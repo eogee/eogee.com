@@ -1,0 +1,2 @@
+<?php
+//session配置

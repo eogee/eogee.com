@@ -33,17 +33,17 @@ Eogee-CMS is a content management system built on native `PHP`, native `Javascri
 **Official Website**:
 [https://eogee.com](https://eogee.com)
 
-**Documentation**:
-[https://eogee.com/docs](https://eogee.com/docs)
-
-**Video Presentations**:
-[https://eogee.com/videos](https://eogee.com/videos)
-
 **Front-end Demo**:
-[https://CMS-demo.eogee.com](https://CMS-demo.eogee.com)
+[https://CMS-demo.eogee.com](https://CMS-demo.eogee.com)Temporarily unavailable.
 
 **Back-end Demo**:
-[https://CMS-demo.eogee.com/admin](https://CMS-demo.eogee.com/admin)
+[https://CMS-demo.eogee.com/admin](https://CMS-demo.eogee.com/admin)Temporarily unavailable.
+
+**Documentation**:
+[https://eogee.com/docs](https://eogee.com/docs)Temporarily unavailable.
+
+**Video Presentations**:
+[https://eogee.com/videos](https://eogee.com/videos)Temporarily unavailable.
 
 Default Username: `admin`, Password: `123456`
 

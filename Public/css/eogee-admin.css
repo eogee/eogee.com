@@ -1,0 +1,18 @@
+.layui-layer-loading .layui-layer-content {
+    width: 40px;
+    height: 40px;
+}
+.layui-layer-btn .layui-layer-btn0{
+    border-color: #16baaa; 
+    background-color: #16baaa; 
+    color: #fff;
+}
+/* 移动端设置 */
+@media screen and (max-width:850px) {
+    .layui-body{
+        left:0px;
+    }
+    .layui-footer{
+        left:0px !important;
+    }
+}

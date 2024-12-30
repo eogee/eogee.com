@@ -23,7 +23,7 @@
 1. 前后台均采用`layui`前端框架，简化前端开发，提升用户体验。
 2. 基于`layui.css`进一步编写并引入了`Resource\css\eogee-text-layui.css`，实现风格统一、样式朴素、移动端友好的前后台界面。
 
-### 功能模块：
+### 功能模块
 
 1. 前台模块：首页、内容中心、内容详情、搜索、分类、标签、技术支持（留言）、软件工具（下载）、关于、最新动态；个人中心、文章收藏等。
 2. 后台模块：后台看板（首页）、内容中心管理、内容详情管理、分类管理、标签管理、用户管理页、角色管理、权限（菜单）管理、日志管理、站点功能、系统设置、个人中心等。
@@ -33,17 +33,17 @@
 **官方网站**：
 [https://eogee.com](https://eogee.com)
 
-**说明文档**：
-[https://eogee.com/docs](https://eogee.com/docs)
-
-**视频讲演**：
-[https://eogee.com/videos](https://eogee.com/videos)
-
 **前台演示**：
-[https://CMS-demo.eogee.com](https://CMS-demo.eogee.com)
+[https://CMS-demo.eogee.com](https://CMS-demo.eogee.com)暂不可用
 
 **后台演示**：
-[https://CMS-demo.eogee.com/admin](https://CMS-demo.eogee.com/admin)
+[https://CMS-demo.eogee.com/admin](https://CMS-demo.eogee.com/admin)暂不可用
+
+**说明文档**：
+[https://eogee.com/docs](https://eogee.com/docs)暂不可用
+
+**视频讲演**：
+[https://eogee.com/videos](https://eogee.com/videos)暂不可用
 
 默认用户名`admin`密码`123456`
 
@@ -59,9 +59,9 @@ EOGEE
 │   ├── Route.php 路由类
 ├── Resource
 │   ├── css
-│   │   ├── eogee-text-layui.css 风格统一的layui样式
+│   │   ├── eogee-text-layui.css 基于layui的前台样式
 │   ├── js
-│   │   ├── eogee-admin-layui.js 后台管理系统的layui组件
+│   │   ├── eogee-admin-layui.js 封装的layui组件
 │   ├── pic 图片资源
 ├── ├── view 视图文件
 ├── autoload.php 自动加载类
@@ -94,6 +94,14 @@ EOGEE
 2.  新建 Feat_xxx 分支
 3.  提交代码
 4.  新建 Pull Request
+
+### 联系我们
+
+- 官方网站：[https://eogee.com](https://eogee.com)
+- 官方QQ：3886370035
+- 官方QQ群：589912610
+- 官方邮箱：eogee@qq.com
+- 您可以直接提交`Issue`或者通过官方QQ群联系我们
 
 ### 开源协议
 
