@@ -1,5 +1,5 @@
 <?php
-namespace Controller;
+namespace App\Http\Controller;
 
 use Model\Model;
 use Model\News;
@@ -22,7 +22,11 @@ class IndexController extends BasicController
         $carousel = Model::showAll('carousel','','sort');
         $news = News::showAll();
         
-        require_once 'Resource/view/index/index.php';
+        echo $rootPath = $_SERVER['DOCUMENT_ROOT']; // 网站的根目录
+
+        echo $rootPath = realpath(dirname(__DIR__)); // 获取项目根目录的绝对路径
+
+        //require_once '/../../Public/view/index/index.php';
     }
     
 }

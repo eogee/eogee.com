@@ -4,7 +4,7 @@
  */
 function autoload($className) 
 {
-    $filePath = __DIR__.'/'.$className.'.php';#讲类名转化为文件路径
+    $filePath = __DIR__.'/../'.$className.'.php';#将类名转化为文件路径
     if (file_exists($filePath)) {
         require_once $filePath;
     }
