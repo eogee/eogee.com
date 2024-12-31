@@ -1,6 +1,12 @@
 <?php
-    require_once 'Resource/view/index/head.php';
-?>    
+    $indexData = $data['indexData'];
+    use Helper\View;
+    View::view('/index/head', $indexData);
+
+    $carousel = $data['carousel'];
+    $content = $data['content'];
+    $news = $data['news'];
+?> 
     
     <div class="eog-container eog-index-main eog-text">
         <!-- 轮播 -->
@@ -308,5 +314,5 @@
         tabIndex('<?= $content[3]['id'] ?>');
     </script>
 <?php
-    require_once 'Resource/view/index/foot.php';
+    View::view('/index/foot',$indexData);
 ?>

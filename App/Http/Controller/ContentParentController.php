@@ -1,5 +1,7 @@
 <?php
-namespace Controller;
+namespace App\Http\Controller;
+
+
 
 use Model\Model;
 /**

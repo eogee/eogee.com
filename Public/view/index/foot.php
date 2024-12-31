@@ -1,3 +1,7 @@
+<?php
+$indexData = $data;
+?>
+
     <div class="layui-footer eog-footer">
         <p>
             <?php

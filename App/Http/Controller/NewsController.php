@@ -1,6 +1,9 @@
 <?php
-namespace Controller;
+namespace App\Http\Controller;
 
+
+use Helper\View;
+use Helper\Url;
 use Model\Model;
 use Model\News;
 /**
@@ -14,7 +17,11 @@ class NewsController extends BasicController
     {
         $indexData = self::headData();
         $data = News::showAll();
-        require_once 'Resource/view/index/news.php';
+        $data = [
+            'indexData' => $indexData,
+            'data' => $data
+        ];
+        View::view('/index/'.Url::getTable(),$data);
     }
     public static function updateApi()
     {

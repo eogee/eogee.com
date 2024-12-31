@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controller;
 
+use Helper\View;
 use Model\Model;
 use Model\News;
 /**
@@ -17,16 +18,15 @@ class IndexController extends BasicController
      */
     public static function index()
     {
-        $indexData = self::headData();
-        $content = Model::showAll('contentParent','','sort','','content');
-        $carousel = Model::showAll('carousel','','sort');
-        $news = News::showAll();
-        
-        echo $rootPath = $_SERVER['DOCUMENT_ROOT']; // 网站的根目录
 
-        echo $rootPath = realpath(dirname(__DIR__)); // 获取项目根目录的绝对路径
+        $data = [
+            'indexData' => self::headData(),
+            'content' => Model::showAll('contentParent','','sort','','content'),
+            'carousel' => Model::showAll('carousel','','sort'),
+            'news' => News::showAll()
+        ];
 
-        //require_once '/../../Public/view/index/index.php';
+        View::view('/index/index',$data);
     }
     
 }

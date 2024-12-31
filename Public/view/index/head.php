@@ -1,3 +1,6 @@
+<?php
+$indexData = $data;
+?>
 <!-- 前台首页 头部文件 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -14,12 +17,12 @@
     <meta name="msvalidate.01" content="07DCCB9A7D723A9B1C0E4493FFA72770" /><!-- bing验证 -->
     <meta name="sogou_site_verification" content="BOJbo4nVyh" /><!-- 搜狗验证 -->
     <meta name="360-site-verification" content="a0cb143ca79bdcbd3239111ddc5160cc" /><!-- 360验证 -->
-    <link rel="stylesheet" href="/Resource/layui/css/layui.css" rel="stylesheet">
-    <link rel="stylesheet" href="/Resource/css/eogee-text-layui.css" rel="stylesheet">
+    <link rel="stylesheet" href="/layui/css/layui.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/eogee-text-layui.css" rel="stylesheet">
     <!-- 网站标题 图标 -->
     <link rel="icon" href="<?= $indexData['titleIconImage'] ?>" type="image/x-icon">
-    <script src="/Resource/layui/layui.js"></script>
-    <script src="/Resource/js/index/index.js"></script>
+    <script src="/layui/layui.js"></script>
+    <script src="/js/index/index.js"></script>
 </head>
 
 <body>

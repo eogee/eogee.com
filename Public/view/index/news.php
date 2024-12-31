@@ -1,6 +1,9 @@
 <?php
-    require_once 'Resource/view/index/head.php';
-?>
+    $indexData = $data['indexData'];
+    use Helper\View;
+    View::view('/index/head', $indexData);
+    $data = $data['data'];
+?> 
     
     <div class="eog-container">
         <div class = "eog-image-background-half  eog-index-main" style = "background-image:url('<?=$data['info']['data']['backgroundImage']?>')">
@@ -42,5 +45,5 @@
         </div>
     </div>
 <?php
-    require_once 'Resource/view/index/foot.php';
+    View::view('/index/foot',$indexData);
 ?>

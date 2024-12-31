@@ -1,15 +1,14 @@
 <?php
 namespace App\Http\Controller;
 
+use Helper\View;
+use Helper\Url;
 use Model\Model;
 use Model\Log;
 /**
  * Summary of BasicController
  * 基础控制器
- * @author eogee.com
- * @version 1.0.0
- * @bugContacts: You can contact us by email:eogee@qq.com or QQ: 3886370035
- * @联系我们: 邮箱:eogee@qq.com 或 QQ: 3886370035
+ * @author <eogee.com> <<eogee@qq.com>>
  */
 class BasicController{
     /**
@@ -82,7 +81,11 @@ class BasicController{
     {
         $indexData = self::headData();//获取前台头部数据        
         $data = Model::showAllWithChild('','','content');
-        require_once 'Resource/view/index/detail.php';
+        $data = [
+            'indexData' => $indexData
+            ,'data' => $data
+        ];
+        View::view('/index/detail',$data);
     }
     /**
      * Summary of detailChild
@@ -92,7 +95,11 @@ class BasicController{
     {
         $indexData = self::headData();//获取前台头部数据
         $data = Model::show();
-        require_once 'Resource/view/index/detailChild.php';
+        $data = [
+            'indexData' => $indexData
+            ,'data' => $data
+        ];
+        View::view('/index/detailChild',$data);
     }
     /**
      * Summary of tableHeadDataApi
@@ -115,9 +122,13 @@ class BasicController{
      */
     public static function index()
     {
-        self::limit();
+        $indexData = self::headData();
         $data = Model::show();
-        require_once 'Resource/view/admin/'.Model::getTable().'/index.php';
+        $data = [
+            'indexData' => $indexData
+            ,'data' => $data
+        ];
+        View::view('/index/'.Url::getTable(),$data);
     }
     /**
      * Summary of list
@@ -259,5 +270,5 @@ class BasicController{
     public static function restoreBatch()
     {
         Model::restoreBatch();
-    }  
+    }
 }
