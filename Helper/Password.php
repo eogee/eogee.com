@@ -10,8 +10,8 @@ namespace Helper;
 class Password
 {
     /**
-     * Encrypt password using md5
-     * 使用md5加密密码
+     * Encrypt password
+     * 加密密码
      * @param string $password 密码
      * @return string 加密后的密码
      */

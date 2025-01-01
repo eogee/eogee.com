@@ -3,8 +3,9 @@
 namespace Helper;
 
 use Helper\Database;
+
 /**
- * 处理Session相关 * 
+ * 处理Session相关
  * @author <eogee.com> <<eogee@qq.com>>
  */
 class Session

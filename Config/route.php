@@ -4,14 +4,9 @@
  * 路由配置
  */
 return [
-    /**
-     * Default Route
-     * 默认路由
-     */
+    // 默认控制器
     'default_controller' => 'IndexController',
-    /**
-     * Default Action
-     * 默认方法
-     */
+    
+    // 默认方法
     'default_action' => 'index',
 ];

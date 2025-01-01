@@ -43,7 +43,7 @@ class Captcha
             $char = $content[$i];
             $x = 15 + 20 * $i;
             $color = imagecolorallocate($image, mt_rand(0, 100), mt_rand(0, 100), mt_rand(0, 100));
-            $path = Path::rootPath().'/public/font/zhugulihei.ttf';#字体绝对路径
+            $path = Path::rootPath().'/public/font/'.CONFIG['app']['captcha_font'];#字体绝对路径
             imagefttext($image, 16, mt_rand(-15, 15), $x, 20, $color, $path, $char);
         }
         header("content-type:image/png");

@@ -557,5 +557,5 @@ class Database
     public function __destruct()
     {
         mysqli_close($this->conn);
-    }    
+    }
 }
