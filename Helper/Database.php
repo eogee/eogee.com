@@ -14,7 +14,7 @@ class Database
     protected $database = CONFIG['database']['name'];
     protected $charset = CONFIG['database']['charset'];
     protected $table;//表名
-    protected $conn;//数据库连接资源
+    public $conn;//数据库连接资源
     private static $instance;//单例模式实例
 
     /**
@@ -101,32 +101,43 @@ class Database
     {
         // 确保数据不为空
         if (empty($data)) {
-            return "插入数据不能为空";
+            return "插入数据不能为空"; // 返回错误信息
         }
     
-        // 使用参数化查询以增强安全性，防止SQL注入
+        // 使用参数化查询以增强安全性，防止 SQL 注入
         $columns = implode(', ', array_keys($data));
         $placeholders = implode(', ', array_fill(0, count($data), '?'));
     
         $sql = "INSERT INTO `$table` ($columns) VALUES ($placeholders)";
     
+        // 准备 SQL 语句
         $stmt = self::getInstance()->prepare($sql);
     
-        // 创建一个数组，存放参数的引用
+        // 确保准备成功
+        if ($stmt === false) {
+            return "准备 SQL 语句失败: " . mysqli_error(self::getInstance()->conn);
+        }
+    
+        // 创建类型字符串
         $types = str_repeat('s', count($data)); // 默认为字符串类型
         $params = array_merge([$types], array_values($data)); // 结合类型和数据
     
+        // 创建引用数组
+        $refParams = [];
+        foreach ($params as $key => $value) {
+            $refParams[$key] = &$params[$key]; // 确保每个参数都是引用
+        }
+    
         // 将参数作为引用绑定
-        call_user_func_array([$stmt, 'bind_param'], $params);
+        call_user_func_array([$stmt, 'bind_param'], $refParams);
     
         // 执行语句
         if (!$stmt->execute()) {
-            return "执行插入失败: " . $stmt->error;
+            return "执行插入失败: " . $stmt->error; // 返回错误信息
         }
     
         return $stmt->insert_id; // 返回插入的自增ID
     }
-    
     /**
      * Summary of delete
      * 删除数据
@@ -160,39 +171,52 @@ class Database
     {
         // 确保数据不为空
         if (empty($data)) {
-            return "更新数据不能为空"; // 返回错误信息而不是抛出异常
+            return "更新数据不能为空"; // 返回错误信息
         }
-    
+
         // 验证 WHERE 子句是否提供
         if (empty($where)) {
-            return "WHERE 子句不能为空"; // 返回错误信息而不是抛出异常
+            return "WHERE 子句不能为空"; // 返回错误信息
         }
-    
-        // 使用参数化查询以增强安全性，防止SQL注入
+
+        // 使用参数化查询以增强安全性，防止 SQL 注入
         $setClause = [];
         foreach ($data as $k => $v) {
-            $setClause[] = "$k = ?";  // 使用 ? 作为占位符进行参数化
+            $setClause[] = "$k = ?";  // 使用 ? 作为占位符
         }
         $setStr = implode(', ', $setClause);
-    
+
         $sql = "UPDATE `$table` SET $setStr $where";
-    
+
+        // 准备 SQL 语句
         $stmt = self::getInstance()->prepare($sql);
-    
-        // 动态生成类型字符串
+
+        // 确保准备成功
+        if ($stmt === false) {
+            return "准备 SQL 语句失败: " . mysqli_error(self::getInstance()->conn); // 返回错误信息
+        }
+
+        // 创建类型字符串
         $types = str_repeat('s', count($data)); // 默认为字符串类型
         $params = array_merge([$types], array_values($data)); // 结合类型和数据
-    
+
+        // 创建引用数组
+        $refParams = [];
+        foreach ($params as $key => &$value) {
+            $refParams[$key] = &$value; // 确保每个参数都是引用
+        }
+
         // 将参数作为引用绑定
-        call_user_func_array([$stmt, 'bind_param'], $params);
-    
+        call_user_func_array([$stmt, 'bind_param'], $refParams);
+
         // 执行语句
         if (!$stmt->execute()) {
-            return "执行更新失败: " . $stmt->error; // 返回错误信息而不是抛出异常
+            return "执行更新失败: " . $stmt->error; // 返回错误信息
         }
-    
+
         return $stmt->affected_rows; // 返回受影响的行数
     }
+
    /**
      * Summary of select
      * 查询一条或全部数据，默认根据id倒序排序，不限制条数

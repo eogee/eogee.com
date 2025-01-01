@@ -4,6 +4,7 @@ namespace App\Http\Controller;
 
 use Helper\Auth;
 use Helper\View;
+use Helper\Captcha;
 
 /**
  * Summary of AuthController
@@ -30,7 +31,7 @@ class AuthController{
      * @return void
      */
     public static function setCaptcha(){
-        Auth::setCaptcha();
+        Captcha::setCaptcha();
     }
     /**
      * Summary of logout

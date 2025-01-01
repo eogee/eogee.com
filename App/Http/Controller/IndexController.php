@@ -3,7 +3,6 @@
 namespace App\Http\Controller;
 
 use Helper\View;
-use Helper\Database;
 use App\Model\Model;
 use App\Model\News;
 

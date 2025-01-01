@@ -5,6 +5,7 @@ namespace App\Http\Controller;
 use Helper\View;
 use Helper\Url;
 use Helper\Window;
+use Helper\File;
 use App\Model\Model;
 use App\Model\Log;
 
@@ -56,10 +57,10 @@ class BasicController{
                 ,'url' => Model::show('basicInfo',1)['data']['navToolUrl']
             ]
             ,'singlePageName' => Model::show('basicInfo',1)['data']['singlePageName']
-            ,'singlePage' => Model::showAll('singlePage','','sort',"where inNav = 1")
-            ,'sponsor' => Model::showAll('footUrl','','sort',"where type = '赞助商'")
-            ,'friendUrl' => Model::showAll('footUrl','','sort',"where type = '友情链接'")
-            ,'internal' => Model::showAll('footUrl','','sort',"where type = '内部链接'")
+            ,'singlePage' => Model::showAll('singlePage','','sort',"inNav = 1")
+            ,'sponsor' => Model::showAll('footUrl','','sort',"type = '赞助商'")
+            ,'friendUrl' => Model::showAll('footUrl','','sort',"type = '友情链接'")
+            ,'internal' => Model::showAll('footUrl','','sort',"type = '内部链接'")
             ,'copyright' => Model::show('basicInfo',1)['data']['copyright']
             ,'siteName' => Model::show('basicInfo',1)['data']['siteName']
             ,'recordCode' => Model::show('basicInfo',1)['data']['recordCode']
@@ -82,7 +83,7 @@ class BasicController{
      */
     public static function detail()
     {
-        $indexData = self::headData();//获取前台头部数据        
+        $indexData = self::headData();//获取前台头部数据
         $data = Model::showAllWithChild('','','content');
         $data = [
             'indexData' => $indexData
@@ -216,7 +217,7 @@ class BasicController{
      */
     public static function fileUploadApi()
     {
-        Model::fileUploadApi();
+        File::fileUploadApi();
     }
     /**
      * Summary of updateApi
