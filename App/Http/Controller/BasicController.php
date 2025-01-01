@@ -21,7 +21,7 @@ class BasicController{
     public static function headData()
     {
         Log::insert();
-        if(CONFIG['developer_mode']){
+        if(CONFIG['app']['developer_mode']){
             $indexUrl = '/';
         }else{
             $indexUrl = Model::show('basicInfo',1)['data']['indexUrl'];

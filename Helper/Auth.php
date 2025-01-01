@@ -14,7 +14,7 @@ use App\Http\Request\Request;
 
 class Auth
 {    
-    private static $tableName = 'user';#要操作的数据表名
+    private static $tableName = CONFIG['database']['user_table'];#要操作的数据表名
     /**
      * Summary of login
      * 登录验证
@@ -101,7 +101,7 @@ class Auth
      */
     public static function checkCaptcha()
     {
-        if(CONFIG['developer_mode'] == false){
+        if(CONFIG['app']['developer_mode'] == false){
             if(empty($_POST['captcha']) || empty($_SESSION['captcha']) || $_POST['captcha'] !== $_SESSION['captcha']){
                 Window::alert('输入的验证码不正确，请重新输入！','back');
                 die();

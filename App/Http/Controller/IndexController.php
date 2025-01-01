@@ -3,6 +3,7 @@
 namespace App\Http\Controller;
 
 use Helper\View;
+use Helper\Database;
 use App\Model\Model;
 use App\Model\News;
 
@@ -19,8 +20,7 @@ class IndexController extends BasicController
      * 轮播图、产品中心、服务中心、课程中心、产品动态、课程动态、赞助商、友情链接
      */
     public static function index()
-    {
-
+    {        
         $data = [
             'indexData' => self::headData(),
             'content' => Model::showAll('contentParent','','sort','','content'),
