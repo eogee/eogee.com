@@ -9,8 +9,8 @@ function defineRoutes($routes, $controller, $actions) {
 
 $routes = [];
 /* 前台 首页 */
-$routes['/'] = [CONFIG['default_controller'],CONFIG['default_action']];
-$routes['/index'] = [CONFIG['default_controller'],CONFIG['default_action']];
+$routes['/'] = [CONFIG['route']['default_controller'],CONFIG['route']['default_action']];
+$routes['/index'] = [CONFIG['route']['default_controller'],CONFIG['route']['default_action']];
 
 /* 前台 技术支持 */
 $routes['/support'] = ['SinglePageController','support'];
@@ -19,11 +19,11 @@ $routes['/support'] = ['SinglePageController','support'];
 $routes['/contentParent/detail'] = ['ContentParentController','detail'];
 $routes['/content/detailChild'] = ['ContentController','detailChild'];
 $routes['/singlePage/detail'] = ['SinglePageController','detailChild'];
-$routes['/news'] = ['NewsController',CONFIG['default_action']];
+$routes['/news'] = ['NewsController',CONFIG['route']['default_action']];
 
 /* 后台 首页 */
-$routes['/admin'] = ['AdminController',CONFIG['default_action']];
-$routes['/admin/index'] = ['AdminController',CONFIG['default_action']];
+$routes['/admin'] = ['AdminController',CONFIG['route']['default_action']];
+$routes['/admin/index'] = ['AdminController',CONFIG['route']['default_action']];
 
 /* 后台 登陆-退出 */
 $routes = defineRoutes($routes, 'auth', [

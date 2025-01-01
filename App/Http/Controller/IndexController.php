@@ -3,8 +3,8 @@
 namespace App\Http\Controller;
 
 use Helper\View;
-use Model\Model;
-use Model\News;
+use App\Model\Model;
+use App\Model\News;
 
 /**
  * Summary of IndexController

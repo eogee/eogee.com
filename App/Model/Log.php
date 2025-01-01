@@ -1,5 +1,5 @@
 <?php
-namespace Model;
+namespace App\Model;
 
 use Helper\Database;
 use Helper\Session;

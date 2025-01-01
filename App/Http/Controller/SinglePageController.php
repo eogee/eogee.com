@@ -3,7 +3,7 @@
 namespace App\Http\Controller;
 
 use Helper\Window;
-use Model\Model;
+use App\Model\Model;
 
 /**
  * Summary of SinglePageController

@@ -1,8 +1,9 @@
 <?php
-namespace Model;
+namespace App\Model;
 
 use Helper\Session;
 use Helper\Url;
+use Helper\Database;
 
 /**
  * 最新动态 模型

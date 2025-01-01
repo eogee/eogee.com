@@ -1,5 +1,5 @@
 <?php
-namespace Model;
+namespace App\Model;
 /**
  * 角色管理 模型
  */

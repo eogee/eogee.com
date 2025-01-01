@@ -4,8 +4,8 @@ namespace App\Http\Controller;
 
 use Helper\Url;
 use Helper\View;
-use Model\Model;
-use Model\User;
+use App\Model\Model;
+use App\Model\User;
 
 /**
  * Summary of UserController

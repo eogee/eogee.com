@@ -2,7 +2,7 @@
 /**
  * 权限管理 模型
  */
-namespace Model;
+namespace App\Model;
 
 
 class PermissionParent extends Model 

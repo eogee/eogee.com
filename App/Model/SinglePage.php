@@ -2,7 +2,7 @@
 /**
  * 单页内容 模型
  */
-namespace Model;
+namespace App\Model;
 
 
 class FriendUrl extends Model 

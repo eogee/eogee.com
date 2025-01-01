@@ -4,8 +4,8 @@ namespace App\Http\Controller;
 
 use Helper\View;
 use Helper\Url;
-use Model\Model;
-use Model\News;
+use App\Model\Model;
+use App\Model\News;
 
 /**
  * Summary of NewsController
@@ -33,7 +33,7 @@ class NewsController extends BasicController
         self::limit();
         $id = Url::getId();
         if(isset($id)){
-            View::view('/admin/'.Url::getTable().'/update.php');
+            View::view('/admin/'.Url::getTable().'/update');
         }else{
             Model::edit();
         }

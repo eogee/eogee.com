@@ -2,7 +2,7 @@
 
 namespace App\Http\Controller;
 
-use Model\Model;
+use App\Model\Model;
 
 /**
  * Summary of FootUrlController

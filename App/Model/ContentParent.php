@@ -2,7 +2,7 @@
 /**
  * 内容中心 模型
  */
-namespace Model;
+namespace App\Model;
 
 
 class ContentParent extends Model 

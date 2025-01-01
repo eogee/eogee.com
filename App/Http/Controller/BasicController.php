@@ -5,8 +5,8 @@ namespace App\Http\Controller;
 use Helper\View;
 use Helper\Url;
 use Helper\Window;
-use Model\Model;
-use Model\Log;
+use App\Model\Model;
+use App\Model\Log;
 
 /**
  * Summary of BasicController

@@ -1,21 +1,18 @@
 <?php
 namespace Helper;
+
 /**
  * Summary of Database
  * 数据库操作类
- * @author eogee.com
- * @version 1.0.0
- * @bugContacts: You can contact us by email:eogee@qq.com or QQ: 3886370035
- * @联系我们: 邮箱:eogee@qq.com 或 QQ: 3886370035
+ * @author <eogee.com> <<eogee@qq.com>>
  */
-
 class Database
 {
-    protected $host = CONFIG['db_host'];
-    protected $username = CONFIG['db_user'];
-    protected $password = CONFIG['db_password'];
-    protected $database = CONFIG['db_name'];
-    protected $charset = CONFIG['db_charset'];
+    protected $host = CONFIG['database']['host'];
+    protected $username = CONFIG['database']['user'];
+    protected $password = CONFIG['database']['password'];
+    protected $database = CONFIG['database']['name'];
+    protected $charset = CONFIG['database']['charset'];
     protected $table;//表名
     protected $conn;//数据库连接资源
     private static $instance;//单例模式实例
@@ -25,14 +22,27 @@ class Database
      * 构造函数，连接数据库
      */
     private function __construct()
-    {
-        $conn = mysqli_connect( $this->host, $this->username, $this->password, $this->database);
-        if (!$conn) {
-            die("数据库链接失败！". mysqli_connect_error() );
-        }
-        mysqli_set_charset($conn, $this->charset);
-        $this->conn = $conn;
+    {        
+        // 尝试连接数据库
+        $this->conn = $this->connectDatabase();
     }
+
+    private function connectDatabase()
+    {
+        // 创建数据库连接
+        $conn = mysqli_connect($this->host, $this->username, $this->password, $this->database);
+
+        // 检查连接是否成功
+        if (!$conn) {
+            die("数据库连接失败: " . mysqli_connect_error());
+        }
+
+        // 设置字符集
+        mysqli_set_charset($conn, $this->charset);
+        
+        return $conn;
+    }
+
     /**
      * Summary of getInstance
      * 单例模式获取实例
@@ -49,22 +59,21 @@ class Database
      * 数据库查询操作
      */
     protected function query($sql)
-    {        
+    {
         $result = mysqli_query($this->conn, $sql);
-        $arr = [];
-        if(is_object($result)){//如果查询结果是对象，则将对象转换为数组
-            foreach($result as $k=>$v){
-                $arr[] = $v;
-            }
-            return $arr;
-        }else{
-            if($result){
-                return true;
-            }else{
-                return false;
-            }
+        
+        if ($result === false) {
+            return false; // 查询失败时返回 false
         }
+        
+        // 如果查询结果是对象，则将对象转换为数组
+        if (is_object($result)) {
+            return mysqli_fetch_all($result, MYSQLI_ASSOC); // 直接转为关联数组
+        }
+
+        return true; // 查询成功但无结果时返回 true
     }
+
     /**
      * Summary of queryGetId
      * 数据库新增操作并返回自增ID 配合 insertGetId使用
