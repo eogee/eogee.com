@@ -1,7 +1,9 @@
 <?php
-namespace Controller;
+
+namespace App\Http\Controller;
 
 use Model\Model;
+
 /**
  * Summary of FootUrlController
  * 底部链接 控制器

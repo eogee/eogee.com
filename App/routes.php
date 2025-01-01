@@ -27,7 +27,7 @@ $routes['/admin/index'] = ['AdminController',CONFIG['default_action']];
 
 /* 后台 登陆-退出 */
 $routes = defineRoutes($routes, 'auth', [
-    'login', 'logout', 'captcha'
+    'login', 'logout', 'setCaptcha'
 ]);
 
 /* 后台 访问日志 */

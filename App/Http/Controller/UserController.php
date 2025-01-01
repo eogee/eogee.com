@@ -1,9 +1,12 @@
 <?php
-namespace Controller;
+
+namespace App\Http\Controller;
 
 use Helper\Url;
+use Helper\View;
 use Model\Model;
 use Model\User;
+
 /**
  * Summary of UserController
  * 用户管理 控制器
@@ -29,7 +32,7 @@ class UserController extends BasicController
     public static function insert()
     {
         self::limit();
-        require_once 'Resource/view/admin/'.Url::getTable().'/update.php';
+        View::view('/admin/'.Url::getTable().'/update');
         if(isset($_POST) and !empty($_POST)){
             User::insert();
         }
@@ -39,7 +42,7 @@ class UserController extends BasicController
         self::limit();
         $id = Url::getId();
         if(isset($id)){
-            require_once 'Resource/view/admin/'.Url::getTable().'/update.php';
+            View::view('/admin/'.Url::getTable().'/update');
         }else{
             User::edit();
         }

@@ -1,9 +1,9 @@
 <?php
+
 namespace App\Http\Controller;
 
-
-
 use Model\Model;
+
 /**
  * Summary of ContentParentController
  * 内容中心 控制器

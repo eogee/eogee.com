@@ -1,10 +1,12 @@
 <?php
+
 namespace Model;
 
 use Helper\Session;
 use Helper\Url;
+use Helper\Database;
 use App\Verify\Verify;
-use Model\Database;
+
 /**
  * Summary of Model
  * 所有模型的基类及助手函数

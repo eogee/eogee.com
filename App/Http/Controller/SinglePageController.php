@@ -1,9 +1,10 @@
 <?php
-namespace App\Http\Controller;
 
+namespace App\Http\Controller;
 
 use Helper\Window;
 use Model\Model;
+
 /**
  * Summary of SinglePageController
  * 单页内容 控制器

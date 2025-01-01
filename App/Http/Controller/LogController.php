@@ -1,6 +1,9 @@
 <?php
-namespace Controller;
+
+namespace App\Http\Controller;
+
 use Model\Model;
+
 /**
  * Summary of LogController
  * 访问日志 控制器

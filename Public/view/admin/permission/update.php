@@ -1,7 +1,7 @@
 <?php
-    require_once 'Resource/View/admin/updateHead.php';
+    use Helper\View;
+    View::view('/admin/updateHead');
 ?>
-
     <tr id = "parentId">
         <td></td>
         <td>
@@ -23,7 +23,7 @@
         <td><input type="text" name="sort" class="layui-input"  lay-verify="number">
         </td>
     </tr>
-    <script src = "/Resource/js/admin/permission/update.js"></script>
+    <script src = "/js/admin/permission/update.js"></script>
 <?php
-    require_once 'Resource/View/admin/updateFoot.php';
+    View::view('/admin/updateFoot');
 ?>

@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>EOGEE</title>
-    <link rel="stylesheet" href="/Resource/layui/css/layui.css">
-    <script src="/Resource/layui/layui.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <script src="/layui/layui.js"></script>
     <style>
         img {
             display: block;
@@ -69,7 +69,7 @@
                             </div>
                             <div class="layui-col-xs4">
                                 <div style="margin-left: 10px;">
-                                    <img src="/auth/captcha" alt="" style="margin:3px 0 3px 0;">
+                                    <img src="/auth/setCaptcha" alt="" style="margin:3px 0 3px 0;">
                                 </div>
                             </div>
                         </div>

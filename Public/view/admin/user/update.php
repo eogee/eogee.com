@@ -1,5 +1,6 @@
 <?php
-    require_once 'Resource/View/admin/updateHead.php';
+    use Helper\View;
+    View::view('/admin/updateHead');
 ?>
     <tr id = "username">
         <td></td>
@@ -37,7 +38,7 @@
             <input id = "passwordRepeatInput" type = "password" name="passwordRepeat" class="layui-input" lay-affix="eye" lay-verify="required|passwordRepeat">
         </td>
     </tr>
-    <script src = "/Resource/js/admin/user/update.js"></script>
+    <script src = "/js/admin/user/update.js"></script>
 <?php
-    require_once 'Resource/View/admin/updateFoot.php';
+    View::view('/admin/updateFoot');
 ?>

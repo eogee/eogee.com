@@ -1,6 +1,6 @@
 <?php
-namespace App\Http\Controller;
 
+namespace App\Http\Controller;
 
 /**
  * Summary of ContentController

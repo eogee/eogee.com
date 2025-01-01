@@ -1,6 +1,7 @@
 <?php
-    require_once 'Resource/View/admin/updateHead.php';
-?>
+    use Helper\View;
+    View::view('/admin/updateHead');
+?> 
     <tr>
         <td>颜色样式</td>
         <td>
@@ -125,7 +126,7 @@
             </select>
         </td>
     </tr>
-    <script src="/Resource/js/admin/news/update.js"></script>
+    <script src="/js/admin/news/update.js"></script>
 <?php
-    require_once 'Resource/View/admin/updateFoot.php';
+    View::view('/admin/updateFoot');
 ?>

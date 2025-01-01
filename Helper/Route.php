@@ -1,12 +1,11 @@
 <?php
+
 namespace Helper;
+
 /**
  * Summary of Route
  * 操作路由类
- * @author eogee.com
- * @version 1.0.0
- * @bugContacts: You can contact us by email:eogee@qq.com or QQ: 3886370035
- * @联系我们: 邮箱:eogee@qq.com 或 QQ: 3886370035
+ * @author <eogee.com> <<eogee@qq.com>>
  */
 class Route
 {
@@ -35,7 +34,7 @@ class Route
     /**
      * Summary of define
      * define路由
-     * @param mixed $routes
+     * @param mixed $routes 路由配置
      * @return void
      */
     public static function define($routes)

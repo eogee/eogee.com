@@ -1,6 +1,7 @@
 <?php
-    require_once 'Resource/View/admin/updateHead.php';
-?>
+    use Helper\View;
+    View::view('/admin/updateHead');
+?> 
     <tr>
         <td>颜色样式</td>
         <td>
@@ -189,7 +190,7 @@
         <td><input type="text" name="sort" class="layui-input"  lay-verify="number">
         </td>
     </tr>
-    <script src="/Resource/js/admin/carousel/update.js"></script>
+    <script src="/js/admin/carousel/update.js"></script>
 <?php
-    require_once 'Resource/View/admin/updateFoot.php';
+    View::view('/admin/updateFoot');
 ?>

@@ -1,11 +1,14 @@
 <?php
-namespace Controller;
 
-use Model\Auth;
+namespace App\Http\Controller;
+
+use Helper\Auth;
+use Helper\View;
+
 /**
  * Summary of AuthController
  * 用户验证控制器
- * @author eogee.com
+ * @author <eogee.com> <<eogee@qq.com>>
  */
 class AuthController{
     /**
@@ -17,17 +20,17 @@ class AuthController{
     {
         if(isset($_POST["username"])){
             Auth::login();
-        }else{            
-            require_once 'Resource/view/admin/auth/login.php';
+        }else{
+            View::view('/admin/auth/login');
         }
     }
     /**
      * Summary of captcha
-     * 验证码
+     * 生成验证码
      * @return void
      */
-    public static function captcha(){
-        Auth::captcha();
+    public static function setCaptcha(){
+        Auth::setCaptcha();
     }
     /**
      * Summary of logout

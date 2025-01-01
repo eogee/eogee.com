@@ -7,11 +7,11 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/Resource/layui/css/layui.css" rel="stylesheet">
-    <link rel="stylesheet" href="/Resource/css/eogee-admin.css" rel="stylesheet">
-    <link rel="icon" href="/Resource/pic/logomini-2.ico" type="image/x-icon">
-    <script src="/Resource/layui/layui.js"></script>
-    <script src="/Resource/js/admin/eogee-admin-layui.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/eogee-admin.css" rel="stylesheet">
+    <link rel="icon" href="/pic/logomini-2.ico" type="image/x-icon">
+    <script src="/layui/layui.js"></script>
+    <script src="/js/admin/eogee-admin-layui.js"></script>
 </head>
 
 <body>

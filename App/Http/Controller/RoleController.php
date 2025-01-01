@@ -1,7 +1,9 @@
 <?php
-namespace Controller;
+
+namespace App\Http\Controller;
 
 use Model\Model;
+
 /**
  * Summary of RoleController
  * 角色管理 控制器

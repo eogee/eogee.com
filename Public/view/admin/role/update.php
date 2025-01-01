@@ -1,5 +1,6 @@
 <?php
-    require_once 'Resource/View/admin/updateHead.php';
+    use Helper\View;
+    View::view('/admin/updateHead');
 ?>
     <tr id = "name">
         <td></td>
@@ -17,7 +18,7 @@
         <td></td>
         <td id = "permissionCheck"></td>
     </tr>
-    <script src = "/Resource/js/admin/role/update.js"></script>
+    <script src = "/js/admin/role/update.js"></script>
     <script>
         layui.use(function(){
             var tree = layui.tree;            
@@ -58,5 +59,5 @@
         });
     </script>
 <?php
-    require_once 'Resource/View/admin/updateFoot.php';
+    View::view('/admin/updateFoot');
 ?>

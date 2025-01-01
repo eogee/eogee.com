@@ -1,5 +1,6 @@
 <?php
-    require_once 'Resource/view/admin/head.php';
+    use Helper\View;
+    View::view('/admin/head');
 ?>
     
     <div class="layui-body">
@@ -28,12 +29,7 @@
             </div>                
         </div>
     </div>
-    
-    <script src = "Resource/js/admin/list.js"></script>
-
-    <script>
-        
-    </script>
+    <script src = "/js/admin/list.js"></script>
 <?php
-    require_once 'Resource/view/admin/foot.php';
-?>   
+    View::view('/admin/foot');
+?> 

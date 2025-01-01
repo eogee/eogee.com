@@ -1,6 +1,7 @@
 <?php
-    require_once 'Resource/View/admin/updateHead.php';
-?>
+    use Helper\View;
+    View::view('/admin/updateHead');
+?> 
     <tr id="title">
         <td></td>
         <td><input type="text" name="title" class="layui-input" lay-verify="required"></td>
@@ -91,7 +92,7 @@
         <td></td>
         <td><input type="text" name="recordCode" class="layui-input"></td>
     </tr>
-    <script src="/Resource/js/admin/basicInfo/update.js"></script>
+    <script src="/js/admin/basicInfo/update.js"></script>
 <?php
-    require_once 'Resource/View/admin/updateFoot.php';
+    View::view('/admin/updateFoot');
 ?>

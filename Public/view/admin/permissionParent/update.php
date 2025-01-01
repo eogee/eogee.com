@@ -2,9 +2,9 @@
 <html>
 <head>
     <title>更新数据</title>
-    <link rel="stylesheet" href="/Resource/layui/css/layui.css" rel="stylesheet">
-    <script src="/Resource/layui/layui.js"></script>
-    <script src="/Resource/js/admin/eogee-admin-layui.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css" rel="stylesheet">
+    <script src="/layui/layui.js"></script>
+    <script src="/js/admin/eogee-admin-layui.js"></script>
 </head>
 <body>
     <div style="padding: 10px 10px 35px 10px;">
@@ -69,8 +69,8 @@
                 </div>
             </div>
         </div>
-        <script src="/Resource/js/admin/permissionParent/update.js"></script>
-        <script src="/Resource/js/admin/permissionParent/childList.js"></script>
+        <script src="/js/admin/permissionParent/update.js"></script>
+        <script src="/js/admin/permissionParent/childList.js"></script>
     </div>
 </body>
 </html>

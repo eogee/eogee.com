@@ -1,11 +1,12 @@
 <?php
-namespace App\Http\Controller;
 
+namespace App\Http\Controller;
 
 use Helper\View;
 use Helper\Url;
 use Model\Model;
 use Model\News;
+
 /**
  * Summary of NewsController
  * 最新动态 控制器
@@ -32,7 +33,7 @@ class NewsController extends BasicController
         self::limit();
         $id = Url::getId();
         if(isset($id)){
-            require_once 'Resource/view/admin/'.Url::getTable().'/update.php';
+            View::view('/admin/'.Url::getTable().'/update.php');
         }else{
             Model::edit();
         }

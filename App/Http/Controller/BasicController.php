@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controller;
 
 use Helper\View;
@@ -6,6 +7,7 @@ use Helper\Url;
 use Helper\Window;
 use Model\Model;
 use Model\Log;
+
 /**
  * Summary of BasicController
  * 基础控制器
@@ -138,7 +140,7 @@ class BasicController{
     public static function list()
     {
         self::limit();
-        require_once 'Resource/view/admin/'.Url::getTable().'/list.php';
+        View::view('/admin/'.Url::getTable().'/list');
     }
     /**
      * Summary of recycle
@@ -147,7 +149,7 @@ class BasicController{
     public static function recycle()
     {
         self::limit();
-        require_once 'Resource/view/admin/'.Url::getTable().'/list.php';        
+        View::view('/admin/'.Url::getTable().'/list');      
     }
     /**
      * Summary of listApi
@@ -172,7 +174,7 @@ class BasicController{
     public static function show()
     {
         self::limit();
-        require_once 'Resource/view/admin/show.php';
+        View::view('/admin/show');
     }
     /**
      * Summary of showApi
@@ -189,7 +191,7 @@ class BasicController{
     public static function insert()
     {
         self::limit();
-        require_once 'Resource/view/admin/'.Url::getTable().'/update.php';
+        View::view('/admin/'.Url::getTable().'/update');   
         if(isset($_POST) and !empty($_POST)){
             Model::insert();
         }
@@ -203,7 +205,7 @@ class BasicController{
         self::limit();
         $id = Url::getId();
         if(isset($id)){
-            require_once 'Resource/view/admin/'.Url::getTable().'/update.php';
+            View::view('/admin/'.Url::getTable().'/update');
         }else{
             Model::edit();
         }

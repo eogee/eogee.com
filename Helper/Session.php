@@ -1,4 +1,5 @@
 <?php
+
 namespace Helper;
 
 use Helper\Database;
@@ -54,6 +55,11 @@ class Session
             unset($_SESSION[$key]);
         }
     }
+    /**
+     * Summary of getUser
+     * 获取当前登录的用户
+     * @return mixed | null 返回当前登录的用户名
+     */
     public static function getUser()
     {
         if (isset($_SESSION['username'])) 
@@ -65,6 +71,11 @@ class Session
             return null;
         }
     }
+    /**
+     * Summary of getUserId
+     * 获取当前登录的用户id
+     * @return mixed | null 返回当前登录的用户id
+     */
     public static function getUserId()
     {
         if(!empty(self::getUser()))

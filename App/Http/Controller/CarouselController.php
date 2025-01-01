@@ -1,7 +1,9 @@
 <?php
-namespace Controller;
+
+namespace App\Http\Controller;
 
 use Model\Model;
+
 /**
  * Summary of CarouselController
  * 轮播图 控制器

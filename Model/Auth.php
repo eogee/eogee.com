@@ -61,7 +61,7 @@ class Auth
      * Summary of captcha
      * 生成验证码
      */
-    public static function captcha()
+    public static function setCaptcha()
     {
         $str = "1234567890qwertyuiopasdfghjklzxcvbnm";
         $str = str_shuffle($str); #打乱顺序

@@ -1,11 +1,14 @@
 <?php
+
+namespace App\Http\Controller;
+
+use Helper\View;
+
 /**
  * Summary of AdminController
  * 后台首页 控制器
- * @author eogee.com
+ * @author <eogee.com> <<eogee@qq.com>>
  */
-namespace Controller;
-
 class AdminController extends BasicController
 {
     /**
@@ -15,7 +18,7 @@ class AdminController extends BasicController
     public static function index()
     {
         self::limit();
-        require_once 'Resource/view/admin/list.php';
+        View::view('/admin/list');
     }
     
 }

@@ -1,6 +1,6 @@
 <?php
-namespace Helper;
 
+namespace Helper;
 
 /**
  * 处理路径相关

@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Http\Controller;
 
 use Helper\View;
 use Model\Model;
 use Model\News;
+
 /**
  * Summary of IndexController
  * 前台首页 控制器

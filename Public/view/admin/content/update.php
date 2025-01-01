@@ -1,6 +1,7 @@
 <?php
-    require_once 'Resource/View/admin/updateHead.php';
-?>
+    use Helper\View;
+    View::view('/admin/updateHead');
+?> 
     <tr>
         <td>颜色样式</td>
         <td>
@@ -283,7 +284,7 @@
     </tr>
     <input id = "enter" type="hidden" name = "enter">
     <input id = "enterId" type="hidden" name = "enterId">
-    <script src = "/Resource/js/admin/content/update.js"></script>
+    <script src = "/js/admin/content/update.js"></script>
 <?php
-    require_once 'Resource/View/admin/updateFoot.php';
+    View::view('/admin/updateFoot');
 ?>

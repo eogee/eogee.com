@@ -1,5 +1,7 @@
 <?php
+
 namespace Helper;
+
 /**
  * Summary of Window
  * 窗口操作类

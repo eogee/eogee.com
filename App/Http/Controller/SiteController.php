@@ -1,9 +1,12 @@
 <?php
-namespace Controller;
+
+namespace App\Http\Controller;
+
 /**
  * Summary of SiteController
  * 站点功能 控制器
  */
+
 class SiteController extends indexController
 {
     public static function post()
