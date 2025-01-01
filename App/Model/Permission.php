@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Model;
+
 /**
  * 权限明细 模型
  */

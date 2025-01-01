@@ -17,7 +17,7 @@ class Password
      */
     public static function encrypt($password)
     {
-        return md5($password);
+        return password_hash($password, PASSWORD_DEFAULT);
     }
     /**
      * Verify password using password_verify

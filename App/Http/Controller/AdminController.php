@@ -3,6 +3,7 @@
 namespace App\Http\Controller;
 
 use Helper\View;
+use App\Http\Request\Request;
 
 /**
  * Summary of AdminController
@@ -17,7 +18,7 @@ class AdminController extends BasicController
      */
     public static function index()
     {
-        self::limit();
+        Request::adminLimit();
         View::view('/admin/list');
     }
     

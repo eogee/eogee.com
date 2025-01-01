@@ -8,6 +8,8 @@ use Helper\Window;
 use Helper\File;
 use App\Model\Model;
 use App\Model\Log;
+use App\Http\Request\Request;
+use App\Http\Response\Responce;
 
 /**
  * Summary of BasicController
@@ -18,68 +20,67 @@ class BasicController{
     /**
      * Summary of headData
      * 前台-获取头部数据
+     * @return array
      */
     public static function headData()
     {
         Log::insert();
-        if(CONFIG['app']['developer_mode']){
-            $indexUrl = '/';
-        }else{
-            $indexUrl = Model::show('basicInfo',1)['data']['indexUrl'];
+        
+        // 根据开发模式选择索引 URL
+        $indexUrl = CONFIG['app']['developer_mode'] ? '/' : Model::show('basicInfo', 1)['data']['indexUrl'];
+    
+        // 获取基本信息
+        $basicInfo = Model::show('basicInfo', 1)['data'];
+        
+        // 初始化 title, keywords 和 description
+        $title = $keywords = $description = null;
+    
+        // 判断 URL 中的表和 ID
+        if (Url::getTable() !== null && Url::getId() !== null) {
+            $data = Model::show(); // 获取当前模型数据
+            $title = $data['data']['title'] . "-";
+            $keywords = $data['data']['keywords'] ?? '';
+            $description = $data['data']['description'] ?? '';
+        } elseif (Url::getTable() !== null) {
+            $title = null;
+            $keywords = $basicInfo['keywords'] ?? '';
+            $description = $basicInfo['description'] ?? '';
+        } else {
+            $title = null;
+            $keywords = $basicInfo['keywords'] ?? '';
+            $description = $basicInfo['description'] ?? '';
         }
-        if(Url::getTable() != null and Url::getId() != null){
-            $title = Model::show()['data']['title']."-";
-            $keywords = Model::show()['data']['keywords'];
-            $description = Model::show()['data']['description'];
-        }elseif(Url::getTable() != null){
-            $title = null;
-            $keywords = Model::show('',1)['data']['keywords'];
-            $description = Model::show('',1)['data']['description'];
-        }else{
-            $title = null;
-            $keywords = Model::show('basicInfo',1)['data']['keywords'];
-            $description = Model::show('basicInfo',1)['data']['description'];
-        };
-        return  [
-            'title' => $title.Model::show('basicInfo',1)['data']['title']
-            ,'keywords' => $keywords
-            ,'description' =>  $description
-            ,'titleIconImage' => Model::show('basicInfo',1)['data']['titleIcon']
-            ,'logo' => [
-                'image' => Model::show('basicInfo',1)['data']['logoImage']
-                ,'alt'  => Model::show('basicInfo',1)['data']['logoAlt']
-            ]
-            ,'indexUrl' => $indexUrl
-            ,'nav' => Model::showAll('contentParent','','sort','','content')
-            ,'newsTitle' => Model::show('news',1)['data']['title']
-            ,'navTool' => [
-                'name' => Model::show('basicInfo',1)['data']['navToolName']
-                ,'url' => Model::show('basicInfo',1)['data']['navToolUrl']
-            ]
-            ,'singlePageName' => Model::show('basicInfo',1)['data']['singlePageName']
-            ,'singlePage' => Model::showAll('singlePage','','sort',"inNav = 1")
-            ,'sponsor' => Model::showAll('footUrl','','sort',"type = '赞助商'")
-            ,'friendUrl' => Model::showAll('footUrl','','sort',"type = '友情链接'")
-            ,'internal' => Model::showAll('footUrl','','sort',"type = '内部链接'")
-            ,'copyright' => Model::show('basicInfo',1)['data']['copyright']
-            ,'siteName' => Model::show('basicInfo',1)['data']['siteName']
-            ,'recordCode' => Model::show('basicInfo',1)['data']['recordCode']
+    
+        return [
+            'title' => $title . $basicInfo['title'],
+            'keywords' => $keywords,
+            'description' => $description,
+            'titleIconImage' => $basicInfo['titleIcon'],
+            'logo' => [
+                'image' => $basicInfo['logoImage'],
+                'alt' => $basicInfo['logoAlt']
+            ],
+            'indexUrl' => $indexUrl,
+            'nav' => Model::showAll('contentParent', '', 'sort', '', 'content'),
+            'newsTitle' => Model::show('news', 1)['data']['title'] ?? '',
+            'navTool' => [
+                'name' => $basicInfo['navToolName'] ?? '',
+                'url' => $basicInfo['navToolUrl'] ?? ''
+            ],
+            'singlePageName' => $basicInfo['singlePageName'] ?? '',
+            'singlePage' => Model::showAll('singlePage', '', 'sort', "inNav = 1"),
+            'sponsor' => Model::showAll('footUrl', '', 'sort', "type = '赞助商'"),
+            'friendUrl' => Model::showAll('footUrl', '', 'sort', "type = '友情链接'"),
+            'internal' => Model::showAll('footUrl', '', 'sort', "type = '内部链接'"),
+            'copyright' => $basicInfo['copyright'] ?? '',
+            'siteName' => $basicInfo['siteName'] ?? '',
+            'recordCode' => $basicInfo['recordCode'] ?? '',
         ];
-    }
-    /**
-     * Summary of limit
-     * 后台-权限限制
-     */
-    public static function limit()
-    {
-        if(!isset($_SESSION['username'])){
-            Window::redirect('/auth/login');//判断是否登录
-            die();
-        }
     }
     /**
      * Summary of detail
      * 前台-详情页-渲染页面
+     * @return void
      */
     public static function detail()
     {
@@ -94,6 +95,7 @@ class BasicController{
     /**
      * Summary of detailChild
      * 前台-详情页-渲染页面-子级
+     * @return void
      */
     public static function detailChild()
     {
@@ -108,21 +110,22 @@ class BasicController{
     /**
      * Summary of tableHeadDataApi
      * 后台-获取表头数据-api接口
+     * @return void
      */
     public static function tableHeadDataApi()
     {
-        $arr = [
+        $responce = [
             'code' => 0
             ,'msg' => 'success'
             ,'tableComment' => Model::getTableComment()
             ,'tableFiledComment' => Model::getTableFieldComment()
         ];
-        header('Content-Type: application/json');
-        echo json_encode($arr);
+        Responce::responce($responce);
     }
     /**
      * Summary of index
      * 前台-模块首页-渲染页面
+     * @return void
      */
     public static function index()
     {
@@ -137,24 +140,27 @@ class BasicController{
     /**
      * Summary of list
      * 后台-列表页-渲染页面
+     * @return void
      */
     public static function list()
     {
-        self::limit();
+        Request::adminLimit();
         View::view('/admin/'.Url::getTable().'/list');
     }
     /**
      * Summary of recycle
      * 后台-回收站-渲染页面
+     * @return void
      */
     public static function recycle()
     {
-        self::limit();
+        Request::adminLimit();
         View::view('/admin/'.Url::getTable().'/list');      
     }
     /**
      * Summary of listApi
      * 后台-列表api接口
+     * @return void
      */
     public static function listApi()
     {
@@ -163,6 +169,7 @@ class BasicController{
     /**
      * Summary of recycleApi
      * 后台-回收站api接口
+     * @return void
      */
     public static function recycleApi()
     {
@@ -171,15 +178,17 @@ class BasicController{
     /**
      * Summary of show
      * 后台-查看详情-渲染页面
+     * @return void
      */
     public static function show()
     {
-        self::limit();
+        Request::adminLimit();
         View::view('/admin/show');
     }
     /**
      * Summary of showApi
      * 后台-查看详情-api接口
+     * @return void
      */
     public static function showApi()
     {
@@ -188,10 +197,11 @@ class BasicController{
     /**
      * Summary of insert
      * 后台-新增-渲染页面-新增数据
+     * @return void
      */
     public static function insert()
     {
-        self::limit();
+        Request::adminLimit();
         View::view('/admin/'.Url::getTable().'/update');   
         if(isset($_POST) and !empty($_POST)){
             Model::insert();
@@ -200,10 +210,11 @@ class BasicController{
     /**
      * Summary of edit
      * 后台-编辑-渲染页面-编辑数据
+     * @return void
      */
     public static function edit()
     {
-        self::limit();
+        Request::adminLimit();
         $id = Url::getId();
         if(isset($id)){
             View::view('/admin/'.Url::getTable().'/update');
@@ -214,6 +225,7 @@ class BasicController{
     /**
      * Summary of fileUploadApi
      * 文件上传-api接口
+     * @return void
      */
     public static function fileUploadApi()
     {
@@ -222,6 +234,7 @@ class BasicController{
     /**
      * Summary of updateApi
      * 更新数据-api接口-获取数据及字段信息
+     * @return void
      */
     public static function updateApi()
     {
@@ -230,6 +243,7 @@ class BasicController{
     /**
      * Summary of delete
      * 删除
+     * @return void
      */
     public static function delete()
     {
@@ -238,6 +252,7 @@ class BasicController{
     /**
      * Summary of deleteBatch
      * 批量删除
+     * @return void
      */
     public static function deleteBatch()
     {        
@@ -246,6 +261,7 @@ class BasicController{
     /**
      * Summary of deleteSoft
      * 软删除
+     * @return void
      */
     public static function deleteSoft()
     {
@@ -254,6 +270,7 @@ class BasicController{
     /**
      * Summary of deleteSoftBatch
      * 批量软删除
+     * @return void
      */
     public static function deleteSoftBatch()
     {
@@ -262,6 +279,7 @@ class BasicController{
     /**
      * Summary of restore
      * 还原
+     * @return void
      */
     public static function restore()
     {
@@ -270,6 +288,7 @@ class BasicController{
     /**
      * Summary of restoreBatch
      * 批量还原
+     * @return void
      */
     public static function restoreBatch()
     {

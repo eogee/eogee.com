@@ -6,6 +6,7 @@ use Helper\Url;
 use Helper\View;
 use App\Model\Model;
 use App\Model\User;
+use App\Http\Request\Request;
 
 /**
  * Summary of UserController
@@ -31,7 +32,7 @@ class UserController extends BasicController
     }
     public static function insert()
     {
-        self::limit();
+        Request::adminLimit();
         View::view('/admin/'.Url::getTable().'/update');
         if(isset($_POST) and !empty($_POST)){
             User::insert();
@@ -39,7 +40,7 @@ class UserController extends BasicController
     }
     public static function edit()
     {
-        self::limit();
+        Request::adminLimit();
         $id = Url::getId();
         if(isset($id)){
             View::view('/admin/'.Url::getTable().'/update');

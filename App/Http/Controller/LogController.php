@@ -7,7 +7,6 @@ use App\Model\Model;
 /**
  * Summary of LogController
  * 访问日志 控制器
- * @author eogee.com
  */
 class LogController extends BasicController
 {

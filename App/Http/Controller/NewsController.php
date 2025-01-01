@@ -6,11 +6,11 @@ use Helper\View;
 use Helper\Url;
 use App\Model\Model;
 use App\Model\News;
+use App\Http\Request\Request;
 
 /**
  * Summary of NewsController
  * 最新动态 控制器
- * @author eogee.com
  */
 class NewsController extends BasicController
 {
@@ -30,7 +30,7 @@ class NewsController extends BasicController
     }
     public static function edit()
     {
-        self::limit();
+        Request::adminLimit();
         $id = Url::getId();
         if(isset($id)){
             View::view('/admin/'.Url::getTable().'/update');
