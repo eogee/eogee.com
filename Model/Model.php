@@ -67,10 +67,10 @@ class Model{
      */
     public static function getId()
     {
-        $uri = $_SERVER['REQUEST_URI'];
-        $uriArr = explode("/", $uri); #将获取到的uri进行拆分为数组
-        $num = count($uriArr);
-        return $num > 3 ? $id = $uriArr[3] : $id = null;
+            $uri = $_SERVER['REQUEST_URI'];
+            $uriArr = explode("/", $uri); #将获取到的uri进行拆分为数组
+            $num = count($uriArr);
+            return $num > 3 ? $id = $uriArr[3] : $id = null;
     }
     /**
      * Summary of getTable

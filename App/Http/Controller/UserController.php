@@ -1,6 +1,7 @@
 <?php
 namespace Controller;
 
+use Helper\Url;
 use Model\Model;
 use Model\User;
 /**
@@ -28,7 +29,7 @@ class UserController extends BasicController
     public static function insert()
     {
         self::limit();
-        require_once 'Resource/view/admin/'.Model::getTable().'/update.php';
+        require_once 'Resource/view/admin/'.Url::getTable().'/update.php';
         if(isset($_POST) and !empty($_POST)){
             User::insert();
         }
@@ -36,9 +37,9 @@ class UserController extends BasicController
     public static function edit()
     {
         self::limit();
-        $id = Model::getId();
+        $id = Url::getId();
         if(isset($id)){
-            require_once 'Resource/view/admin/'.Model::getTable().'/update.php';
+            require_once 'Resource/view/admin/'.Url::getTable().'/update.php';
         }else{
             User::edit();
         }

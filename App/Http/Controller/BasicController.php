@@ -3,6 +3,7 @@ namespace App\Http\Controller;
 
 use Helper\View;
 use Helper\Url;
+use Helper\Window;
 use Model\Model;
 use Model\Log;
 /**
@@ -23,11 +24,11 @@ class BasicController{
         }else{
             $indexUrl = Model::show('basicInfo',1)['data']['indexUrl'];
         }
-        if(Model::getTable() != null and Model::getId() != null){
+        if(Url::getTable() != null and Url::getId() != null){
             $title = Model::show()['data']['title']."-";
             $keywords = Model::show()['data']['keywords'];
             $description = Model::show()['data']['description'];
-        }elseif(Model::getTable() != null){
+        }elseif(Url::getTable() != null){
             $title = null;
             $keywords = Model::show('',1)['data']['keywords'];
             $description = Model::show('',1)['data']['description'];
@@ -69,7 +70,7 @@ class BasicController{
     public static function limit()
     {
         if(!isset($_SESSION['username'])){
-            Model::redirect('/auth/login');//判断是否登录
+            Window::redirect('/auth/login');//判断是否登录
             die();
         }
     }
@@ -137,7 +138,7 @@ class BasicController{
     public static function list()
     {
         self::limit();
-        require_once 'Resource/view/admin/'.Model::getTable().'/list.php';
+        require_once 'Resource/view/admin/'.Url::getTable().'/list.php';
     }
     /**
      * Summary of recycle
@@ -146,7 +147,7 @@ class BasicController{
     public static function recycle()
     {
         self::limit();
-        require_once 'Resource/view/admin/'.Model::getTable().'/list.php';        
+        require_once 'Resource/view/admin/'.Url::getTable().'/list.php';        
     }
     /**
      * Summary of listApi
@@ -188,7 +189,7 @@ class BasicController{
     public static function insert()
     {
         self::limit();
-        require_once 'Resource/view/admin/'.Model::getTable().'/update.php';
+        require_once 'Resource/view/admin/'.Url::getTable().'/update.php';
         if(isset($_POST) and !empty($_POST)){
             Model::insert();
         }
@@ -200,9 +201,9 @@ class BasicController{
     public static function edit()
     {
         self::limit();
-        $id = Model::getId();
+        $id = Url::getId();
         if(isset($id)){
-            require_once 'Resource/view/admin/'.Model::getTable().'/update.php';
+            require_once 'Resource/view/admin/'.Url::getTable().'/update.php';
         }else{
             Model::edit();
         }

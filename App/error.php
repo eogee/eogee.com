@@ -1,11 +1,13 @@
 <?php
-/*错误处理文件 */
-use Model\Model;
-
-// 错误处理提示函数
+use Helper\Window;
+/**
+ * 自定义错误处理函数
+ * @param int $errNo 错误码
+ * @param string $errStr 错误信息
+ */
 function error($errNo, $errStr) 
 {
-    Model::alert("发生错误：[$errNo] $errStr 请点击确认返回至上一页",'back');#弹窗显示错误内容
+    Window::alert("发生错误：[$errNo] $errStr ");#弹窗显示错误内容
     die();
 }
 // 全局使用

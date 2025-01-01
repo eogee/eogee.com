@@ -1,6 +1,9 @@
 <?php
 namespace Model;
 
+use Helper\Session;
+use Helper\Url;
+use App\Verify\Verify;
 use Model\Database;
 /**
  * Summary of Model
@@ -12,88 +15,13 @@ use Model\Database;
  */
 class Model{
     /**
-     * Summary of alert
-     * 弹出提示框
-     */
-    public static function alert($str,$url = null)
-    {
-        if(empty($url)){
-            echo "<script>alert('$str')</script>";
-        }elseif($url == 'back'){
-            echo "<script>alert('$str');history.back()</script>";
-        }else{
-            echo "<script>alert('$str');window.location.href='$url'</script>" ;
-        }
-    }
-    /**
-     * Summary of redirect
-     * 重定向
-     */
-    public static function redirect($url)
-    {
-        echo "<script>window.location.href = '$url';</script>" ;
-    }
-    /**
-     * Summary of getUserId
-     * 获取当前用户id
-     */
-    public static function getUserId()
-    {
-        return Database::select('user',"where username = '".$_SESSION['username']."'")[0]['id'];
-    }
-    /**
-     * Summary of crsf
-     * 生成csrf
-     */
-    public static function crsf()
-    {
-        return bin2hex(random_bytes(32));        
-    }
-    /**
-     * Summary of crsfVerify
-     * 验证csrf
-     */
-    public static function crsfVerify()
-    {
-        if(empty($_POST['csrf']) || $_POST['csrf'] !== $_SESSION['csrf_token']) {
-            die('CSRF attack detected!');
-        }else{
-            unset($_POST['csrf']);
-        }
-    }
-    /**
-     * Summary of getId
-     * 获取当前模型的id
-     */
-    public static function getId()
-    {
-        $uri = $_SERVER['REQUEST_URI'];
-        $uriArr = explode("/", $uri); #将获取到的uri进行拆分为数组
-        $num = count($uriArr);
-        return $num > 3 ? $id = $uriArr[3] : $id = null;
-    }
-    /**
-     * Summary of getTable
-     * 获取当前模型的表名
-     */
-    public static function getTable()
-    {
-        $uri = $_SERVER['REQUEST_URI'];
-        $uriArr = explode("/", $uri); #将获取到的uri进行拆分为数组
-        if(!empty($uriArr[1]) and $uriArr[1]!='index'){
-            return $uriArr[1];
-        }else{
-            return null;
-        }
-    } 
-    /**
      * Summary of getTableComment
      * 获取数据表注释(模型中文名称)
      */
     public static function getTableComment($table = null)
     {
         if(empty($table)){
-            $table = self::getTable();
+            $table = Url::getTable();
         }
         return Database::tableComment($table)[0]['TABLE_COMMENT'];
     }
@@ -104,7 +32,7 @@ class Model{
     public static function getTableFieldComment($table = null)
     {
         if(empty($table)){
-            $table = self::getTable();
+            $table = Url::getTable();
         }
         $colComment = Database::columnComment($table);#获取数据表中的字段注释
         $fileds = [];
@@ -120,7 +48,7 @@ class Model{
     public static function columnIsnullable($table = null)
     {
         if(empty($table)){
-            $table = self::getTable();
+            $table = Url::getTable();
         }
         $columnIsnullable = Database::columnIsnullable($table);#获取数据表中字段是否为空
         $nullable = [];
@@ -168,7 +96,7 @@ class Model{
     public static function listApi($table = null,$field = null,$page = 1,$limit = 10)    
     {
         if(empty($table)){ //如果没有传入数据表名则获取当前模型的表名
-            $table = self::getTable();
+            $table = Url::getTable();
         }
         if(isset($_GET['page'])){
             $page = $_GET['page'];
@@ -221,7 +149,7 @@ class Model{
     public static function recycleApi($table = null,$field = null,$page = 1,$limit = 10)
     {
         if(empty($table)){
-            $table = self::getTable();
+            $table = Url::getTable();
         }
         if(isset($_GET['page'])){
             $page = $_GET['page'];
@@ -284,7 +212,7 @@ class Model{
     {
         $option = explode(',',$field);
         foreach($option as $key => $value){
-            $option[$key] = self::getTableFieldComment(self::getTable())[$value];
+            $option[$key] = self::getTableFieldComment(Url::getTable())[$value];
         }
         return implode('、',$option);
     }
@@ -295,11 +223,11 @@ class Model{
      */
     public static function insert()
     {
-        self::crsfVerify();
+        Verify::crsfVerify();
         if(isset($_POST['file'])){
             unset($_POST['file']);
         }
-        Database::insert(self::getTable(),$_POST);
+        Database::insert(Url::getTable(),$_POST);
     }
     /**
     * Summary of edit
@@ -307,13 +235,13 @@ class Model{
     */
     public static function edit($table = null)
     {
-        self::crsfVerify();
+        Verify::crsfVerify();
         if(isset($_POST['file'])){
             unset($_POST['file']);
         }
         $id = $_POST['id'];
         if(empty($table)){
-            $table = self::getTable();
+            $table = Url::getTable();
         }
         Database::update($table,$_POST,"where id = $id");
     }
@@ -323,12 +251,12 @@ class Model{
      */
     public static function fileUploadApi($table = null,$fileName = null,$dir = "Resource/pic/",$id = null)
     {
-        $id = self::getId();
+        $id = Url::getId();
         if(empty($id)){
             $id = 1;
         }
         if(empty($table)){
-            $table = self::getTable();
+            $table = Url::getTable();
         }
         if(empty($fileName)){
             $fileName = $_POST['fileName'];
@@ -368,7 +296,7 @@ class Model{
      */
     public static function updateApi()
     {
-        $id = self::getId();
+        $id = Url::getId();
         $data = self::show();
         $nullable = self::columnIsnullable();
         if(empty($id)){
@@ -382,7 +310,7 @@ class Model{
             ,'nullable' => $nullable
             ,'csrf_token' => $_SESSION['csrf_token']
             ,'enter' => $_SESSION['username']
-            ,'enterId' => self::getUserId()
+            ,'enterId' => Session::getUserId()
         ];
         header('Content-Type: application/json');
         echo json_encode($arr);
@@ -394,10 +322,10 @@ class Model{
     public static function show($table = null,$id = null)
     {
         if(empty($table)){
-            $table = self::getTable();
+            $table = Url::getTable();
         }
         if(empty($id)){
-            $id = self::getId();
+            $id = Url::getId();
         }
         if(empty($id)){//如果没有id则获取第一条数据
             $data['data'] = Database::select($table,"","limit 1")[0];
@@ -429,7 +357,7 @@ class Model{
      */
     public static function showAll($table = null,$id = null,$sort = null,$where = null,$childTable = null,$parentKey = null){
         if(empty($table)){
-            $table = self::getTable();
+            $table = Url::getTable();
         }
         if(empty($where)){
             if(empty($sort)){
@@ -514,10 +442,10 @@ class Model{
     public static function showAllWithChild($table = null,$id = null,$childTable = null,$parentKey = null)
     {
         if(empty($table)){
-            $table = self::getTable();
+            $table = Url::getTable();
         }
         if(empty($id)){
-            $id = self::getId();
+            $id = url::getId();
         }
         if(Database::hasDeletedAt($table)){
             $data['data'] = Database::select($table,"where id = $id and deleted_at is null");
@@ -537,11 +465,11 @@ class Model{
      */
     public static function deleteSoft()
     {
-        $id = self::getId();
+        $id = url::getId();
         $data = [
             "deleted_at" => date('Y-m-d H:i:s')
         ];
-        Database::update(self::getTable(),$data,"where id = $id");
+        Database::update(Url::getTable(),$data,"where id = $id");
     }
     /**
      * Summary of deleteSoftBatch
@@ -553,7 +481,7 @@ class Model{
         $data = [
             "deleted_at" => date('Y-m-d H:i:s')
         ];
-        return Database::update(self::getTable(),$data,"where id IN ($ids)");
+        return Database::update(Url::getTable(),$data,"where id IN ($ids)");
     }
     /**
      * Summary of delete
@@ -561,8 +489,8 @@ class Model{
      */
     public static function delete()
     {
-        $id = self::getId();
-        Database::delete(self::getTable(),"where id = $id");
+        $id = Url::getId();
+        Database::delete(Url::getTable(),"where id = $id");
     }
     /**
      * Summary of deleteBatch
@@ -571,7 +499,7 @@ class Model{
     public static function deleteBatch()
     {
         $ids = $_POST['batchId'];
-        Database::delete(self::getTable(),"where id IN ($ids)");
+        Database::delete(Url::getTable(),"where id IN ($ids)");
     }
     /**
      * Summary of restore
@@ -579,8 +507,8 @@ class Model{
      */
     public static function restore()
     {
-        $id = self::getId();
-        Database::deleteDate(self::getTable(),"where id = $id");
+        $id = Url::getId();
+        Database::deleteDate(Url::getTable(),"where id = $id");
     }
     /**
      * Summary of restoreBatch
@@ -589,6 +517,6 @@ class Model{
     public static function restoreBatch()
     {
         $ids = $_POST['batchId'];
-        return Database::deleteDate(self::getTable(),"where id IN ($ids)");
+        return Database::deleteDate(Url::getTable(),"where id IN ($ids)");
     }
 }

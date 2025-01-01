@@ -2,6 +2,7 @@
 namespace App\Http\Controller;
 
 
+use Helper\Window;
 use Model\Model;
 /**
  * Summary of SinglePageController
@@ -19,6 +20,6 @@ class SinglePageController extends BasicController
     }
     public static function support()
     {
-        Model::redirect('/singlePage/detail/2');
+        Window::redirect('/singlePage/detail/2');
     }
 }

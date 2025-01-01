@@ -1,5 +1,9 @@
 <?php
 namespace Model;
+
+use Helper\Session;
+use Helper\Url;
+
 /**
  * 最新动态 模型
  */
@@ -7,7 +11,7 @@ class News extends Model
 {
     public static function updateApi()
     {
-        $id = self::getId();
+        $id = Url::getId();
         $data = self::show();
         if(empty($id)){
             $data['data'] = [];
@@ -22,7 +26,7 @@ class News extends Model
             ,'option' => Database::selectCol('content','id,title','deleted_at is null')
             ,'csrf_token' => $_SESSION['csrf_token']
             ,'enter' => $_SESSION['username']
-            ,'enterId' => self::getUserId()
+            ,'enterId' => Session::getUserId()
         ];
         header('Content-Type: application/json');
         echo json_encode($arr);

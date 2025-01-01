@@ -12,6 +12,9 @@ $routes = [];
 $routes['/'] = [CONFIG['default_controller'],CONFIG['default_action']];
 $routes['/index'] = [CONFIG['default_controller'],CONFIG['default_action']];
 
+/* 前台 技术支持 */
+$routes['/support'] = ['SinglePageController','support'];
+
 /* 前台 内容页 */
 $routes['/contentParent/detail'] = ['ContentParentController','detail'];
 $routes['/content/detailChild'] = ['ContentController','detailChild'];

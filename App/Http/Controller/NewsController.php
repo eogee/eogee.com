@@ -30,9 +30,9 @@ class NewsController extends BasicController
     public static function edit()
     {
         self::limit();
-        $id = News::getId();
+        $id = Url::getId();
         if(isset($id)){
-            require_once 'Resource/view/admin/'.News::getTable().'/update.php';
+            require_once 'Resource/view/admin/'.Url::getTable().'/update.php';
         }else{
             Model::edit();
         }

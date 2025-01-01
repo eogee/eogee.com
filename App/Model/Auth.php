@@ -6,6 +6,9 @@
  */
 namespace Model;
 
+use Helper\Session;
+use Helper\Window;
+use App\Http\Request\Request;
 use Model\Database;
 
 class Auth
@@ -23,11 +26,11 @@ class Auth
         $captcha = $_POST['captcha'];
         if(CONFIG['developer_mode'] == false){
             if(empty($username) || empty($password) || empty($captcha)) {
-                Model::alert('请填写完整的登录信息！','back');
+                Window::alert('请填写完整的登录信息！','back');
                 die();
             }
             if($captcha != $_SESSION['captcha']){
-                Model::alert('输入的验证码不正确，请重新输入！','back');
+                Window::alert('输入的验证码不正确，请重新输入！','back');
                 die();
             }
         }
@@ -38,14 +41,14 @@ class Auth
                 /* $password == $result[0]["password"] */
                 password_verify($password, $result[0]["password"])
             ) {
-                $_SESSION["username"] = $username;#登录成功，设置session
-                $_SESSION["csrf_token"] = Model::crsf();#生成csrf_token
-                Model::redirect("/admin");
+                Session::set('username', $username);
+                Session::set('csrf_token', Request::crsf());
+                Window::redirect("/admin");
             }else{
-                Model::alert('输入的密码不正确！','back');
+                Window::alert('输入的密码不正确！','back');
             }
         }else{
-            Model::alert('输入的用户名不存在！','back');
+            Window::alert('输入的用户名不存在！','back');
         }
     }
     /**
@@ -55,7 +58,7 @@ class Auth
     public static function logout()
     {
         session_destroy();
-        Model::alert('退出登录成功！','/auth/login');
+        Window::alert('退出登录成功！','/auth/login');
     }
     /**
      * Summary of captcha

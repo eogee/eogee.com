@@ -19,7 +19,7 @@ class View
     public static function view($view, $data = [])
     {
 
-        require_once Path::getRootPath(). '/Public/view'. $view. '.php';
+        require_once Path::rootPath(). '/Public/view'. $view. '.php';
 
     }
 }

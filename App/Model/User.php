@@ -1,6 +1,11 @@
 <?php
 namespace Model;
 
+use Helper\Session;
+use Helper\Url;
+use App\Verify\Verify;
+
+
 /**
  * 用户管理 模型
  */
@@ -8,15 +13,15 @@ class User extends Model
 {
     public static function checkUsernameApi()
     {
-        $username = Model::getId();
-        $usernameExist = Database::select(self::getTable(),"where username = '$username'");
+        $username = Url::getId();
+        $usernameExist = Database::select(Url::getTable(),"where username = '$username'");
         if(count($usernameExist)>0) {
             echo 'true';
         }
     }
     public static function updateApi()
     {
-        $id = self::getId();
+        $id = Url::getId();
         $data = self::show();
         $nullable = self::columnIsnullable();
         $options = Database::selectCol('role',"id,name");
@@ -32,13 +37,13 @@ class User extends Model
             ,'options' => $options
             ,'csrf_token' => $_SESSION['csrf_token']
             ,'enter' => $_SESSION['username']
-            ,'enterId' => self::getUserId()
+            ,'enterId' => Session::getUserId()
         ];
         header('Content-Type: application/json');
         echo json_encode($arr);
     }
     public static function insert(){
-        self::crsfVerify();
+        Verify::crsfVerify();
         $username = $_POST['username'];
         $password = $_POST['password'];
         $passwordRepeat = $_POST['passwordRepeat'];
@@ -50,7 +55,7 @@ class User extends Model
             Model::errorResponce('两次输入密码不一致，请重新输入！');
             die();
         }
-        $usernameExist = Database::select(self::getTable(),"where username = '$username'");
+        $usernameExist = Database::select(Url::getTable(),"where username = '$username'");
         if(count($usernameExist)>0) {
             Model::errorResponce('该用户名已存在！');
             die();
@@ -59,14 +64,14 @@ class User extends Model
             $_POST['username'] = $username;
             $_POST['password'] = $password;
             unset($_POST['passwordRepeat']);
-            Database::insert(self::getTable(),$_POST);
+            Database::insert(Url::getTable(),$_POST);
         }
     }
     public static function edit($table = null)
     {
-        self::crsfVerify();
+        Verify::crsfVerify();
         if(empty($table)) {
-            $table = self::getTable();
+            $table = Url::getTable();
         }
 
         $id = $_POST['id'];
