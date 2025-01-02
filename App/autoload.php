@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 自动加载类
+ * 类自动加载
  */
 function autoload($className) 
 {

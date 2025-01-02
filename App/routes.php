@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Summary of defineRoutes
+ * 定义路由
+ * @param mixed $routes 路由数组
+ * @param mixed $controller 控制器类名
+ * @param mixed $actions 方法数组
+ * @return mixed
+ */
 function defineRoutes($routes, $controller, $actions) {
     foreach ($actions as $action) {
         $routes["/$controller/$action"] = ["{$controller}Controller", $action]; // 使用控制器类名

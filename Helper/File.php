@@ -14,8 +14,13 @@ class File{
      * Summary of fileUploadApi
      * 文件上传api接口
      */
-    public static function fileUploadApi($table = null, $fileName = null, $dir = "pic/", $id = null)
+    public static function fileUploadApi($table = null, $fileName = null, $type = 'pic' ,$id = null )
     {
+        if($type == 'pic'){
+            $dir = CONFIG['file']['pic_upload_path'];
+        }else{
+            $dir = CONFIG['file']['file_upload_path'];
+        }
         // 获取 ID，并确保其存在
         $id = Url::getId() ?: 1;
         

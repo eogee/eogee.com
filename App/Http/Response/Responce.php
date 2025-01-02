@@ -1,12 +1,16 @@
 <?php
+
 namespace App\Http\Response;
 
+/**
+ * Summary of Responce
+ * 响应类
+ * @author <eogee.com> <<eogee@qq.com>>
+ */
 class Responce {
     /**
      * Summary of responce
      * 响应数据
-     * @param mixed $data
-     * @return void
      */
     public static function responce($data)
     {

@@ -8,7 +8,6 @@ use App\Http\Request\Request;
 /**
  * Summary of AdminController
  * 后台首页 控制器
- * @author <eogee.com> <<eogee@qq.com>>
  */
 class AdminController extends BasicController
 {

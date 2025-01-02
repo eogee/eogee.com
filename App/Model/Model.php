@@ -11,7 +11,7 @@ use App\Http\Response\Responce;
 /**
  * Summary of Model
  * 所有模型的基类
- * @author <eogee.com> <<email:eogee@qq.com>>
+ * @author <eogee.com> <<eogee@qq.com>>
  */
 class Model{
     /**

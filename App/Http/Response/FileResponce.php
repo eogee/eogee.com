@@ -3,6 +3,7 @@
 namespace App\Http\Response;
 
 /**
+ * Summary of FileResponce
  * 文件响应类
  * @author <eogee.com> <<eogee@qq.com>>
  */

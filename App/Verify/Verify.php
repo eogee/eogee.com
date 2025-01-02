@@ -1,7 +1,11 @@
 <?php
+
 namespace App\Verify;
+
 /**
+ * Summary of Verify
  * 验证类
+ * @author <eogee.com> <<eogee@qq.com>>
  */
 class Verify{
     /**

@@ -6,7 +6,6 @@ use Helper\Session;
 
 /**
  * 日志 模型
- * @author eogee.com
  */
 class Log extends Model 
 {

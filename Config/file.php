@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * File configuration
+ * 文件上传配置
+ */
 return [
     //图片上传路径
     'pic_upload_path' => 'pic/',

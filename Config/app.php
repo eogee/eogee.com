@@ -1,6 +1,8 @@
 <?php
+
 /**
- * 站点配置
+ * Application configuration
+ * 应用配置
  */
 return [
     //站点名称

@@ -1,7 +1,9 @@
 <?php
 
 use Helper\Path;
+
 /**
+ * Main configuration
  * 配置文件
  */
 return [    
@@ -17,5 +19,9 @@ return [
      * 路由配置
      */
     'route' => require_once Path::rootPath().'/Config/route.php',
+    /**
+     * 文件配置
+     */
+    'file' => require_once Path::rootPath().'/Config/route.php',
     
 ];

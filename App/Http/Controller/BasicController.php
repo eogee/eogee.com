@@ -4,7 +4,6 @@ namespace App\Http\Controller;
 
 use Helper\View;
 use Helper\Url;
-use Helper\Window;
 use Helper\File;
 use App\Model\Model;
 use App\Model\Log;

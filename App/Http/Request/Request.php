@@ -9,7 +9,6 @@ use Helper\Window;
  * 请求类
  * @author <eogee.com> <<eogee@qq.com>>
  */
-
 class Request
 {
     /**

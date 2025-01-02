@@ -1,5 +1,7 @@
 <?php
+
 use Helper\Window;
+
 /**
  * 自定义错误处理函数
  * @param int $errNo 错误码

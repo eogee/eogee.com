@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Route Configuration
+ * Route configuration
  * 路由配置
  */
 return [
