@@ -23,5 +23,9 @@ return [
      * 文件配置
      */
     'file' => require_once Path::rootPath().'/Config/route.php',
+    /**
+     * 缓存配置
+     */
+    'cache' => require_once Path::rootPath().'/Config/cache.php',
     
 ];

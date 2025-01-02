@@ -24,31 +24,36 @@ class Auth
      */
     public static function login()
     {
-        $username = $_POST['username'];
-        $username = filter_var($username, FILTER_SANITIZE_STRING);
+        // 获取并过滤用户名和密码
+        $username = filter_var($_POST['username'], FILTER_SANITIZE_STRING);
         $password = $_POST['password'];
-        if(empty($username) || empty($password)) {
-            Window::alert('请填写完整的登录信息！','back');
+
+        // 检查用户名和密码是否为空
+        if (empty($username) || empty($password)) {
+            Window::alert('请填写完整的登录信息！', 'back');
             die();
         }
 
+        // 验证验证码
         Captcha::checkCaptcha();
 
-        $usernameExist = Database::select(self::$tableName,"where username = '$username'");
-        if(count($usernameExist)> 0) {
-            $result = Database::select(self::$tableName,"where username = '$username'");
-            if(/* $password == $result[0]["password"] */Password::verify($password, $result[0]["password"])
-            ){
-                Session::set('username', $username);
-                Session::set('csrf_token', Request::crsf());
-                Window::redirect("/admin");
-            }else{
-                Window::alert('输入的用户名或密码不正确！','back');
-            }
-        }else{
-            Window::alert('输入的用户名或密码不正确！','back');
+        // 查询用户是否存在
+        $user = Database::select(self::$tableName, "WHERE username = ?", [$username]);
+        if (empty($user)) {
+            Window::alert('输入的用户名或密码不正确！', 'back');
+            die();
+        }
+
+        // 验证密码
+        if (Password::verify($password, $user[0]["password"])) {
+            Session::set('username', $username);
+            Session::set('csrf_token', Request::crsf());
+            Window::redirect("/admin");
+        } else {
+            Window::alert('输入的用户名或密码不正确！', 'back');
         }
     }
+
     /**
      * Summary of logout
      * 退出登录
