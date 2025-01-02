@@ -67,7 +67,10 @@ class File{
             $code = 100;
             $msg = "上传失败！错误代码：" . ($_FILES['file']['error'] ?? '未知错误');
         }
-        FileResponce::upload($code, $msg);
+        return $data = [
+            'code' => $code
+            ,'msg' => $msg
+        ];
     }
     /**
      * Summary of getCurrentFileName

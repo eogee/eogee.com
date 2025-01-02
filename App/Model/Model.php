@@ -6,7 +6,7 @@ use Helper\Session;
 use Helper\Url;
 use Helper\Database;
 use App\Verify\Verify;
-use App\Http\Response\Responce;
+use App\Http\Response\Response;
 
 /**
  * Summary of Model
@@ -107,7 +107,7 @@ class Model{
      * @param string $field 字段名
      * @param int $page 页码
      * @param int $limit 每页限制
-     * @return void 响应数据表格数据
+     * @return array 响应数据
      */
     public static function listApi($table = null, $field = null, $page = 1, $limit = 10)
     {
@@ -146,7 +146,7 @@ class Model{
             if (isset($_GET['search']) && $_GET['search'] != null) {
                 // 如果有搜索参数，则进行搜索
                 self::search($table, $page, $limit, $_GET['search'], $field);
-                return; // 结束函数执行
+                die(); // 结束函数执行
             }
     
             // 检查是否有 deleted_at 字段
@@ -161,15 +161,13 @@ class Model{
         $data['count'] = $dataCount;
         $data['searchOption'] = self::searchOption($field);
         // 构建响应数组
-        $data = [
+        return $data = [
             'code' => 0,
             'msg' => 'success',
             'count' => isset($data['count']) ? $data['count'] : 0, // 确保 count 存在
             'data' => $data['data'] ?? [], // 默认提供一个空数组
             'searchOption' => $data['searchOption']
-        ];        
-        // 返回响应
-        Responce::responce($data);
+        ];
     }
     /**
      * Summary of recycleApi
@@ -178,7 +176,7 @@ class Model{
      * @param string $field 字段名
      * @param int $page 页码
      * @param int $limit 每页限制
-     * @return void 响应回收站数据
+     * @return array 响应回收站数据
      */
     public static function recycleApi($table = null, $field = null, $page = 1, $limit = 10)
     {
@@ -197,7 +195,7 @@ class Model{
         // 处理搜索参数
         if (isset($_GET['search']) && trim($_GET['search']) !== '') {
             self::searchRecycle($table, $page, $limit, $_GET['search'], $field);
-            return; // 调用 searchRecycle 后退出方法，避免执行后续查询
+            die(); // 调用 searchRecycle 后退出方法，避免执行后续查询
         }
 
         // 计算偏移量
@@ -212,15 +210,13 @@ class Model{
         $data['searchOption'] = self::searchOption($field);
 
         // 构建响应数组
-        $data = [
+        return $data = [
             'code' => 0,
             'msg' => 'success',
             'count' => isset($data['count']) ? $data['count'] : 0, // 确保 count 存在
             'data' => $data['data'] ?? [], // 默认提供一个空数组
             'searchOption' => $data['searchOption']
-        ];        
-        // 返回响应
-        Responce::responce($data);
+        ];
     }
     /**
      * Summary of search
@@ -230,6 +226,7 @@ class Model{
      * @param int $limit 每页限制
      * @param string $search 搜索内容
      * @param string $field 搜索字段名 
+     * @return  响应搜索结果
      */
     public static function search($table, $page, $limit, $search, $field)
     {
@@ -265,15 +262,13 @@ class Model{
         $data['count'] = $dataCount;
 
         // 构建响应数组
-        $data = [
+        return $data = [
             'code' => 0,
             'msg' => 'success',
             'count' => isset($data['count']) ? $data['count'] : 0, // 确保 count 存在
             'data' => $data['data'] ?? [], // 默认提供一个空数组
             'searchOption' => $data['searchOption']
-        ];        
-        // 返回响应
-        Responce::responce($data);
+        ];
     }
 
     /**
@@ -311,16 +306,13 @@ class Model{
         $dataCount = count(Database::select($table, $where));
     
         // 准备响应数组
-        $response = [
+        return $data = [
             'code' => 0,
             'msg' => 'success',
             'count' => $dataCount, // 保证 count 存在
             'data' => $data['data'] ?? [], // 默认提供一个空数组
             'searchOption' => self::searchOption($field) // 假设这是可用的
         ];
-    
-        // 返回响应
-        Responce::responce($response);
     }
     
     /**
@@ -432,11 +424,11 @@ class Model{
     
         // 验证 ID 是否存在
         if (empty($id)) {
-            return Responce::responce([
+            return  [
                 'code' => 100,
                 'msg' => 'ID 不能为空',
                 'data' => []
-            ]); // 返回错误信息
+            ]; // 返回错误信息
         }
     
         // 获取数据和可空字段信息
@@ -444,7 +436,7 @@ class Model{
         $nullable = self::columnIsnullable();
     
         // 准备响应数据
-        $response = [
+        return $data = [
             'code' => 0,
             'msg' => 'success',
             'data' => !empty($data['data']) ? $data['data'] : [], // 确保数据有效
@@ -454,9 +446,6 @@ class Model{
             'enter' => $_SESSION['username'] ?? 'Guest', // 使用默认用户名
             'enterId' => Session::getUserId() ?? null // 确保返回有效的用户 ID
         ];
-    
-        // 返回响应
-        Responce::responce($response);
     }
     
     /**
@@ -506,7 +495,7 @@ class Model{
     /**
      * Summary of showApi
      * 显示详情api接口
-     * @return void 响应数据
+     * @return array 响应数据
      */
     public static function showApi()
     {
@@ -514,15 +503,12 @@ class Model{
         $data = self::show();
     
         // 创建响应数组
-        $response = [
+        return $data = [
             'code' => 0,
             'msg' => 'success',
             'data' => !empty($data['data']) ? $data['data'] : [], // 确保 data 不为空
             'field' => !empty($data['field']) ? $data['field'] : [] // 确保 field 不为空
         ];
-    
-        // 返回响应
-        Responce::responce($response);
     }    
     /**
      * Summary of showAll

@@ -22,9 +22,8 @@ class Auth
      * 登录验证
      * @return void
      */
-    public static function login(Request $request)
+    public static function login()
     {
-        $_POST = $request->all();
         // 获取并过滤用户名和密码
         $username = filter_var($_POST['username'], FILTER_SANITIZE_STRING);
         $password = $_POST['password'];

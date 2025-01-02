@@ -6,7 +6,8 @@ use Helper\View;
 use Helper\Url;
 use App\Model\Model;
 use App\Model\News;
-use App\Http\Request\Request;
+use App\Verify\Verify;
+use App\Http\Response\Response;
 
 /**
  * Summary of NewsController
@@ -26,11 +27,13 @@ class NewsController extends BasicController
     }
     public static function updateApi()
     {
-        News::updateApi();
+        $data = News::updateApi();
+        $response = new Response;
+        $response->json($data);
     }
     public static function edit()
     {
-        Request::adminLimit();
+        Verify::adminLimit();
         $id = Url::getId();
         if(isset($id)){
             View::view('/admin/'.Url::getTable().'/update');

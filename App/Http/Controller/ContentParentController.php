@@ -3,6 +3,7 @@
 namespace App\Http\Controller;
 
 use App\Model\Model;
+use App\Http\Response\Response;
 
 /**
  * Summary of ContentParentController
@@ -13,10 +14,14 @@ class ContentParentController extends BasicController
     
     public static function listApi()
     {
-        Model::listApi('','title,keynote');
+        $data = Model::listApi('','title,keynote');
+        $response = new Response;
+        $response->json($data);
     }
     public static function recycleApi()
     {
-        Model::recycleApi('','title,keynote');
+        $data = Model::recycleApi('','title,keynote');
+        $response = new Response;
+        $response->json($data);
     }
 }

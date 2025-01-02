@@ -1,13 +1,13 @@
 <?php
 namespace App\Model;
 
-use App\Http\Response\Responce;
 use Helper\Session;
 use Helper\Url;
 use Helper\Database;
 use Helper\Window;
 use Helper\Password;
 use App\Verify\Verify;
+use App\Http\Response\Response;
 
 /**
  * 用户管理 模型
@@ -30,9 +30,15 @@ class User extends Model
         $usernameExist = Database::select(Url::getTable(), "WHERE username = '$username'");
         
         if (count($usernameExist) > 0) {
-            echo 'true';
+            return [
+                'code' => 1
+                ,'msg' => '用户名已存在'
+            ];
         }else{
-            echo 'false';
+            return [
+                'code' => 0
+                ,'msg' => '用户名可用'
+            ];
         }
     }
 
@@ -47,13 +53,11 @@ class User extends Model
     
         // 验证 ID 是否有效
         if (empty($id)) {
-            $response = [
+            $data = [
                 'code' => 100,
                 'msg' => 'ID 不能为空',
                 'data' => []
             ];
-            Responce::responce($response);
-            die();
         }
     
         // 获取相关数据
@@ -62,7 +66,7 @@ class User extends Model
         $options = Database::selectCol('role', "id, name"); // 获取角色选项
     
         // 构建响应数组
-        $response = [
+        return $data = [
             'code' => 0,
             'msg' => 'success',
             'data' => !empty($data['data']) ? $data['data'] : [], // 确保数据存在
@@ -73,7 +77,6 @@ class User extends Model
             'enter' => $_SESSION['username'] ?? 'Guest', // 设置用户名称为 'Guest'
             'enterId' => Session::getUserId() ?? null // 确保返回有效的用户 ID
         ];
-        Responce::responce($response); // 返回 JSON 格式数据
     }
     
     /**

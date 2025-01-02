@@ -18,8 +18,11 @@ document.getElementById('usernameInput').addEventListener('blur', function() {
         return;
     }
     ajax('/'+modelName+'/checkUsernameApi/'+username, false, function(response) {
-        if (response == 'true') {
-            layer.msg('该用户名已存在',{icon: 2, time: 1000});
+        response = JSON.parse(response);
+        if (response.code > 0) {
+            layer.msg(response.msg,{icon: 2, time: 1000});
+        }else{
+            layer.msg(response.msg,{icon: 1, time: 1000});
         }
     });
 });

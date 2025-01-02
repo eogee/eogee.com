@@ -3,6 +3,7 @@
 namespace App\Http\Controller;
 
 use App\Model\Model;
+use App\Http\Response\Response;
 
 /**
  * Summary of CarouselController
@@ -13,10 +14,14 @@ class CarouselController extends BasicController
     
     public static function listApi()
     {
-        Model::listApi('','title,keynote,content');
+        $data = Model::listApi('','title,keynote,content');
+        $response = new Response;
+        $response->json($data);
     }
     public static function recycleApi()
     {
-        Model::recycleApi('','title,keynote,content');
+        $data = Model::recycleApi('','title,keynote,content');
+        $response = new Response;
+        $response->json($data);
     }
 }

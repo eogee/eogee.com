@@ -6,7 +6,8 @@ use Helper\Url;
 use Helper\View;
 use App\Model\Model;
 use App\Model\User;
-use App\Http\Request\Request;
+use app\Verify\Verify;
+use App\Http\Response\Response;
 
 /**
  * Summary of UserController
@@ -16,23 +17,31 @@ class UserController extends BasicController
 {    
     public static function listApi()
     {
-        Model::listApi('','username');
+        $data = Model::listApi('','username');
+        $response = new Response;
+        $response->json($data);
     }
     public static function recycleApi()
     {
-        Model::recycleApi('','username');
+        $data = Model::recycleApi('','username');
+        $response = new Response;
+        $response->json($data);
     }
     public static function checkUsernameApi()
     {
-        User::checkUsernameApi();
+        $data = User::checkUsernameApi();
+        $response = new Response;
+        $response->json($data);
     }
     public static function updateApi()
     {
-        User::updateApi();
+        $data = User::updateApi();
+        $response = new Response;
+        $response->json($data);
     }
     public static function insert()
     {
-        Request::adminLimit();
+        Verify::adminLimit();
         View::view('/admin/'.Url::getTable().'/update');
         if(isset($_POST) and !empty($_POST)){
             User::insert();
@@ -40,7 +49,7 @@ class UserController extends BasicController
     }
     public static function edit()
     {
-        Request::adminLimit();
+        Verify::adminLimit();
         $id = Url::getId();
         if(isset($id)){
             View::view('/admin/'.Url::getTable().'/update');

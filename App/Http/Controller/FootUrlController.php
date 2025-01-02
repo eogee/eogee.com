@@ -3,6 +3,7 @@
 namespace App\Http\Controller;
 
 use App\Model\Model;
+use App\Http\Response\Response;
 
 /**
  * Summary of FootUrlController
@@ -13,10 +14,14 @@ class FootUrlController extends BasicController
     
     public static function listApi()
     {
-        Model::listApi('','name');
+        $data = Model::listApi('','name');
+        $response = new Response;
+        $response->json($data);
     }
     public static function recycleApi()
     {
-        Model::recycleApi('','name');
+        $data = Model::recycleApi('','name');
+        $response = new Response;
+        $response->json($data);
     }
 }

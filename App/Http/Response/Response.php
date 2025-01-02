@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http;
+namespace App\Http\Response;
 
 /**
  * Summary of Response
@@ -12,32 +12,28 @@ class Response
     /**
      * 设置 HTTP 状态码
      * @param int $code 状态码
-     * @return self
      */
-    public function status(int $code)
+    public static function status(int $code)
     {
         http_response_code($code);
-        return $this;
     }
     /**
      * 设置响应头
      * @param string $key 头名称
      * @param string $value 头值
-     * @return self
      */
-    public function header(string $key, string $value)
+    public static function header(string $key, string $value)
     {
         header("$key: $value");
-        return $this;
     }
     /**
      * 返回 JSON 数据
      * @param array $data 数据
      * @return void
      */
-    public function json(array $data)
+    public static function json(array $data)
     {
-        $this->header('Content-Type', 'application/json');
+        self::header('Content-Type', 'application/json');
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -46,9 +42,9 @@ class Response
      * @param string $text 文本内容
      * @return void
      */
-    public function text(string $text)
+    public static function text(string $text)
     {
-        $this->header('Content-Type', 'text/plain');
+        self::header('Content-Type', 'text/plain');
         echo $text;
         exit;
     }
@@ -57,9 +53,9 @@ class Response
      * @param string $html HTML 内容
      * @return void
      */
-    public function html(string $html)
+    public static function html(string $html)
     {
-        $this->header('Content-Type', 'text/html');
+        self::header('Content-Type', 'text/html');
         echo $html;
         exit;
     }
@@ -69,10 +65,10 @@ class Response
      * @param int $statusCode 状态码（默认 302）
      * @return void
      */
-    public function redirect(string $url, int $statusCode = 302)
+    public static function redirect(string $url, int $statusCode = 302)
     {
-        $this->status($statusCode);
-        $this->header('Location', $url);
+        self::status($statusCode);
+        self::header('Location', $url);
         exit;
     }
     /**
@@ -81,16 +77,18 @@ class Response
      * @param string|null $fileName 下载文件名（可选）
      * @return void
      */
-    public function download(string $filePath, ?string $fileName = null)
+    public static function download(string $filePath, ?string $fileName = null)
     {
         if (!file_exists($filePath)) {
-            $this->status(404)->text('File not found');
+            self::status(404);
+            self::text('File not found');
+            exit;
         }
 
         $fileName = $fileName ?? basename($filePath);
-        $this->header('Content-Type', 'application/octet-stream');
-        $this->header('Content-Disposition', "attachment; filename=\"$fileName\"");
-        $this->header('Content-Length', filesize($filePath));
+        self::header('Content-Type', 'application/octet-stream');
+        self::header('Content-Disposition', "attachment; filename=\"$fileName\"");
+        self::header('Content-Length', filesize($filePath));
 
         readfile($filePath);
         exit;

@@ -22,7 +22,7 @@ return [
     /**
      * 文件配置
      */
-    'file' => require_once Path::rootPath().'/Config/route.php',
+    'file' => require_once Path::rootPath().'/Config/file.php',
     /**
      * 缓存配置
      */

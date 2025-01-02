@@ -28,7 +28,7 @@ class News extends Model
         $nullable = self::columnIsnullable();
     
         // 构建响应数组
-        $response = [
+        return $data = [
             'code' => 0,
             'msg' => 'success',
             'data' => $data['data'] ?? [], // 使用 null 合并运算符确保不存在时返回空数组
@@ -39,9 +39,6 @@ class News extends Model
             'enter' => $_SESSION['username'] ?? 'Guest', // 使用默认值防止未定义索引
             'enterId' => Session::getUserId() ?? null // 确保返回有效的用户 ID
         ];
-
-        // 返回响应
-        Responce::responce($response);
     }
     public static function showAll($table = null, $id = null, $sort = null, $where = null, $childTable = null, $parentKey = null)
     {

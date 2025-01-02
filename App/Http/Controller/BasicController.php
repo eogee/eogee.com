@@ -9,8 +9,7 @@ use App\Model\Model;
 use App\Model\Log;
 use App\Verify\Verify;
 use App\Http\Request\Request;
-use App\Http\Response;
-use App\Http\Response\Responce;
+use App\Http\Response\Response;
 
 /**
  * Summary of BasicController
@@ -114,14 +113,15 @@ class BasicController{
      * @return void
      */
     public static function tableHeadDataApi()
-    {
-        $responce = [
+    {        
+        $data = [
             'code' => 0
             ,'msg' => 'success'
             ,'tableComment' => Model::getTableComment()
             ,'tableFiledComment' => Model::getTableFieldComment()
         ];
-        Response::json($responce);
+        $response = new Response;
+        $response->json($data);
     }
     /**
      * Summary of index
@@ -165,7 +165,9 @@ class BasicController{
      */
     public static function listApi()
     {
-        Model::listApi();
+        $data = Model::listApi();
+        $response = new Response;
+        $response->json($data);
     }
     /**
      * Summary of recycleApi
@@ -174,7 +176,9 @@ class BasicController{
      */
     public static function recycleApi()
     {
-        Model::recycleApi();
+        $data = Model::recycleApi();
+        $response = new Response;
+        $response->json($data);
     }
     /**
      * Summary of show
@@ -193,7 +197,9 @@ class BasicController{
      */
     public static function showApi()
     {
-        Model::showApi();
+        $data = Model::showApi();
+        $response = new Response;
+        $response->json($data);
     }
     /**
      * Summary of insert
@@ -230,7 +236,9 @@ class BasicController{
      */
     public static function fileUploadApi()
     {
-        File::fileUploadApi();
+        $data = File::fileUploadApi();
+        $response = new Response;
+        $response->json($data);
     }
     /**
      * Summary of updateApi
@@ -239,7 +247,9 @@ class BasicController{
      */
     public static function updateApi()
     {
-        Model::updateApi();
+        $data = Model::updateApi();
+        $response = new Response;
+        $response->json($data);
     }
     /**
      * Summary of delete
