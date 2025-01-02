@@ -2,6 +2,8 @@
 
 namespace App\Verify;
 
+use Helper\Window;
+
 /**
  * Summary of Verify
  * 验证类
@@ -9,7 +11,18 @@ namespace App\Verify;
  */
 class Verify{
     /**
-     * 验证CSRF攻击
+     * 后台访问限制
+     * @return void
+     */
+    public static function adminLimit()
+    {
+        if(!isset($_SESSION['username'])){
+            Window::redirect('/auth/login');//判断是否登录
+            die();
+        }
+    }
+    /**
+     * CSRF 攻击验证
      */
     public static function crsfVerify()
     {

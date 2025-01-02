@@ -2,12 +2,12 @@
 
 namespace Helper;
 
+use App\Http\Request\Request;
 use Helper\Session;
 use Helper\Window;
 use Helper\Database;
 use Helper\Password;
 use Helper\Captcha;
-use App\Http\Request\Request;
 
 /**
  * Summary of Auth
@@ -22,8 +22,9 @@ class Auth
      * 登录验证
      * @return void
      */
-    public static function login()
+    public static function login(Request $request)
     {
+        $_POST = $request->all();
         // 获取并过滤用户名和密码
         $username = filter_var($_POST['username'], FILTER_SANITIZE_STRING);
         $password = $_POST['password'];
@@ -38,7 +39,8 @@ class Auth
         Captcha::checkCaptcha();
 
         // 查询用户是否存在
-        $user = Database::select(self::$tableName, "WHERE username = ?", [$username]);
+        $user = Database::select(self::$tableName, "WHERE username = '$username' AND deleted_at IS NULL", );
+
         if (empty($user)) {
             Window::alert('输入的用户名或密码不正确！', 'back');
             die();
@@ -47,7 +49,7 @@ class Auth
         // 验证密码
         if (Password::verify($password, $user[0]["password"])) {
             Session::set('username', $username);
-            Session::set('csrf_token', Request::crsf());
+            Session::set('csrf_token', self::setCsrf());
             Window::redirect("/admin");
         } else {
             Window::alert('输入的用户名或密码不正确！', 'back');
@@ -64,4 +66,14 @@ class Auth
         Session::destroy();
         Window::alert('退出登录成功！','/auth/login');
     }
+    /**
+     * Summary of setCsrf
+     * 设置csrf_token
+     * @return string
+     */
+    public static function setCsrf()
+    {
+        return bin2hex(random_bytes(32));
+    }
+
 }

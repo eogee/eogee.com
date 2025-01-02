@@ -79,7 +79,7 @@ class Database
     {
         $result = mysqli_query($this->conn, $sql);        
         if ($result === false) {
-            if(CONFIG['developer_mode'] == true){
+            if(CONFIG['app']['developer_mode'] == true){
                 return $sql; // 开发模式下返回SQL语句
             }else{
                 return false; // 生产模式下返回false
@@ -108,7 +108,7 @@ class Database
         $columns = implode(', ', array_keys($data));
         $placeholders = implode(', ', array_fill(0, count($data), '?'));
     
-        $sql = "INSERT INTO `$table` ($columns) VALUES ($placeholders)";
+        $sql = "INSERT INTO $table ($columns) VALUES ($placeholders)";
     
         // 准备 SQL 语句
         $stmt = self::getInstance()->prepare($sql);
@@ -152,8 +152,10 @@ class Database
             return "WHERE 子句不能为空"; // 返回错误信息
         }
 
-        // 使用参数化查询以增强安全性，防止SQL注入
-        $sql = "DELETE FROM `$table` $where"; // 如果 $where 是可验证的条件句，就直接使用
+        // 转义字符串，防止SQL注入
+        $table = self::getInstance()->conn->real_escape_string($table);
+        $where = self::getInstance()->conn->real_escape_string($where);
+        $sql = "DELETE FROM $table $where";
 
         // 调用 query 方法执行查询
         self::getInstance()->query($sql);
@@ -186,7 +188,10 @@ class Database
         }
         $setStr = implode(', ', $setClause);
 
-        $sql = "UPDATE `$table` SET $setStr $where";
+        $table = self::getInstance()->conn->real_escape_string($table);
+        $where = self::getInstance()->conn->real_escape_string($where);
+
+        $sql = "UPDATE $table SET $setStr $where";
 
         // 准备 SQL 语句
         $stmt = self::getInstance()->prepare($sql);
@@ -232,7 +237,7 @@ class Database
             return "表名不能为空"; // 返回错误信息
         }
 
-        $sql = "SELECT * FROM `$table`"; // 使用大写的 SQL 关键字以提高可读性
+        $sql = "SELECT * FROM $table";
 
         // 如果有 WHERE 子句，添加到 SQL 查询中
         if (!empty($where)) {
@@ -243,6 +248,7 @@ class Database
 
         // 添加 LIMIT 子句
         if (!empty($limit)) {
+            $limit = self::getInstance()->conn->real_escape_string($limit);
             $sql .= " $limit"; // 确保 $limit 不为空
         }
 
@@ -285,10 +291,10 @@ class Database
             return "列名或表名不能为空"; 
         }
 
-        // 使用字符串拼接构建 SQL 查询，注意使用 real_escape_string 防止 SQL 注入
+        // 使用字符串拼接构建 SQL 查询，使用 real_escape_string 防止 SQL 注入
         $table = self::getInstance()->conn->real_escape_string($table);
         $col = self::getInstance()->conn->real_escape_string($col);
-        $sql = "SHOW COLUMNS FROM `$table` LIKE '$col'";
+        $sql = "SHOW COLUMNS FROM $table LIKE '$col'";
 
         // 执行查询
         $result = self::getInstance()->query($sql);
@@ -312,7 +318,7 @@ class Database
 
         // 使用字符串拼接前对表名进行转义以防止 SQL 注入
         $table = self::getInstance()->conn->real_escape_string($table);
-        $sql = "SHOW COLUMNS FROM `$table` LIKE 'deleted_at'"; // 使用反引号包围表名
+        $sql = "SHOW COLUMNS FROM $table LIKE 'deleted_at'";
 
         // 执行查询
         $result = self::getInstance()->query($sql);
@@ -339,8 +345,10 @@ class Database
         // 使用字符串转义来避免 SQL 注入
         $table = self::getInstance()->conn->real_escape_string($table);
         $col = self::getInstance()->conn->real_escape_string($col);
+        $where = self::getInstance()->conn->real_escape_string($where);
+        $limit = self::getInstance()->conn->real_escape_string($limit);
         
-        $sql = "SELECT * FROM `$table` $where  ORDER BY `$col` DESC $limit";
+        $sql = "SELECT * FROM $table $where ORDER BY $col DESC $limit";
 
         return self::getInstance()->query($sql);
     }
@@ -364,9 +372,11 @@ class Database
         // 使用字符串转义来避免 SQL 注入
         $table = self::getInstance()->conn->real_escape_string($table);
         $col = self::getInstance()->conn->real_escape_string($col);
+        $where = self::getInstance()->conn->real_escape_string($where);
         $sortCol = self::getInstance()->conn->real_escape_string($sortCol);
+        $desc = self::getInstance()->conn->real_escape_string($desc);
 
-        $sql = "SELECT `$col` from `$table` $where ORDER BY `$sortCol` $desc";
+        $sql = "SELECT $col from $table $where ORDER BY $sortCol $desc";
         return self::getInstance()->query($sql);
     }
     /**
@@ -437,6 +447,7 @@ class Database
         // 使用字符串转义以防止 SQL 注入
         $table = self::getInstance()->conn->real_escape_string($table);
         $col = self::getInstance()->conn->real_escape_string($col);
+        $colType = self::getInstance()->conn->real_escape_string($colType);
         $comment = self::getInstance()->conn->real_escape_string($comment);
 
         // 构建 SQL 查询
@@ -481,9 +492,10 @@ class Database
 
         // 使用字符串转义以防止 SQL 注入
         $table = self::getInstance()->conn->real_escape_string($table);
+        $where = self::getInstance()->conn->real_escape_string($where);
         
         // 构建 SQL 查询
-        $sql = "UPDATE `$table` SET deleted_at = NULL $where";
+        $sql = "UPDATE $table SET deleted_at = NULL $where";
 
         self::getInstance()->query($sql);
     }
@@ -503,9 +515,10 @@ class Database
 
         // 使用字符串转义以防止 SQL 注入
         $table = self::getInstance()->conn->real_escape_string($table);
+        $where = self::getInstance()->conn->real_escape_string($where);
 
         // 构建 SQL 查询
-        $sql = "UPDATE `$table` SET readed_at = NULL $where";
+        $sql = "UPDATE $table SET readed_at = NULL $where";
 
         self::getInstance()->query($sql);
     }
@@ -528,6 +541,7 @@ class Database
         // 使用字符串转义来避免 SQL 注入
         $table = self::getInstance()->conn->real_escape_string($table);
         $col = self::getInstance()->conn->real_escape_string($col);
+        $where = self::getInstance()->conn->real_escape_string($where);
 
         // 初始总和
         $sum = 0;
@@ -536,7 +550,7 @@ class Database
         // 使用循环分批次查询总和
         while (true) {
             // 构建 SQL 查询
-            $sql = "SELECT SUM($col) AS total FROM `$table` " . ($where ? "WHERE $where" : "") . " LIMIT $batchSize OFFSET $offset";
+            $sql = "SELECT SUM($col) AS total FROM $table " . ($where ? "$where" : "") . " LIMIT $batchSize OFFSET $offset";
             $result = self::getInstance()->query($sql);
 
             // 检查结果

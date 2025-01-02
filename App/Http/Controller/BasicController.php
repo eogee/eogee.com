@@ -7,7 +7,9 @@ use Helper\Url;
 use Helper\File;
 use App\Model\Model;
 use App\Model\Log;
+use App\Verify\Verify;
 use App\Http\Request\Request;
+use App\Http\Response;
 use App\Http\Response\Responce;
 
 /**
@@ -119,7 +121,7 @@ class BasicController{
             ,'tableComment' => Model::getTableComment()
             ,'tableFiledComment' => Model::getTableFieldComment()
         ];
-        Responce::responce($responce);
+        Response::json($responce);
     }
     /**
      * Summary of index
@@ -143,7 +145,7 @@ class BasicController{
      */
     public static function list()
     {
-        Request::adminLimit();
+        Verify::adminLimit();
         View::view('/admin/'.Url::getTable().'/list');
     }
     /**
@@ -153,7 +155,7 @@ class BasicController{
      */
     public static function recycle()
     {
-        Request::adminLimit();
+        Verify::adminLimit();
         View::view('/admin/'.Url::getTable().'/list');      
     }
     /**
@@ -181,7 +183,7 @@ class BasicController{
      */
     public static function show()
     {
-        Request::adminLimit();
+        Verify::adminLimit();
         View::view('/admin/show');
     }
     /**
@@ -200,7 +202,7 @@ class BasicController{
      */
     public static function insert()
     {
-        Request::adminLimit();
+        Verify::adminLimit();
         View::view('/admin/'.Url::getTable().'/update');   
         if(isset($_POST) and !empty($_POST)){
             Model::insert();
@@ -213,7 +215,7 @@ class BasicController{
      */
     public static function edit()
     {
-        Request::adminLimit();
+        Verify::adminLimit();
         $id = Url::getId();
         if(isset($id)){
             View::view('/admin/'.Url::getTable().'/update');

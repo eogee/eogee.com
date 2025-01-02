@@ -32,20 +32,4 @@ class Window {
         header("Location: $url");
         exit();
     }
-    /**
-     * 获取请求头部信息
-     * @return array 请求头部信息
-     */
-    public static function getHeader() 
-    {
-        return headers_list();
-    }
-    /**
-     * 设置头部信息
-     * @param string $header 请求头部信息
-     */
-    public static function setHeader($header) 
-    {
-        header($header);
-    }
 }

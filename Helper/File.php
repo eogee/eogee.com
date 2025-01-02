@@ -69,4 +69,13 @@ class File{
         }
         FileResponce::upload($code, $msg);
     }
+    /**
+     * Summary of getCurrentFileName
+     * 获取当前文件名（不含后缀）
+     * @return string
+     */
+    public static function getCurrentFileName()
+    {
+        return pathinfo(__FILE__, PATHINFO_FILENAME);
+    }
 }

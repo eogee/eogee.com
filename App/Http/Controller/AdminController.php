@@ -3,7 +3,7 @@
 namespace App\Http\Controller;
 
 use Helper\View;
-use App\Http\Request\Request;
+use App\Verify\Verify;
 
 /**
  * Summary of AdminController
@@ -17,7 +17,7 @@ class AdminController extends BasicController
      */
     public static function index()
     {
-        Request::adminLimit();
+        Verify::adminLimit();
         View::view('/admin/list');
     }
     
