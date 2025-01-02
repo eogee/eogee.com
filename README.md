@@ -1,27 +1,34 @@
-# Eogee-CMS
+# eogee.com 岳极技术官方网站源码（内容管理系统）
 
 ### 介绍
-基于原生`PHP`、原生 `Javascript`、`Layui`前端框架构建的内容管理系统。
 
-**轻量**：原生PHP构成轻量化框架`EOGEE`，实现`MVC`（模型-视图-控制器）架构模式。
+基于原生`PHP`、`Layui`前端框架及部分原生 `Javascript`构建的内容管理系统。
+
+**轻量**：
+
+原生PHP构成轻量化框架`EOGEE`，实现`MVC`（模型-视图-控制器）架构模式。
 
 **健壮**：
 
-1. **支持`ORM`（对象关系映射）数据库操作**，通过`Model\Database.php`类封装`SQL`，除实现基本的增、删、改、查外，还提供筛选特定列、特定列数据求和、软删除等大量数据库操作`API`。
-2. 设置基础模型类 `Model\Model.php`提供弹窗提醒、重定向、获取登陆用户ID、获取当前模型名、请求响应等多种基础API。
-3. 封装`Controller\BasicController.php`类，**实现`MVC`架构模式**，可实现控制器的前置操作、权限控制、请求参数过滤、请求响应等功能。
-4. 进一步封装`layui.js`为 `Resource\js\admin\eogee-admin-layui.js`，可实现数据表格、按钮组、弹出层、表单、表单验证、表单提交、文件上传、分页、内容搜索等组件，函数式构建前端页面，**简化前端开发**，对后端开发人员友好。
-5. 后台管理系统通过原生`ajax`实现**前后端分离**。
-6. 前台页面嵌入原生`PHP`变量，各页面均可单独定义关键字、描述等SEO信息，对**SEO友好**。
+1. **支持`ORM`（对象关系映射）数据库操作**，通过`Helper\Database.php`类封装`SQL`，除实现基本的增、删、改、查外，还提供筛选特定列、特定列数据求和、软删除等大量数据库操作`API`。
+2. 设置基础模型类 `App\Model\Model.php`提供面向数据库，实现模型的`CURD`操作，并提供`ORM`查询方法。
+3. 封装`App\Http\Controller\BasicController.php`类，**实现`MVC`架构模式**，可实现请求过滤，权限验证，请求响应，日志记录等功能。
+4. 进一步封装`layui.js`为 `Public\js\admin\eogee-admin-layui.js`，可实现数据表格、按钮组、弹出层、表单、表单验证、表单提交、文件上传、分页、内容搜索等组件，函数式构建前端页面，**简化前端开发**，对后端开发人员友好。
+5. 后台管理系统通过原生`ajax`进行数据交互，实现**前后端分离**。
+6. 前台页面嵌入原生`PHP`代码，各页面均可单独定义关键字、页面描述等SEO信息，对**SEO友好**。
 
-**安全**：采用`session`验证、`crsf`验证、敏感字段加密，可防止`CSRF`攻击、防止`XSS`攻击、防止`SQL`注入攻击等安全问题。
+**安全**：
 
-**易用**：将本项目部署于`apache`服务器中，执行`eogee.sql`文件即可完成数据库初始化，即可使用全部功能。
+采用`session`验证、`crsf`验证、敏感字段加密，有效应对`CSRF`攻击、`XSS`攻击、`SQL`注入攻击等安全问题。
 
-**美观**：
+**易用**：
+
+将本项目部署于`apache`服务器中，执行`Database\eogee.sql`文件即可完成数据库初始化，即可使用全部功能。
+
+**简洁**：
 
 1. 前后台均采用`layui`前端框架，简化前端开发，提升用户体验。
-2. 基于`layui.css`进一步编写并引入了`Resource\css\eogee-text-layui.css`，实现风格统一、样式朴素、移动端友好的前后台界面。
+2. 基于`layui.css`进一步编写并引入了`public\css\eogee-text-layui.css`，实现风格统一、样式朴素、移动端友好的前后台界面。
 
 ### 功能模块
 
@@ -34,10 +41,10 @@
 [https://eogee.com](https://eogee.com)
 
 **前台演示**：
-[https://CMS-demo.eogee.com](https://CMS-demo.eogee.com)暂不可用
+[https://eogee.com](https://eogee.com)
 
 **后台演示**：
-[https://CMS-demo.eogee.com/admin](https://CMS-demo.eogee.com/admin)暂不可用
+暂不可用
 
 **说明文档**：
 [https://eogee.com/docs](https://eogee.com/docs)暂不可用
@@ -51,27 +58,52 @@
 
 ```
 EOGEE
-├── Controller
-│   ├── BasicController.php 控制器基类
-├── Model
-│   ├── Database.php 数据库操作类
-│   ├── Model.php 模型基类
-│   ├── Route.php 路由类
-├── Resource
+├── App 应用核心
+│   ├── Http 控制器请求响应
+│   │   ├── Controllers 控制器
+│   │   ├── Middleware 中间件
+│   │   ├── Request 请求
+│   │   └── Response 响应
+│   ├── Model 模型
+│   ├── Mail 邮件
+│   ├── Notice 通知
+│   ├── Notice 验证
+│   ├── autoload.php 自动加载
+│   ├── error.php 错误处理
+│   └── routes.php 路由
+├── Config 配置
+│   ├── app.php 应用配置
+│   ├── cache.php 缓存配置
+│   ├── congig.php 总配置
+│   ├── database.php 数据库配置
+│   ├── file.php 文件配置
+│   ├── mail.php 邮件配置
+│   └── route.php 路由配置
+├── Database 数据库初识化文件
+├── Helper 助手函数
+│   ├── Auth.php 用户验证
+│   ├── Cache.php 缓存
+│   ├── Captcha.php 验证码
+│   ├── Database.php 数据库操作
+│   ├── File.php 文件操作
+│   ├── Log.php 日志
+│   ├── Password.php 密码加密
+│   ├── Session.php 会话
+│   ├── Url.php
+│   ├── View.php 视图
+│   └── Window.php 窗口操作
+├── Public
 │   ├── css
-│   │   ├── eogee-text-layui.css 基于layui的前台样式
+│   ├── file 上传的文件
+│   ├── font
 │   ├── js
-│   │   ├── eogee-admin-layui.js 封装的layui组件
-│   ├── pic 图片资源
-├── ├── view 视图文件
-├── autoload.php 自动加载类
-├── config.php 配置文件
-├── eogee.sql 数据库初始化文件
-├── error.php 错误处理文件
-├── index.php 入口文件
-├── routes.php 路由文件
+│   ├── layui 前端框架
+│   ├── pic
+│   └── view 视图文件
+└── Storage
+    ├── Cache 缓存
+    └── Log 日志
 ```
-
 ### 环境要求
 
 - PHP >= 7.3
@@ -106,6 +138,7 @@ EOGEE
 ### 开源协议
 
 本项目遵循 MIT 开源协议发布并供企业或个人免费使用。
+
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
 
 ### 鸣谢
@@ -120,6 +153,5 @@ Eogee-CMS的诞生依赖于以下开源项目：
 
 - [VsCode](https://code.visualstudio.com/)：代码编辑器
 - [小皮面板](https://www.xp.cn/)：集成环境
-- [Navicat](https://www.HeidiSQL.com/)：数据库客户端
+- [heidiSQL](https://www.HeidiSQL.com/)：数据库客户端
 - [FileZilla](https://filezilla-project.org/)：FTP客户端
-
