@@ -80,7 +80,7 @@ EOGEE
 │   ├── mail.php 邮件配置
 │   └── route.php 路由配置
 ├── Database 数据库初识化文件
-├── Helper 助手函数
+├── Helper 核心功能及助手函数
 │   ├── Auth.php 用户验证
 │   ├── Cache.php 缓存
 │   ├── Captcha.php 验证码
