@@ -5,7 +5,8 @@ namespace Helper;
 /**
  * Password encryption and verification helper class
  * 密码加密和验证相关
- * @author <eogee.com> <<eogee@qq.com>>
+ * @author Eogee
+ * @email eogee@qq.com 
  */
 class Password
 {

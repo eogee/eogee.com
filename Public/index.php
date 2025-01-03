@@ -1,11 +1,14 @@
 <?php
+
 use Helper\Path;
 use Easy\Route\Route;
 use Easy\Session\Session;
+
 /**
  * Summary of index
  * 入口文件
- * @author <eogee.com> <<eogee@qq.com>>
+ * @author Eogee
+ * @email eogee@qq.com 
  */
 require_once __DIR__.'/../App/autoload.php';//引入自动加载
 define('CONFIG',require_once Path::rootPath().'/Config/config.php');//引入配置文件

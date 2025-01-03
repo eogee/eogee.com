@@ -5,7 +5,8 @@ namespace Helper;
 /**
  * Summary of Window
  * 窗口操作类
- * @author <eogee> <<eogee@qq.com>>
+ * @author Eogee
+ * @email eogee@qq.com 
  */
 class Window {
     /**

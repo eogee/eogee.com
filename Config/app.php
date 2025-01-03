@@ -3,6 +3,8 @@
 /**
  * Application configuration
  * 应用配置
+ * @author Eogee
+ * @email eogee@qq.com 
  */
 return [
     //站点名称

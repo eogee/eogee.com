@@ -10,7 +10,8 @@ use Helper\Url;
 /**
  * Summary of Model
  * 所有模型的基类
- * @author <eogee.com> <<eogee@qq.com>>
+ * @author Eogee
+ * @email eogee@qq.com 
  */
 class Base{
     protected $db;//数据库连接资源

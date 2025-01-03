@@ -1,8 +1,7 @@
 /**
  * eogee-admin-layui.js
- * @author: eogee.com
- * @bugContacts: You can contact us by email:eogee@qq.com or QQ: 3886370035
- * @联系我们: 邮箱:eogee@qq.com 或 QQ: 3886370035
+ * @author Eogee
+ * @email eogee@qq.com 
  */
 
 /**

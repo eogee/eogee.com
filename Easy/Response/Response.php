@@ -5,7 +5,8 @@ namespace Easy\Response;
 /**
  * Summary of Response
  * 响应类
- * @author eogee.com <<eogee@qq.com>>
+ * @author Eogee
+ * @email eogee@qq.com 
  */
 class Response
 {

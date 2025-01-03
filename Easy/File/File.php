@@ -7,7 +7,8 @@ use Helper\Url;
 /**
  * Summary of File
  * 文件操作类
- * @author <eogee> <<eogee@qq.com>
+ * @author Eogee
+ * @email eogee@qq.com 
  */
 class File
 {

@@ -5,7 +5,8 @@ namespace Easy\Route;
 /**
  * Summary of Route
  * 操作路由类
- * @author <eogee.com> <<eogee@qq.com>>
+ * @author Eogee
+ * @email eogee@qq.com 
  */
 class Route
 {

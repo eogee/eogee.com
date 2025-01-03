@@ -9,11 +9,17 @@ use Helper\Path;
 /**
  * Summary of Captcha
  * 验证码操作类
- * @author <eogee.com> <<eogee@qq.com>>
+ * @author Eogee
+ * @email eogee@qq.com 
  */
 class Captcha
 {
-    protected $session = new Session();
+    protected $session;
+
+    public function __construct()
+    {
+        $this->session = new Session;
+    }
     /**
      * Summary of setCaptcha
      * 生成验证码

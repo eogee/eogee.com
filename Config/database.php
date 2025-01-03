@@ -3,6 +3,8 @@
 /**
  * Database configuration
  * 数据库配置
+ * @author Eogee
+ * @email eogee@qq.com 
  */
 return [
     // 数据库链接配置

@@ -9,7 +9,8 @@ use Easy\Captcha\Captcha;
 /**
  * Summary of AuthController
  * 用户验证控制器
- * @author <eogee.com> <<eogee@qq.com>>
+ * @author Eogee
+ * @email eogee@qq.com 
  */
 class AuthController{
     protected $captcha;

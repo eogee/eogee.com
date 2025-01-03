@@ -7,7 +7,8 @@ use Helper\Path;
 /**
  * Summary of View
  * 视图操作
- * @author <eogee.com> <<email:eogee@qq.com>>
+ * @author Eogee
+ * @email eogee@qq.com 
  */
 class View
 {

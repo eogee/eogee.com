@@ -8,7 +8,8 @@ use App\Model\News;
 /**
  * Summary of IndexController
  * 前台首页 控制器
- * @author eogee.com
+ * @author Eogee
+ * @email eogee@qq.com 
  */
 class IndexController extends BasicController
 {

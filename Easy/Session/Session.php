@@ -6,7 +6,8 @@ use Easy\Database\Database;
 
 /**
  * 处理Session相关
- * @author <eogee.com> <<eogee@qq.com>>
+ * @author Eogee
+ * @email eogee@qq.com 
  */
 class Session
 {

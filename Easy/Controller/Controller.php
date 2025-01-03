@@ -14,7 +14,8 @@ use Helper\Url;
 /**
  * Summary of BasicController
  * 基础控制器
- * @author <eogee.com> <<eogee@qq.com>>
+ * @author Eogee
+ * @email eogee@qq.com 
  */
 class Controller{
     protected $model;//模型类

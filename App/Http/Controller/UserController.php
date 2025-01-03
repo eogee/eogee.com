@@ -5,7 +5,7 @@ namespace App\Http\Controller;
 use Easy\View\View;
 use Helper\Url;
 use App\Model\User;
-use app\Verify\Verify;
+use App\Verify\Verify;
 
 /**
  * Summary of UserController
