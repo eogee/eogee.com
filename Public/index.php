@@ -10,7 +10,10 @@ use Easy\Session\Session;
  * @author Eogee
  * @email eogee@qq.com 
  */
-require_once __DIR__.'/../App/autoload.php';//引入自动加载
+//require_once __DIR__.'/../App/autoload.php';//引入自动加载
+
+require __DIR__ . '/../vendor/autoload.php';
+
 define('CONFIG',require_once Path::rootPath().'/Config/config.php');//引入配置文件
 $session = new Session;
 $session->start();
