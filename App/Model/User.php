@@ -1,13 +1,10 @@
 <?php
 namespace App\Model;
 
-use Helper\Session;
 use Helper\Url;
-use Helper\Database;
 use Helper\Window;
 use Helper\Password;
 use App\Verify\Verify;
-use App\Http\Response\Response;
 
 /**
  * 用户管理 模型
@@ -18,16 +15,16 @@ class User extends Model
      * Summary of checkUsernameApi
      * 检查用户名是否存在 API
      */
-    public static function checkUsernameApi()
+    public function checkUsernameApi()
     {
         // 获取 username
-        $username = Url::getId();
+        $username = $this->id;
 
         // 安全处理
-        $username = Database::getInstance()->conn->real_escape_string($username);
+        $username = $this->db->conn->real_escape_string($username);
 
         // 查询数据库判断用户名是否存在
-        $usernameExist = Database::select(Url::getTable(), "WHERE username = '$username'");
+        $usernameExist = $this->db->select(Url::getTable(), "WHERE username = '$username'");
         
         if (count($usernameExist) > 0) {
             return [
@@ -46,13 +43,14 @@ class User extends Model
      * Summary of updateApi
      * 编辑用户信息 API 
      */
-    public static function updateApi()
+    public function updateApi()
     {
+        //todo: 验证用户权限
         // 获取 ID
-        $id = Url::getId();
+        $username = $this->id;
     
         // 验证 ID 是否有效
-        if (empty($id)) {
+        if (empty($username)) {
             $data = [
                 'code' => 100,
                 'msg' => 'ID 不能为空',
@@ -61,9 +59,9 @@ class User extends Model
         }
     
         // 获取相关数据
-        $data = self::show(); // 获取数据
-        $nullable = self::columnIsnullable(); // 获取字段是否可空
-        $options = Database::selectCol('role', "id, name"); // 获取角色选项
+        $data = $this->show(); // 获取数据
+        $nullable = $this->columnIsnullable(); // 获取字段是否可空
+        $options = $this->db->selectCol('role', "id, name"); // 获取角色选项
     
         // 构建响应数组
         return $data = [
@@ -75,7 +73,7 @@ class User extends Model
             'options' => !empty($options) ? $options : [], // 确保选项存在
             'csrf_token' => $_SESSION['csrf_token'] ?? '', // 确保 CSRF Token 存在
             'enter' => $_SESSION['username'] ?? 'Guest', // 设置用户名称为 'Guest'
-            'enterId' => Session::getUserId() ?? null // 确保返回有效的用户 ID
+            'enterId' => $this->session->getUserId() ?? null // 确保返回有效的用户 ID
         ];
     }
     
@@ -86,7 +84,7 @@ class User extends Model
      * @param mixed $table
      * @return mixed
      */
-    public static function edit($table = null)
+    public function edit($table = null)
     {
         // 验证 CSRF Token
         Verify::crsfVerify();
@@ -106,7 +104,7 @@ class User extends Model
         }
 
         // 获取旧密码和旧用户名
-        $userData = Database::select($table, "WHERE id = " . intval($id));
+        $userData = $this->db->select($table, "WHERE id = " . intval($id));
         if (empty($userData)) {
             Window::alert('用户不存在！');
             die();
@@ -124,7 +122,7 @@ class User extends Model
         // 检查用户名是否已存在
         $username = $_POST['username'];
         if ($username !== $usernameOld) {
-            $usernameExist = Database::select($table, "WHERE username = '" . Database::getInstance()->conn->real_escape_string($username) . "'");
+            $usernameExist = $this->db->select($table, "WHERE username = '" . $this->db->conn->real_escape_string($username) . "'");
             if (count($usernameExist) > 0) {
                 Window::alert('该用户名已存在！');
                 die();
@@ -145,6 +143,6 @@ class User extends Model
         ];
 
         // 执行更新
-        return Database::update($table, $dataToUpdate, "WHERE id = " . intval($id));
+        return $this->db->update($table, $dataToUpdate, "WHERE id = " . intval($id));
     }
 }

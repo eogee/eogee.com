@@ -1,6 +1,6 @@
 <?php
 
-use Helper\Cache;
+use Easy\Cache\Cache;
 
 /**
  * Summary of defineRoutes

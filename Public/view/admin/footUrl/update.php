@@ -1,5 +1,5 @@
 <?php
-    use Helper\View;
+    use Easy\View\View;
     View::view('/admin/updateHead');
 ?> 
     <tr id = "name">

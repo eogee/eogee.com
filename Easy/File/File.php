@@ -1,29 +1,42 @@
 <?php
-namespace Helper;
+namespace Easy\File;
 
-use Helper\Database;
-use App\Http\Response\FileResponce;
+use Easy\Database\Database;
+use Helper\Url;
 
 /**
  * Summary of File
  * 文件操作类
  * @author <eogee> <<eogee@qq.com>
  */
-class File{
+class File
+{
+    protected $db;
+
+    public function __construct()
+    {
+        $this->db = Database::getInstance();
+    }
     /**
      * Summary of fileUploadApi
      * 文件上传api接口
+     * @param string|null $table 表名
+     * @param string|null $fileName 文件名
+     * @param string $type 文件类型（默认 'pic'）
+     * @param int|null $id 记录ID
+     * @return array 返回上传结果
      */
-    public static function fileUploadApi($table = null, $fileName = null, $type = 'pic' ,$id = null )
+    public function fileUploadApi($table = null, $fileName = null, $type = 'pic', $id = null)
     {
-        if($type == 'pic'){
+        if ($type == 'pic') {
             $dir = CONFIG['file']['pic_upload_path'];
-        }else{
+        } else {
             $dir = CONFIG['file']['file_upload_path'];
         }
+
         // 获取 ID，并确保其存在
         $id = Url::getId() ?: 1;
-        
+
         // 确保表名有效
         if (empty($table)) {
             $table = Url::getTable();
@@ -41,7 +54,7 @@ class File{
             $name = basename($_FILES['file']['name']); // 防止路径注入，确保文件名安全
 
             // 获取旧文件路径
-            $oldFileStr = Database::select($table, "WHERE id = $id")[0][$fileName] ?? null;
+            $oldFileStr = $this->db->select($table, "WHERE id = $id")[0][$fileName] ?? null;
             $oldFile = ltrim($oldFileStr, '/'); // 去除开头的斜杠
 
             // 删除旧文件
@@ -51,12 +64,12 @@ class File{
 
             // 移动上传的文件到目标目录
             if (move_uploaded_file($tmpName, $uploadDir . $name)) {
-                // Prepare the data for the database update
+                // 准备数据库更新数据
                 $data = [
                     $fileName => '/' . $uploadDir . $name // 记录新文件路径
                 ];
-                Database::update($table, $data, "WHERE id = $id"); // 更新数据库记录
-                
+                $this->db->update($table, $data, "WHERE id = $id"); // 更新数据库记录
+
                 $code = 0;
                 $msg = "上传成功！";
             } else {
@@ -67,17 +80,19 @@ class File{
             $code = 100;
             $msg = "上传失败！错误代码：" . ($_FILES['file']['error'] ?? '未知错误');
         }
-        return $data = [
-            'code' => $code
-            ,'msg' => $msg
+
+        return [
+            'code' => $code,
+            'msg' => $msg
         ];
     }
+
     /**
      * Summary of getCurrentFileName
      * 获取当前文件名（不含后缀）
      * @return string
      */
-    public static function getCurrentFileName()
+    public function getCurrentFileName()
     {
         return pathinfo(__FILE__, PATHINFO_FILENAME);
     }

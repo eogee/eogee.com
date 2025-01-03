@@ -32,8 +32,8 @@ class SiteController extends indexController
             CURLOPT_HTTPHEADER => array('Content-Type: text/plain'),
         );
         curl_setopt_array($ch, $options);
-        $result = curl_exec($ch);        
+        $result = curl_exec($ch);
         
-        require_once 'Resource/view/admin/site/post.php';
+        require_once '/view/admin/site/post.php';
     }
 }

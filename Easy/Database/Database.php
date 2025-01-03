@@ -1,5 +1,5 @@
 <?php
-namespace Helper;
+namespace Easy\Database;
 
 /**
  * Summary of Database
@@ -97,7 +97,7 @@ class Database
      * @param string $table 表名
      * @param array $data 要插入的数据
      */
-    public static function insert($table, array $data)
+    public function insert($table, array $data)
     {
         // 确保数据不为空
         if (empty($data)) {
@@ -111,11 +111,11 @@ class Database
         $sql = "INSERT INTO $table ($columns) VALUES ($placeholders)";
     
         // 准备 SQL 语句
-        $stmt = self::getInstance()->prepare($sql);
+        $stmt = $this->prepare($sql);
     
         // 确保准备成功
         if ($stmt === false) {
-            return "准备 SQL 语句失败: " . mysqli_error(self::getInstance()->conn);
+            return "准备 SQL 语句失败: " . mysqli_error($this->conn);
         }
     
         // 创建类型字符串
@@ -145,7 +145,7 @@ class Database
      * @param string $where WHERE 子句
      * @return mixed 执行结果
      */
-    public static function delete($table, $where)
+    public function delete($table, $where)
     {
         // 验证 WHERE 子句是否提供
         if (empty($where)) {
@@ -153,12 +153,12 @@ class Database
         }
 
         // 转义字符串，防止SQL注入
-        $table = self::getInstance()->conn->real_escape_string($table);
-        $where = self::getInstance()->conn->real_escape_string($where);
+        $table = $this->conn->real_escape_string($table);
+        $where = $this->conn->real_escape_string($where);
         $sql = "DELETE FROM $table $where";
 
         // 调用 query 方法执行查询
-        self::getInstance()->query($sql);
+        $this->query($sql);
 
     }
     /**
@@ -169,7 +169,7 @@ class Database
      * @param string $where WHERE 子句
      * @return mixed 执行结果
      */
-    public static function update($table, array $data, $where)
+    public function update($table, array $data, $where)
     {
         // 确保数据不为空
         if (empty($data)) {
@@ -188,17 +188,17 @@ class Database
         }
         $setStr = implode(', ', $setClause);
 
-        $table = self::getInstance()->conn->real_escape_string($table);
-        $where = self::getInstance()->conn->real_escape_string($where);
+        $table = $this->conn->real_escape_string($table);
+        $where = $this->conn->real_escape_string($where);
 
         $sql = "UPDATE $table SET $setStr $where";
 
         // 准备 SQL 语句
-        $stmt = self::getInstance()->prepare($sql);
+        $stmt = $this->prepare($sql);
 
         // 确保准备成功
         if ($stmt === false) {
-            return "准备 SQL 语句失败: " . mysqli_error(self::getInstance()->conn); // 返回错误信息
+            return "准备 SQL 语句失败: " . mysqli_error($this->conn); // 返回错误信息
         }
 
         // 创建类型字符串
@@ -230,7 +230,7 @@ class Database
      * @param string $limit LIMIT 子句
      * @return mixed 查询结果集
      */
-    public static function select($table, $where = null, $limit = null)
+    public function select($table, $where = null, $limit = null)
     {
         // 验证表名是否有效
         if (empty($table)) {
@@ -248,12 +248,12 @@ class Database
 
         // 添加 LIMIT 子句
         if (!empty($limit)) {
-            $limit = self::getInstance()->conn->real_escape_string($limit);
+            $limit = $this->conn->real_escape_string($limit);
             $sql .= " $limit"; // 确保 $limit 不为空
         }
 
         // 执行查询
-        return self::getInstance()->query($sql);
+        return $this->query($sql);
     }
     /**
      * Summary of hasTable
@@ -261,7 +261,7 @@ class Database
      * @param string $table 表名
      * @return mixed 查询结果集
      */
-    public static function hasTable($table)
+    public function hasTable($table)
     {
         // 验证表名是否有效
         if (empty($table)) {
@@ -269,10 +269,10 @@ class Database
         }
 
         // 使用字符串拼接构建 SQL 查询
-        $sql = "SHOW TABLES LIKE '" . self::getInstance()->conn->real_escape_string($table) . "'";
+        $sql = "SHOW TABLES LIKE '" . $this->conn->real_escape_string($table) . "'";
 
         // 执行查询
-        $result = self::getInstance()->query($sql);
+        $result = $this->query($sql);
 
         // 检查结果集是否有记录
         return $result && count($result) > 0; // 直接返回布尔值
@@ -284,7 +284,7 @@ class Database
      * @param string $table 表名
      * @return mixed 查询结果集
      */
-    public static function hasCol($col, $table)
+    public function hasCol($col, $table)
     {
         // 验证表名和列名是否有效
         if (empty($col) || empty($table)) {
@@ -292,12 +292,12 @@ class Database
         }
 
         // 使用字符串拼接构建 SQL 查询，使用 real_escape_string 防止 SQL 注入
-        $table = self::getInstance()->conn->real_escape_string($table);
-        $col = self::getInstance()->conn->real_escape_string($col);
+        $table = $this->conn->real_escape_string($table);
+        $col = $this->conn->real_escape_string($col);
         $sql = "SHOW COLUMNS FROM $table LIKE '$col'";
 
         // 执行查询
-        $result = self::getInstance()->query($sql);
+        $result = $this->query($sql);
 
         // 直接返回布尔值
         return $result && count($result) > 0; // 检查结果集是否有记录
@@ -309,7 +309,7 @@ class Database
      * @param string $table 表名
      * @return mixed 查询结果集
      */
-    public static function hasDeletedAt($table) 
+    public function hasDeletedAt($table) 
     {
         // 验证表名是否有效
         if (empty($table)) {
@@ -317,11 +317,11 @@ class Database
         }
 
         // 使用字符串拼接前对表名进行转义以防止 SQL 注入
-        $table = self::getInstance()->conn->real_escape_string($table);
+        $table = $this->conn->real_escape_string($table);
         $sql = "SHOW COLUMNS FROM $table LIKE 'deleted_at'";
 
         // 执行查询
-        $result = self::getInstance()->query($sql);
+        $result = $this->query($sql);
 
         // 直接返回布尔值
         return $result && count($result) > 0; // 检查结果集是否有记录
@@ -335,7 +335,7 @@ class Database
      * @param string $limit LIMIT 子句
      * @return mixed 查询结果集
      */
-    public static function selectOrder($table,$col,$where = null,$limit = null)
+    public function selectOrder($table,$col,$where = null,$limit = null)
     {
         // 验证表名和列名是否有效
         if (empty($table) || empty($col)) {
@@ -343,14 +343,13 @@ class Database
         }
 
         // 使用字符串转义来避免 SQL 注入
-        $table = self::getInstance()->conn->real_escape_string($table);
-        $col = self::getInstance()->conn->real_escape_string($col);
-        $where = self::getInstance()->conn->real_escape_string($where);
-        $limit = self::getInstance()->conn->real_escape_string($limit);
+        $table = $this->conn->real_escape_string($table);
+        $col = $this->conn->real_escape_string($col);
+        $limit = $this->conn->real_escape_string($limit);
         
         $sql = "SELECT * FROM $table $where ORDER BY $col DESC $limit";
 
-        return self::getInstance()->query($sql);
+        return $this->query($sql);
     }
     /**
      * Summary of selectCol
@@ -362,7 +361,7 @@ class Database
      * @param string $desc 排序方式
      * @return mixed 查询结果集
      */
-    public static function selectCol($table, $col,$where = null,$sortCol = "id",$desc = "DESC")
+    public function selectCol($table, $col,$where = null,$sortCol = "id",$desc = "DESC")
     {
         // 验证表名和列名是否有效
         if (empty($table) || empty($col) || empty($sortCol)) {
@@ -370,14 +369,14 @@ class Database
         }
 
         // 使用字符串转义来避免 SQL 注入
-        $table = self::getInstance()->conn->real_escape_string($table);
-        $col = self::getInstance()->conn->real_escape_string($col);
-        $where = self::getInstance()->conn->real_escape_string($where);
-        $sortCol = self::getInstance()->conn->real_escape_string($sortCol);
-        $desc = self::getInstance()->conn->real_escape_string($desc);
+        $table = $this->conn->real_escape_string($table);
+        $col = $this->conn->real_escape_string($col);
+        $where = $this->conn->real_escape_string($where);
+        $sortCol = $this->conn->real_escape_string($sortCol);
+        $desc = $this->conn->real_escape_string($desc);
 
         $sql = "SELECT $col from $table $where ORDER BY $sortCol $desc";
-        return self::getInstance()->query($sql);
+        return $this->query($sql);
     }
     /**
      * Summary of tableComment
@@ -385,7 +384,7 @@ class Database
      * @param string $table 表名
      * @return mixed 查询结果集
      */
-    public static function tableComment($table)
+    public function tableComment($table)
     {
         // 验证表名是否有效
         if (empty($table)) {
@@ -393,16 +392,16 @@ class Database
         }
 
         // 获取数据库名
-        $database = self::getInstance()->database;
+        $database = $this->database;
 
         // 使用字符串转义以防止 SQL 注入
-        $table = self::getInstance()->conn->real_escape_string($table);
+        $table = $this->conn->real_escape_string($table);
 
         // 构建 SQL 查询
         $sql = "SELECT TABLE_COMMENT FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '$database' AND TABLE_NAME = '$table'";
 
         // 执行查询并返回结果
-        return self::getInstance()->query($sql);
+        return $this->query($sql);
     }
     /**
      * Summary of columnComment
@@ -410,7 +409,7 @@ class Database
      * @param string $table 表名
      * @return mixed 查询结果集
      */
-    public static function columnComment($table)
+    public function columnComment($table)
     {
         // 验证表名是否有效
         if (empty($table)) {
@@ -418,15 +417,15 @@ class Database
         }
 
         // 获取数据库名
-        $database = self::getInstance()->database;
+        $database = $this->database;
 
         // 使用字符串转义以防止 SQL 注入
-        $table = self::getInstance()->conn->real_escape_string($table);
+        $table = $this->conn->real_escape_string($table);
 
         // 构建 SQL 查询
         $sql = "SELECT COLUMN_NAME, COLUMN_COMMENT FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '$database' AND TABLE_NAME = '$table' ORDER BY ORDINAL_POSITION;";
 
-        return self::getInstance()->query($sql);
+        return $this->query($sql);
     }
     /**
      * Summary of updateColumnComment
@@ -437,7 +436,7 @@ class Database
      * @param string $comment 注释
      * @return mixed 查询结果集
      */
-    public static function updateColumnComment($table,$col,$colType,$comment)
+    public function updateColumnComment($table,$col,$colType,$comment)
     {
         // 验证表名、字段名、字段类型、注释是否有效
         if (empty($table) || empty($col) || empty($colType) || empty($comment)) {
@@ -445,15 +444,15 @@ class Database
         }
 
         // 使用字符串转义以防止 SQL 注入
-        $table = self::getInstance()->conn->real_escape_string($table);
-        $col = self::getInstance()->conn->real_escape_string($col);
-        $colType = self::getInstance()->conn->real_escape_string($colType);
-        $comment = self::getInstance()->conn->real_escape_string($comment);
+        $table = $this->conn->real_escape_string($table);
+        $col = $this->conn->real_escape_string($col);
+        $colType = $this->conn->real_escape_string($colType);
+        $comment = $this->conn->real_escape_string($comment);
 
         // 构建 SQL 查询
         $sql = "ALTER TABLE $table MODIFY COLUMN $col $colType COMMENT '$comment'";
 
-        return self::getInstance()->query($sql);
+        return $this->query($sql);
     }
     /**
      * Summary of columnIsnullable
@@ -461,7 +460,7 @@ class Database
      * @param string $table 表名
      * @return mixed 查询结果集
      */
-    public static function columnIsnullable($table)
+    public function columnIsnullable($table)
     {
         // 验证表名是否有效
         if (empty($table)) {
@@ -469,12 +468,12 @@ class Database
         }
 
         // 使用字符串转义以防止 SQL 注入
-        $table = self::getInstance()->conn->real_escape_string($table);
+        $table = $this->conn->real_escape_string($table);
         
         // 构建 SQL 查询
         $sql = "SELECT COLUMN_NAME, IS_NULLABLE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table'";
 
-        return self::getInstance()->query($sql);
+        return $this->query($sql);
     }
     /**
      * Summary of deleteDate
@@ -483,22 +482,30 @@ class Database
      * @param string $where WHERE 子句
      * @return mixed 查询结果集
      */
-    public static function deleteDate($table, $where = null) 
-    {
-        // 验证表名是否有效
-        if (empty($table)) {
-            return "表名不能为空"; // 返回错误信息
-        }
-
-        // 使用字符串转义以防止 SQL 注入
-        $table = self::getInstance()->conn->real_escape_string($table);
-        $where = self::getInstance()->conn->real_escape_string($where);
-        
-        // 构建 SQL 查询
-        $sql = "UPDATE $table SET deleted_at = NULL $where";
-
-        self::getInstance()->query($sql);
+/**
+ * Summary of deleteDate
+ * 清空删除时间戳
+ * @param string $table 表名
+ * @param string $where WHERE 子句
+ * @return mixed 查询结果集
+ */
+public function deleteDate($table, $where = null) 
+{
+    // 验证表名是否有效
+    if (empty($table)) {
+        return "表名不能为空"; // 返回错误信息
     }
+
+    // 使用字符串转义以防止 SQL 注入
+    $table = $this->conn->real_escape_string($table);
+    $where = $this->conn->real_escape_string($where);
+    
+    // 构建 SQL 查询
+    $sql = "UPDATE $table SET deleted_at = NULL $where";
+
+    $this->query($sql);
+}
+
     /**
      * Summary of deleteReadedDate
      * 清空已读时间戳
@@ -506,7 +513,7 @@ class Database
      * @param string $where WHERE 子句
      * @return mixed 查询结果集
      */
-    public static function deleteReadedDate($table, $where = null) 
+    public function deleteReadedDate($table, $where = null) 
     {
         // 验证表名是否有效
         if (empty($table)) {
@@ -514,14 +521,15 @@ class Database
         }
 
         // 使用字符串转义以防止 SQL 注入
-        $table = self::getInstance()->conn->real_escape_string($table);
-        $where = self::getInstance()->conn->real_escape_string($where);
+        $table = $this->conn->real_escape_string($table);
+        $where = $this->conn->real_escape_string($where);
 
         // 构建 SQL 查询
         $sql = "UPDATE $table SET readed_at = NULL $where";
 
-        self::getInstance()->query($sql);
+        $this->query($sql);
     }
+
     /**
      * Summary of sum
      * 计算特定字段的总和，默认每批次计算100条
@@ -531,7 +539,7 @@ class Database
      * @param int $batchSize 每批次计算条数
      * @return mixed 查询结果集
      */
-    public static function sum($table, $col, $where = null, $batchSize = 100) 
+    public function sum($table, $col, $where = null, $batchSize = 100) 
     {
         // 验证表名和字段名是否有效
         if (empty($table) || empty($col)) {
@@ -539,9 +547,9 @@ class Database
         }
 
         // 使用字符串转义来避免 SQL 注入
-        $table = self::getInstance()->conn->real_escape_string($table);
-        $col = self::getInstance()->conn->real_escape_string($col);
-        $where = self::getInstance()->conn->real_escape_string($where);
+        $table = $this->conn->real_escape_string($table);
+        $col = $this->conn->real_escape_string($col);
+        $where = $this->conn->real_escape_string($where);
 
         // 初始总和
         $sum = 0;
@@ -551,7 +559,7 @@ class Database
         while (true) {
             // 构建 SQL 查询
             $sql = "SELECT SUM($col) AS total FROM $table " . ($where ? "$where" : "") . " LIMIT $batchSize OFFSET $offset";
-            $result = self::getInstance()->query($sql);
+            $result = $this->query($sql);
 
             // 检查结果
             if ($result && count($result) > 0) {                

@@ -1,8 +1,8 @@
 <?php
 
-namespace Helper;
+namespace Easy\Session;
 
-use Helper\Database;
+use Easy\Database\Database;
 
 /**
  * 处理Session相关
@@ -10,12 +10,18 @@ use Helper\Database;
  */
 class Session
 {
+    protected $db;
+
+    public function __construct()
+    {
+        $this->db = Database::getInstance();
+    }
     /**
      * Summary of start
      * 开启session
      * @return void
      */
-    public static function start()
+    public function start()
     {
         session_start();
     }
@@ -26,7 +32,7 @@ class Session
      * @param mixed $value
      * @return void
      */
-    public static function set($key, $value)
+    public function set($key, $value)
     {
         $_SESSION[$key] = $value;
     }
@@ -36,7 +42,7 @@ class Session
      * @param mixed $key
      * @return mixed
      */
-    public static function get($key)
+    public function get($key)
     {
         if (isset($_SESSION[$key])) {
             return $_SESSION[$key];
@@ -50,7 +56,7 @@ class Session
      * @param mixed $key
      * @return void
      */
-    public static function delete($key)
+    public function delete($key)
     {
         if (isset($_SESSION[$key])) {
             unset($_SESSION[$key]);
@@ -61,7 +67,7 @@ class Session
      * 获取当前登录的用户
      * @return mixed | null 返回当前登录的用户名
      */
-    public static function getUser()
+    public function getUser()
     {
         if (isset($_SESSION['username'])) 
         {
@@ -77,11 +83,11 @@ class Session
      * 获取当前登录的用户id
      * @return mixed | null 返回当前登录的用户id
      */
-    public static function getUserId()
+    public function getUserId()
     {
         if(!empty(self::getUser()))
         {
-            Database::select('user',"where username = '".self::getUser()."'")[0]['id'];
+            $this->db->select('user',"where username = '".self::getUser()."'")[0]['id'];
         }else{
             return null;
         }

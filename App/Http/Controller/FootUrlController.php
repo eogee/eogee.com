@@ -2,9 +2,6 @@
 
 namespace App\Http\Controller;
 
-use App\Model\Model;
-use App\Http\Response\Response;
-
 /**
  * Summary of FootUrlController
  * 底部链接 控制器
@@ -12,16 +9,14 @@ use App\Http\Response\Response;
 class FootUrlController extends BasicController
 {
     
-    public static function listApi()
+    public function listApi()
     {
-        $data = Model::listApi('','name');
-        $response = new Response;
-        $response->json($data);
+        $data = $this->model->listApi('','name');
+        $this->response->json($data);
     }
-    public static function recycleApi()
+    public function recycleApi()
     {
-        $data = Model::recycleApi('','name');
-        $response = new Response;
-        $response->json($data);
+        $data = $this->model->recycleApi('','name');
+        $this->response->json($data);
     }
 }

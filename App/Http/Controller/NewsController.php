@@ -2,12 +2,9 @@
 
 namespace App\Http\Controller;
 
-use Helper\View;
-use Helper\Url;
-use App\Model\Model;
+use Easy\View\View;
 use App\Model\News;
 use App\Verify\Verify;
-use App\Http\Response\Response;
 
 /**
  * Summary of NewsController
@@ -15,30 +12,36 @@ use App\Http\Response\Response;
  */
 class NewsController extends BasicController
 {
-    public static function index()
+    protected $news;
+
+    public function __construct()
     {
-        $indexData = self::headData();
-        $data = News::showAll();
+        parent::__construct();
+        $this->news = new News;
+    }
+    public function index()
+    {
+        $indexData = $this->headData();
+        $data = $this->news->showAll();
         $data = [
             'indexData' => $indexData,
             'data' => $data
         ];
-        View::view('/index/'.Url::getTable(),$data);
+        View::view('/index/'.$this->table,$data);
     }
-    public static function updateApi()
+    public function updateApi()
     {
-        $data = News::updateApi();
-        $response = new Response;
-        $response->json($data);
+        $data = $this->news->updateApi();
+        $this->response->json($data);
     }
-    public static function edit()
+    public function edit()
     {
         Verify::adminLimit();
-        $id = Url::getId();
+        $id = $this->id;
         if(isset($id)){
-            View::view('/admin/'.Url::getTable().'/update');
+            View::view('/admin/'.$this->table.'/update');
         }else{
-            Model::edit();
+            $this->model->edit();
         }
     }
 }

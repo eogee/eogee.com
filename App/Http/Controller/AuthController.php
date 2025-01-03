@@ -2,9 +2,9 @@
 
 namespace App\Http\Controller;
 
-use Helper\Auth;
-use Helper\View;
-use Helper\Captcha;
+use Easy\Auth\Auth;
+use Easy\View\View;
+use Easy\Captcha\Captcha;
 
 /**
  * Summary of AuthController
@@ -12,15 +12,22 @@ use Helper\Captcha;
  * @author <eogee.com> <<eogee@qq.com>>
  */
 class AuthController{
+    protected $captcha;
+    protected $auth;
+    public function __construct()
+    {
+        $this->captcha = new Captcha;
+        $this->auth = new Auth;
+    }
     /**
      * Summary of login
      * 登录验证
      * @return void
      */
-    public static function login()
+    public function login()
     {
         if(isset($_POST["username"])){
-            Auth::login();
+            $this->auth->login();
         }else{
             View::view('/admin/auth/login');
         }
@@ -30,17 +37,17 @@ class AuthController{
      * 生成验证码
      * @return void
      */
-    public static function setCaptcha(){
-        Captcha::setCaptcha();
+    public function setCaptcha(){
+        $this->captcha->setCaptcha();
     }
     /**
      * Summary of logout
      * 注销登录
      * @return void
      */
-    public static function logout()
+    public function logout()
     {
-        Auth::logout();
+        $this->auth->logout();
     }
 }
 

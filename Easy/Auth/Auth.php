@@ -1,13 +1,12 @@
 <?php
 
-namespace Helper;
+namespace Easy\Auth;
 
-use App\Http\Request\Request;
-use Helper\Session;
+use Easy\Session\Session;
+use Easy\Database\Database;
+use Easy\Captcha\Captcha;
 use Helper\Window;
-use Helper\Database;
 use Helper\Password;
-use Helper\Captcha;
 
 /**
  * Summary of Auth
@@ -16,13 +15,24 @@ use Helper\Captcha;
  */
 class Auth
 {    
-    private static $tableName = CONFIG['database']['user_table'];#要操作的数据表名
+    protected $tableName;//要操作的数据表名
+    protected $db;//数据库操作对象
+    protected $captcha;//验证码对象
+    protected $session;//验证码对象
+    public function __construct()
+    {
+        $this->tableName = CONFIG['database']['user_table'];
+        $this->captcha = new Captcha;
+        $this->session = new Session;
+        $this->db = Database::getInstance();
+    }
+
     /**
      * Summary of login
      * 登录验证
      * @return void
      */
-    public static function login()
+    public function login()
     {
         // 获取并过滤用户名和密码
         $username = filter_var($_POST['username'], FILTER_SANITIZE_STRING);
@@ -35,10 +45,10 @@ class Auth
         }
 
         // 验证验证码
-        Captcha::checkCaptcha();
+        $this->captcha->checkCaptcha();
 
         // 查询用户是否存在
-        $user = Database::select(self::$tableName, "WHERE username = '$username' AND deleted_at IS NULL", );
+        $user = $this->db->select($this->tableName, "WHERE username = '$username' AND deleted_at IS NULL", );
 
         if (empty($user)) {
             Window::alert('输入的用户名或密码不正确！', 'back');
@@ -47,8 +57,8 @@ class Auth
 
         // 验证密码
         if (Password::verify($password, $user[0]["password"])) {
-            Session::set('username', $username);
-            Session::set('csrf_token', self::setCsrf());
+            $this->session->set('username', $username);
+            $this->session->set('csrf_token', $this->setCsrf());
             Window::redirect("/admin");
         } else {
             Window::alert('输入的用户名或密码不正确！', 'back');
@@ -60,7 +70,7 @@ class Auth
      * 退出登录
      * @return void
      */
-    public static function logout()
+    public function logout()
     {
         Session::destroy();
         Window::alert('退出登录成功！','/auth/login');
@@ -70,7 +80,7 @@ class Auth
      * 设置csrf_token
      * @return string
      */
-    public static function setCsrf()
+    public function setCsrf()
     {
         return bin2hex(random_bytes(32));
     }

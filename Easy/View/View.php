@@ -1,6 +1,6 @@
 <?php
 
-namespace Helper;
+namespace Easy\View;
 
 use Helper\Path;
 

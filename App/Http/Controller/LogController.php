@@ -2,8 +2,6 @@
 
 namespace App\Http\Controller;
 
-use App\Model\Model;
-use App\Http\Response\Response;
 
 /**
  * Summary of LogController
@@ -11,10 +9,9 @@ use App\Http\Response\Response;
  */
 class LogController extends BasicController
 {
-    public static function listApi()
+    public function listApi()
     {
-        $data = Model::listApi('log','ip,address,referrer');
-        $response = new Response;
-        $response->json($data);
+        $data = $this->model->listApi('log','ip,address,referrer');
+        $this->response->json($data);
     }
 }

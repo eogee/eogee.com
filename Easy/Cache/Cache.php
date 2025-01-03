@@ -1,6 +1,6 @@
 <?php
 
-namespace Helper;
+namespace Easy\Cache;
 
 use Helper\Path;
 
@@ -11,7 +11,7 @@ use Helper\Path;
  */
 class Cache {
     protected $dir;
-
+    
     public function __construct() {
         $this->dir = Path::rootPath() . CONFIG['cache']['cache_path'];
         if (!is_dir($this->dir)) {

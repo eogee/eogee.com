@@ -2,12 +2,10 @@
 
 namespace App\Http\Controller;
 
+use Easy\View\View;
 use Helper\Url;
-use Helper\View;
-use App\Model\Model;
 use App\Model\User;
 use app\Verify\Verify;
-use App\Http\Response\Response;
 
 /**
  * Summary of UserController
@@ -15,46 +13,48 @@ use App\Http\Response\Response;
  */
 class UserController extends BasicController
 {    
-    public static function listApi()
+    protected $user;
+    public function __construct()
     {
-        $data = Model::listApi('','username');
-        $response = new Response;
-        $response->json($data);
+        parent::__construct();
+        $this->user = new User;
     }
-    public static function recycleApi()
+    public function listApi()
     {
-        $data = Model::recycleApi('','username');
-        $response = new Response;
-        $response->json($data);
+        $data = $this->user->listApi('','username');
+        $this->response->json($data);
     }
-    public static function checkUsernameApi()
+    public function recycleApi()
     {
-        $data = User::checkUsernameApi();
-        $response = new Response;
-        $response->json($data);
+        $data = $this->user->recycleApi('','username');
+        $this->response->json($data);
     }
-    public static function updateApi()
+    public function checkUsernameApi()
     {
-        $data = User::updateApi();
-        $response = new Response;
-        $response->json($data);
+        $data = $this->user->checkUsernameApi();
+        $this->response->json($data);
     }
-    public static function insert()
+    public function updateApi()
+    {
+        $data = $this->user->updateApi();
+        $this->response->json($data);
+    }
+    public function insert()
     {
         Verify::adminLimit();
         View::view('/admin/'.Url::getTable().'/update');
         if(isset($_POST) and !empty($_POST)){
-            User::insert();
+            $this->user->insert();
         }
     }
-    public static function edit()
+    public function edit()
     {
         Verify::adminLimit();
         $id = Url::getId();
         if(isset($id)){
             View::view('/admin/'.Url::getTable().'/update');
         }else{
-            User::edit();
+            $this->user->edit();
         }
     }
 }

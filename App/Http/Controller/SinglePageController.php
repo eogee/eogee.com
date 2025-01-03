@@ -3,8 +3,6 @@
 namespace App\Http\Controller;
 
 use Helper\Window;
-use App\Model\Model;
-use App\Http\Response\Response;
 
 /**
  * Summary of SinglePageController
@@ -12,17 +10,15 @@ use App\Http\Response\Response;
  */
 class SinglePageController extends BasicController
 {    
-    public static function listApi()
+    public function listApi()
     {
-        $data = Model::listApi('','title,keynote,content');
-        $response = new Response;
-        $response->json($data);
+        $data = $this->model->listApi('','title,keynote,content');
+        $this->response->json($data);
     }
-    public static function recycleApi()
+    public function recycleApi()
     {
-        $data = Model::recycleApi('','title,keynote,content');
-        $response = new Response;
-        $response->json($data);
+        $data = $this->model->recycleApi('','title,keynote,content');
+        $this->response->json($data);
     }
     public static function support()
     {

@@ -2,8 +2,7 @@
 
 namespace App\Http\Controller;
 
-use Helper\View;
-use App\Model\Model;
+use Easy\View\View;
 use App\Model\News;
 
 /**
@@ -13,18 +12,24 @@ use App\Model\News;
  */
 class IndexController extends BasicController
 {
+    protected $news;
+    public function __construct()
+    {
+        parent::__construct();
+        $this->news = new News;
+    }
     /**
      * Summary of index
      * 首页控制器，显示首页内容
      * 轮播图、产品中心、服务中心、课程中心、产品动态、课程动态、赞助商、友情链接
      */
-    public static function index()
-    {        
+    public function index()
+    {
         $data = [
-            'indexData' => self::headData(),
-            'content' => Model::showAll('contentParent','','sort','','content'),
-            'carousel' => Model::showAll('carousel','','sort'),
-            'news' => News::showAll()
+            'indexData' => $this->headData(),
+            'content' => $this->model->showAll('contentParent','','sort','','content'),
+            'carousel' => $this->model->showAll('carousel','','sort'),
+            'news' => $this->news->showAll()
         ];
 
         View::view('/index/index',$data);

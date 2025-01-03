@@ -1,9 +1,10 @@
 <?php
 
-namespace Helper;
+namespace Easy\Captcha;
 
-use Helper\Session;
+use Easy\Session\Session;
 use Helper\Window;
+use Helper\Path;
 
 /**
  * Summary of Captcha
@@ -12,18 +13,19 @@ use Helper\Window;
  */
 class Captcha
 {
+    protected $session = new Session();
     /**
      * Summary of setCaptcha
      * 生成验证码
      * @return void
      */
-    public static function setCaptcha()
+    public function setCaptcha()
     {
         $str = "1234567890qwertyuiopasdfghjklzxcvbnm";
         $str = str_shuffle($str); #打乱顺序
         $content = substr($str, 0, 4); #截取前四位
 
-        Session::set('captcha', $content); #将验证码存入session中
+        $this->session->set('captcha', $content); #将验证码存入session中
 
         $image = imagecreatetruecolor(105, 30); #创建图片
         $backgroud = imagecolorallocate($image, mt_rand(150, 255), mt_rand(150, 255), mt_rand(150, 255)); #定义背景颜色
@@ -54,7 +56,7 @@ class Captcha
      * 验证码验证
      * @return void
      */
-    public static function checkCaptcha()
+    public function checkCaptcha()
     {
         if(CONFIG['app']['developer_mode'] == false){
             if(empty($_POST['captcha']) || empty($_SESSION['captcha']) || $_POST['captcha'] !== $_SESSION['captcha']){

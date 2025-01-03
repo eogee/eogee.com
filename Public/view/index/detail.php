@@ -1,6 +1,6 @@
 <?php
     $indexData = $data['indexData'];
-    use Helper\View;
+    use Easy\View\View;
     View::view('/index/head', $indexData);
 
     $data = $data['data'];

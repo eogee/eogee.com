@@ -2,9 +2,6 @@
 
 namespace App\Http\Controller;
 
-use App\Model\Model;
-use App\Http\Response\Response;
-
 /**
  * Summary of CarouselController
  * 轮播图 控制器
@@ -12,16 +9,14 @@ use App\Http\Response\Response;
 class CarouselController extends BasicController
 {
     
-    public static function listApi()
+    public function listApi()
     {
-        $data = Model::listApi('','title,keynote,content');
-        $response = new Response;
-        $response->json($data);
+        $data = $this->model->listApi('carousel', 'title,keynote,content', 1, 10);
+        $this->response->json($data);
     }
-    public static function recycleApi()
+    public function recycleApi()
     {
-        $data = Model::recycleApi('','title,keynote,content');
-        $response = new Response;
-        $response->json($data);
+        $data = $this->model->recycleApi('','title,keynote,content');
+        $this->response->json($data);
     }
 }

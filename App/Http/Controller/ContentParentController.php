@@ -2,9 +2,6 @@
 
 namespace App\Http\Controller;
 
-use App\Model\Model;
-use App\Http\Response\Response;
-
 /**
  * Summary of ContentParentController
  * 内容中心 控制器
@@ -12,16 +9,14 @@ use App\Http\Response\Response;
 class ContentParentController extends BasicController
 {
     
-    public static function listApi()
+    public function listApi()
     {
-        $data = Model::listApi('','title,keynote');
-        $response = new Response;
-        $response->json($data);
+        $data = $this->model->listApi('','title,keynote');
+        $this->response->json($data);
     }
-    public static function recycleApi()
+    public function recycleApi()
     {
-        $data = Model::recycleApi('','title,keynote');
-        $response = new Response;
-        $response->json($data);
+        $data = $this->model->recycleApi('','title,keynote');
+        $this->response->json($data);
     }
 }
