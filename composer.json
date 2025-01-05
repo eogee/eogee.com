@@ -22,5 +22,9 @@
     ],
     "require": {
         "php": "^7.3.0"
+    },
+    "scripts": {
+        "ogee": "php ./ogee.php",
+        "eogee": "php ./ogee.php"
     }
 }
