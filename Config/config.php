@@ -27,5 +27,9 @@ return [
      * 缓存配置
      */
     'cache' => require_once Path::rootPath().'/Config/cache.php',
+    /**
+     * 日志记录
+     */
+    'log' => require_once Path::rootPath().'/Config/log.php',
     
 ];

@@ -7,8 +7,7 @@ namespace App\Http\Controller;
  * 轮播图 控制器
  */
 class CarouselController extends BasicController
-{
-    
+{    
     public function listApi()
     {
         $data = $this->model->listApi('carousel', 'title,keynote,content', 1, 10);

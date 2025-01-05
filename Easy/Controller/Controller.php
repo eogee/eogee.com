@@ -5,10 +5,10 @@ namespace Easy\Controller;
 use Easy\View\View;
 use Easy\File\File;
 use Easy\Model\Base as Model;
-use Easy\Model\Log;
 use Easy\Request\Request;
 use Easy\Response\Response;
 use Easy\Verify\LimitVerify;
+use Easy\Log\Log;
 use Helper\Url;
 
 /**
@@ -20,15 +20,17 @@ use Helper\Url;
 class Controller{
     protected $model;//模型类
     protected $response;//响应类
+    protected $request;//请求类
     protected $limitVerify;//权限验证
     protected $table;//数据表名
     protected $id;//数据表主键
-    protected $Log;//日志类
+    protected $log;//日志类
 
     public function __construct(){
         $this->model = new Model;
         $this->response = new Response;//实例化响应类
-        $this->Log = new Log;//实例化响应类
+        $this->request = new Request;//实例化响应类
+        $this->log = new Log;//实例化日志类
         $this->limitVerify = new LimitVerify;//实例化权限验证类
         $this->table = Url::getTable();
         $this->id = Url::getId();
@@ -41,8 +43,11 @@ class Controller{
      */
     public function headData()
     {
-        $this->Log->insert();
-        
+        $ip = $this->request->ip();
+        $url = $this->request->url();
+        $method = $this->request->method();
+        $userAgent = $this->request->userAgent();
+        $this->log->info("ip：{$ip}，url：{$url}，method：{$method}，userAgent：{$userAgent}");
         // 根据开发模式选择索引 URL
         $indexUrl = CONFIG['app']['developer_mode'] ? '/' : $this->model->show('basicInfo', 1)['data']['indexUrl'];
     
@@ -130,7 +135,7 @@ class Controller{
      * @return void
      */
     public function tableHeadDataApi()
-    {        
+    {
         $data = [
             'code' => 0
             ,'msg' => 'success'

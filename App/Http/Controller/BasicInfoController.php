@@ -11,7 +11,7 @@ use Easy\View\View;
  */
 class BasicInfoController extends BasicController
 {
-    protected $request;
+    protected $request; //请求对象
     public function __construct()
     {
         parent::__construct();
@@ -19,20 +19,20 @@ class BasicInfoController extends BasicController
     }
     public function edit()
     {
-        $this->limitVerify->verify();
+        $this->limitVerify->verify(); //权限验证
         $id = $this->id;
         if(isset($id)){
             View::view('/admin/'.$this->table.'/update');
         }else{
-            if($this->request->request()){
+            if($this->request->request()){ //请求验证
                 $this->response->json(['code' => 1,'msg' => '更新失败']);
             }else{
-                if($this->model->edit()){
+                if($this->model->edit()){ //更新数据
                     $this->response->json(['code' => 0,'msg' => '更新成功']);
                 }else{
                     $this->response->json(['code' => 1,'msg' => '更新失败']);
                 }
-            }            
+            }
         }
     }
 }
