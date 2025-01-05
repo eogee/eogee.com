@@ -6,8 +6,7 @@
     "keywords": [
         "framework",
         "eogee"
-    ],
-
+    ], 
     "autoload": {
         "psr-4": {
             "App\\": "app/",

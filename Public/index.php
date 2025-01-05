@@ -10,7 +10,6 @@ use Easy\Session\Session;
  * @author Eogee
  * @email eogee@qq.com 
  */
-//require_once __DIR__.'/../App/autoload.php';//引入自动加载
 
 require __DIR__ . '/../vendor/autoload.php';
 
