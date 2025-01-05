@@ -2,8 +2,6 @@
 
 namespace App\Verify;
 
-use App\Verify\Verify;
-
 class UserVerify extends Verify
 {
     public function __construct()

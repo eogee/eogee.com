@@ -41,7 +41,7 @@ class $name extends Model
 
 }
 EOT;
-    // 创建文件并模型文件内容
+    // 创建文件并写入模型文件内容
     if (file_put_contents($filename, $content) !== false) {
         echo "Model '$filename' created successfully!\n";
     } else {
@@ -168,7 +168,7 @@ class $nameVerify extends Verify
 
 }
 EOT;
-    // 创建文件并写入验证文件内容
+    // 创建文件并写入控制器、模型、请求、响应、验证文件内容
     if (file_put_contents($filenameController, $contentController) !== false) {
         echo "Controller '$filenameController' created successfully!\n";
     } else {
