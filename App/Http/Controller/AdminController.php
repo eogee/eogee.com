@@ -3,7 +3,6 @@
 namespace App\Http\Controller;
 
 use Easy\View\View;
-use App\Verify\Verify;
 
 /**
  * Summary of AdminController
@@ -17,7 +16,7 @@ class AdminController extends BasicController
      */
     public function index()
     {
-        Verify::adminLimit();
+        $this->limitVerify->verify();
         View::view('/admin/list');
     }
     

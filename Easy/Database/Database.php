@@ -164,7 +164,7 @@ class Database
         $sql = "DELETE FROM $table $where";
 
         // 调用 query 方法执行查询
-        $this->query($sql);
+        return $this->query($sql);
 
     }
     /**

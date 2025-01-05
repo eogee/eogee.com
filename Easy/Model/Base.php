@@ -376,15 +376,8 @@ class Base{
             return "没有有效的数据进行插入"; // 返回错误信息
         }
 
-        // 执行插入操作
-        $result = $this->db->insert(Url::getTable(), $_POST);
-
-        // 处理插入结果
-        if (is_string($result)) {
-            return $result; // 返回错误信息
-        }
-
-        return "数据插入成功"; // 返回成功信息
+        // 执行插入操作并返回结果
+        return $this->db->insert(Url::getTable(), $_POST);
     }
 
     /**
@@ -423,7 +416,7 @@ class Base{
             return $result; // 如果返回的是字符串，则为错误信息
         }
 
-        return "数据更新成功"; // 返回成功信息
+        return true; // 返回成功信息
     }
     /**
      * Summary of updateApi
@@ -450,7 +443,7 @@ class Base{
     
         // 获取数据和可空字段信息
         $data = $this->show();
-        $nullable = $this->db->columnIsnullable($table);
+        $nullable = $this->columnIsnullable($table);
     
         // 准备响应数据
         return $data = [
@@ -679,7 +672,7 @@ class Base{
             return $result; // 如果返回的是字符串，则为错误信息
         }
     
-        return "软删除成功"; // 返回成功信息
+        return true; // 返回成功信息
     }
     
     /**
@@ -737,7 +730,7 @@ class Base{
             return $result; // 如果返回的是字符串，则为错误信息
         }
 
-        return "删除成功"; // 返回成功信息
+        return true; // 返回成功信息
     }
     /**
      * Summary of deleteBatch
@@ -791,7 +784,7 @@ class Base{
             return $result; // 如果返回的是字符串，则为错误信息
         }
 
-        return "数据还原成功"; // 返回成功信息
+        return true; // 返回成功信息
     }
     /**
      * Summary of restoreBatch
@@ -824,6 +817,6 @@ class Base{
             return $result; // 如果返回的是字符串，则为错误信息
         }
 
-        return "数据批量还原成功"; // 返回成功信息
+        return true; // 返回成功信息
     }
 }

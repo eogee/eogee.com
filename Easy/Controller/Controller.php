@@ -6,9 +6,9 @@ use Easy\View\View;
 use Easy\File\File;
 use Easy\Model\Base as Model;
 use Easy\Model\Log;
-use Easy\Verify\Verify;
 use Easy\Request\Request;
 use Easy\Response\Response;
+use Easy\Verify\LimitVerify;
 use Helper\Url;
 
 /**
@@ -20,14 +20,16 @@ use Helper\Url;
 class Controller{
     protected $model;//模型类
     protected $response;//响应类
+    protected $limitVerify;//权限验证
     protected $table;//数据表名
     protected $id;//数据表主键
     protected $Log;//日志类
 
     public function __construct(){
         $this->model = new Model;
-        $this->response = new Response;//实例化响应类        
+        $this->response = new Response;//实例化响应类
         $this->Log = new Log;//实例化响应类
+        $this->limitVerify = new LimitVerify;//实例化权限验证类
         $this->table = Url::getTable();
         $this->id = Url::getId();
     }
@@ -135,7 +137,6 @@ class Controller{
             ,'tableComment' => $this->model->getTableComment()
             ,'tableFiledComment' => $this->model->getTableFieldComment()
         ];
-        //$response = new Response;
         $this->response->json($data);
     }
     /**
@@ -160,7 +161,7 @@ class Controller{
      */
     public function list()
     {
-        Verify::adminLimit();
+        $this->limitVerify->verify();
         View::view('/admin/'.$this->table.'/list');
     }
     /**
@@ -170,7 +171,7 @@ class Controller{
      */
     public function recycle()
     {
-        Verify::adminLimit();
+        $this->limitVerify->verify();
         View::view('/admin/'.$this->table.'/list');      
     }
     /**
@@ -191,8 +192,7 @@ class Controller{
     public function recycleApi()
     {
         $data = $this->model->recycleApi();
-        $response = new Response;
-        $response->json($data);
+        $this->response->json($data);
     }
     /**
      * Summary of show
@@ -201,7 +201,7 @@ class Controller{
      */
     public function show()
     {
-        Verify::adminLimit();
+        $this->limitVerify->verify();
         View::view('/admin/show');
     }
     /**
@@ -221,10 +221,15 @@ class Controller{
      */
     public function insert()
     {
-        Verify::adminLimit();
-        View::view('/admin/'.$this->table.'/update');   
+        $this->limitVerify->verify();        
         if(isset($_POST) and !empty($_POST)){
-            $this->model->insert();
+            if($this->model->insert() > 0){
+                $this->response->json(['code' => 0,'msg' => '新增成功']);
+            }else{
+                $this->response->json(['code' => 1,'msg' => '新增失败']);
+            }
+        }else{
+            View::view('/admin/'.$this->table.'/update');
         }
     }
     /**
@@ -234,12 +239,16 @@ class Controller{
      */
     public function edit()
     {
-        Verify::adminLimit();
+        $this->limitVerify->verify();
         $id = $this->id;
         if(isset($id)){
             View::view('/admin/'.$this->table.'/update');
         }else{
-            $this->model->edit();
+            if($this->model->edit()){
+                $this->response->json(['code' => 0,'msg' => '更新成功']);
+            }else{
+                $this->response->json(['code' => 1,'msg' => '更新失败']);
+            }
         }
     }
     /**
@@ -270,7 +279,11 @@ class Controller{
      */
     public function delete()
     {
-        $this->model->delete();
+        if($this->model->delete()){
+            $this->response->json(['code' => 0,'msg' => '删除成功']);
+        }else{
+            $this->response->json(['code' => 1,'msg' => '删除失败']);
+        }
     }
     /**
      * Summary of deleteBatch
@@ -279,7 +292,11 @@ class Controller{
      */
     public function deleteBatch()
     {
-        $this->model->deleteBatch();
+        if($this->model->deleteBatch()){
+            $this->response->json(['code' => 0,'msg' => '批量删除成功']);
+        }else{
+            $this->response->json(['code' => 1,'msg' => '批量删除失败']);
+        }
     }
     /**
      * Summary of deleteSoft
@@ -288,7 +305,11 @@ class Controller{
      */
     public function deleteSoft()
     {
-        $this->model->deleteSoft();
+        if($this->model->deleteSoft()){
+            $this->response->json(['code' => 0,'msg' => '软删除成功']);
+        }else{
+            $this->response->json(['code' => 1,'msg' => '软删除失败']);
+        }
     }
     /**
      * Summary of deleteSoftBatch
@@ -297,7 +318,11 @@ class Controller{
      */
     public function deleteSoftBatch()
     {
-        $this->model->deleteSoftBatch();
+        if($this->model->deleteSoftBatch() > 0){
+            $this->response->json(['code' => 0,'msg' => '批量软删除成功']);
+        }else{
+            $this->response->json(['code' => 1,'msg' => '批量软删除失败']);
+        }
     }
     /**
      * Summary of restore
@@ -306,7 +331,11 @@ class Controller{
      */
     public function restore()
     {
-        $this->model->restore();
+        if($this->model->restore()){
+            $this->response->json(['code' => 0,'msg' => '数据还原成功']);
+        }else{
+            $this->response->json(['code' => 1,'msg' => '数据还原失败']);
+        }
     }
     /**
      * Summary of restoreBatch
@@ -315,6 +344,10 @@ class Controller{
      */
     public function restoreBatch()
     {
-        $this->model->restoreBatch();
+        if($this->model->restoreBatch()){
+            $this->response->json(['code' => 0,'msg' => '批量还原成功']);
+        }else{
+            $this->response->json(['code' => 1,'msg' => '批量还原失败']);
+        }
     }
 }

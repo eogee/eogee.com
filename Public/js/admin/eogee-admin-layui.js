@@ -412,10 +412,15 @@ function insertRow(parentId){
                                     var iframeWin = window[layero.find('iframe')[0]['name']];
                                     var vform = iframeWin.layui.form;
                                     vform.submit('form', function() {
-                                        ajaxPost('/' + modelName + '/insert', value, true, function() {
-                                            layer.close(insert);
-                                            layer.msg('操作执行成功',{icon: 1, time: 1000});
-                                            table.reload('table', {});
+                                        ajaxPost('/' + modelName + '/insert', value, true, function(response) {
+                                            response = JSON.parse(response);
+                                            if (response.code === 0) {
+                                                layer.close(insert);
+                                                layer.msg(response.msg,{icon: 1, time: 1000});
+                                                table.reload('table', {});
+                                            } else {
+                                                layer.msg(response.msg,{icon: 2, time: 1000});
+                                            }
                                         });
                                     });
                                 }
@@ -448,12 +453,17 @@ function insertRow(parentId){
                                     var iframeWin = window[layero.find('iframe')[0]['name']];
                                     var vform = iframeWin.layui.form;
                                     vform.submit('form', function() {
-                                        ajaxPost('/' + modelName + '/insert', value, true, function() {
-                                            layer.close(insert);
-                                            layer.msg('操作执行成功',{icon: 1, time: 1000});
-                                            table.reload('table', {
-                                                where: { parentId: parentId }
-                                            });
+                                        ajaxPost('/' + modelName + '/insert', value, true, function(response) {
+                                            response = JSON.parse(response);
+                                            if (response.code === 0) {
+                                                layer.close(insert);
+                                                layer.msg(response.msg,{icon: 1, time: 1000});
+                                                table.reload('table', {
+                                                    where: { parentId: parentId }
+                                                });
+                                            } else {
+                                                layer.msg(response.msg,{icon: 2, time: 1000});
+                                            }
                                         });
                                     });
                                 }
@@ -501,10 +511,15 @@ function batch(){
                     deleteSoftBatch.onclick = function(){
                         layer.confirm("你确认要执行此操作吗？",{icon: 3, title:'警告'},()=>{
                             batchId = "batchId=" + id;
-                            ajaxPost('/' + modelName + '/deleteSoftBatch', batchId, true, function() {
-                                layer.msg('操作执行成功！',{icon: 1, time: 1000},()=>{
-                                    window.location.reload();
-                                });
+                            ajaxPost('/' + modelName + '/deleteSoftBatch', batchId, true, function(response) {
+                                response = JSON.parse(response);
+                                if (response.code === 0) {
+                                    layer.msg(response.msg,{icon: 1, time: 1000},()=>{
+                                        window.location.reload();
+                                    });
+                                } else {
+                                    layer.msg(response.msg,{icon: 2, time: 1000});
+                                }
                             });
                         });
                     }
@@ -512,10 +527,15 @@ function batch(){
                 if(restoreBatch){
                     restoreBatch.onclick = function(){
                         batchId = "batchId=" + id;
-                        ajaxPost('/' + modelName + '/restoreBatch', batchId, true, function() {
-                            layer.msg('操作执行成功！',{icon: 1, time: 1000},()=>{
-                                window.location.reload();
-                            });
+                        ajaxPost('/' + modelName + '/restoreBatch', batchId, true, function(response) {
+                            response = JSON.parse(response);
+                            if (response.code === 0) {
+                                layer.msg(response.msg,{icon: 1, time: 1000},()=>{
+                                    window.location.reload();
+                                });
+                            } else {
+                                layer.msg(response.msg,{icon: 2, time: 1000});
+                            }
                         });
                     }
                 }
@@ -523,10 +543,15 @@ function batch(){
                     deleteBatch.onclick = function(){
                         layer.confirm("你确认要执行此操作吗？",{icon: 3, title:'警告'},()=>{
                             batchId = "batchId=" + id;
-                            ajaxPost('/' + modelName + '/deleteBatch', batchId, true, function() {
-                                layer.msg('操作执行成功！',{icon: 1, time: 1000},()=>{
-                                    window.location.reload();
-                                });
+                            ajaxPost('/' + modelName + '/deleteBatch', batchId, true, function(response) {
+                                response = JSON.parse(response);
+                                if (response.code === 0) {
+                                    layer.msg(response.msg,{icon: 1, time: 1000},()=>{
+                                        window.location.reload();
+                                    });
+                                } else {
+                                    layer.msg(response.msg,{icon: 2, time: 1000});
+                                }
                             }); 
                         });
                     }
@@ -558,18 +583,28 @@ function rowToolbar(){
             if (layEvent ==='delete') {// 彻底删除行数据
                 layer.confirm("你确认要执行此操作吗？",{icon: 3, title:'警告'},()=>{
                     obj.del();
-                    ajax('/' + modelName + '/delete/' + data.id, true, function(){
-                        table.reload('table', {});
-                        layer.msg('操作执行成功',{icon: 1, time: 1000});
+                    ajax('/' + modelName + '/delete/' + data.id, true, function(response){
+                        response = JSON.parse(response);
+                        if (response.code === 0) {
+                            table.reload('table', {});
+                            layer.msg(response.msg,{icon: 1, time: 1000});
+                        } else {
+                            layer.msg(response.msg,{icon: 2, time: 1000});
+                        }
                     });
                 });
             }
             if (layEvent ==='deleteSoft') {// 软删除行数据
                 layer.confirm("你确认要执行此操作吗？",{icon: 3, title:'警告'},()=>{
                     obj.del();
-                    ajax('/' + modelName + '/deleteSoft/' + data.id, true, function(){
-                        table.reload('table', {});
-                        layer.msg('操作执行成功',{icon: 1, time: 1000});
+                    ajax('/' + modelName + '/deleteSoft/' + data.id, true, function(response){
+                        response = JSON.parse(response);
+                        if (response.code === 0) {
+                            table.reload('table', {});
+                            layer.msg(response.msg,{icon: 1, time: 1000});
+                        } else {
+                            layer.msg(response.msg,{icon: 2, time: 1000});
+                        }
                     });
                 });
             }
@@ -595,10 +630,15 @@ function rowToolbar(){
                             var iframeWin = window[layero.find('iframe')[0]['name']];
                             var vform = iframeWin.layui.form;
                             vform.submit('form', function() {
-                                ajaxPost('/' + modelName + '/edit', value, true, function() {
-                                    layer.close(edit);
-                                    table.reload('table', {});
-                                    layer.msg('操作执行成功',{icon: 1, time: 1000});
+                                ajaxPost('/' + modelName + '/edit', value, true, function(response) {
+                                    response = JSON.parse(response);
+                                    if (response.code === 0) {
+                                        layer.close(edit);
+                                        table.reload('table', {});
+                                        layer.msg(response.msg,{icon: 1, time: 1000});
+                                    } else {
+                                        layer.msg(response.msg,{icon: 2, time: 1000});
+                                    }
                                 });
                             });
                         }
@@ -607,9 +647,14 @@ function rowToolbar(){
             }
             if (layEvent ==='restore') {// 恢复行数据
                 obj.del();
-                ajax('/' + modelName + '/restore/' + data.id, true, function(){
-                    table.reload('table', {});
-                    layer.msg('操作执行成功',{icon: 1, time: 1000});
+                ajax('/' + modelName + '/restore/' + data.id, true, function(response){
+                    response = JSON.parse(response);
+                    if (response.code === 0) {
+                        table.reload('table', {});
+                        layer.msg(response.msg,{icon: 1, time: 1000});
+                    } else {
+                        layer.msg(response.msg,{icon: 2, time: 1000});
+                    }
                 });
             }
         });
@@ -666,11 +711,16 @@ function editTable(){
                     var iframeWin = window[layero.find('iframe')[0]['name']];
                     var vform = iframeWin.layui.form;
                     vform.submit('form', function() {
-                        ajaxPost('/' + modelName + '/edit', value, true, function() {                            
-                            layer.msg('操作执行成功',{icon: 1, time: 1000},()=>{
+                        ajaxPost('/' + modelName + '/edit', value, true, function(response) {                            
+                            response = JSON.parse(response);
+                            if (response.code === 0) {
                                 layer.close(edit);
-                                window.location.reload();
-                            });
+                                layer.msg(response.msg,{icon: 1, time: 1000},()=>{
+                                    window.location.reload();
+                                });
+                            } else {
+                                layer.msg(response.msg,{icon: 2, time: 1000});
+                            }
                         });
                     });
                 }

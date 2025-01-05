@@ -5,7 +5,7 @@ namespace App\Model;
 /**
  * 底部链接 模型
  */
-class FriendUrl extends Model 
+class FootUrl extends Model 
 {
     
 }

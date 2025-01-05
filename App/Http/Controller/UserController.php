@@ -5,7 +5,6 @@ namespace App\Http\Controller;
 use Easy\View\View;
 use Helper\Url;
 use App\Model\User;
-use App\Verify\Verify;
 
 /**
  * Summary of UserController
@@ -41,7 +40,7 @@ class UserController extends BasicController
     }
     public function insert()
     {
-        Verify::adminLimit();
+        $this->limitVerify->verify();
         View::view('/admin/'.Url::getTable().'/update');
         if(isset($_POST) and !empty($_POST)){
             $this->user->insert();
@@ -49,7 +48,7 @@ class UserController extends BasicController
     }
     public function edit()
     {
-        Verify::adminLimit();
+        $this->limitVerify->verify();
         $id = Url::getId();
         if(isset($id)){
             View::view('/admin/'.Url::getTable().'/update');

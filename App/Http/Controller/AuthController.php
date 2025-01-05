@@ -2,6 +2,8 @@
 
 namespace App\Http\Controller;
 
+use App\Verify\Verify;
+use Helper\Window;
 use Easy\Auth\Auth;
 use Easy\View\View;
 use Easy\Captcha\Captcha;
@@ -15,10 +17,12 @@ use Easy\Captcha\Captcha;
 class AuthController{
     protected $captcha;
     protected $auth;
+    protected $verify;
     public function __construct()
     {
         $this->captcha = new Captcha;
         $this->auth = new Auth;
+        $this->verify = new Verify;
     }
     /**
      * Summary of login
@@ -28,7 +32,12 @@ class AuthController{
     public function login()
     {
         if(isset($_POST["username"])){
-            $this->auth->login();
+            if (!$this->verify->validate($_POST)) {
+                Window::alert('请填写完整且符合格式的登录信息！', 'back');
+                die();
+            }else{
+                $this->auth->login();
+            }
         }else{
             View::view('/admin/auth/login');
         }

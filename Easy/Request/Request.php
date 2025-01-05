@@ -63,7 +63,7 @@ class Request
      */
     public function allExc(array $excludedFields = ['file'])
     {
-        $input = $this->getInputData();
+        $input = $this->all();
 
         // 过滤敏感字段
         foreach ($excludedFields as $field) {
@@ -94,7 +94,7 @@ class Request
                 return $input;
             default:
                 return [];
-        }
+        }        
     }
     
     /**

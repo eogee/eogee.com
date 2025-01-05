@@ -87,7 +87,7 @@ abstract class Verify
                 }
             }
         }
-
+        
         return empty($this->errors); // 如果没有错误，返回 true
     }
 

@@ -11,5 +11,5 @@ use Easy\Verify\Verify as BaseVerify;
  * @email eogee@qq.com 
  */
 class Verify extends BaseVerify{
-        
+    
 }

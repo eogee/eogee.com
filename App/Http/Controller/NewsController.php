@@ -4,7 +4,6 @@ namespace App\Http\Controller;
 
 use Easy\View\View;
 use App\Model\News;
-use App\Verify\Verify;
 
 /**
  * Summary of NewsController
@@ -36,7 +35,7 @@ class NewsController extends BasicController
     }
     public function edit()
     {
-        Verify::adminLimit();
+        $this->limitVerify->verify();
         $id = $this->id;
         if(isset($id)){
             View::view('/admin/'.$this->table.'/update');
