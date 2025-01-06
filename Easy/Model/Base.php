@@ -606,7 +606,7 @@ class Base{
     
         // 获取有效的 ID
         if (empty($id)) {
-            $this->id;
+            $id = $this->id;
         }
     
         // 确保 ID 有效

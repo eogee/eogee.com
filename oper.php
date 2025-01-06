@@ -2,7 +2,7 @@
 
 // 检查参数数量
 if ($argc < 3) {
-    echo "Usage: php ogee.php must be 2 parameters,<type> <name>\n";
+    echo "Usage: php oper.php must be 2 parameters,<type> <name>\n";
     exit(1);
 }
 
