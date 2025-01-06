@@ -16,6 +16,10 @@ return [
      */
     'database' => require_once Path::rootPath().'/Config/database.php',
     /**
+     * 中间件注册
+     */
+    'middleware' => require_once Path::rootPath().'/Config/middleware.php',
+    /**
      * 路由配置
      */
     'route' => require_once Path::rootPath().'/Config/route.php',

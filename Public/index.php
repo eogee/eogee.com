@@ -25,7 +25,5 @@ require_once Path::rootPath().'/App/routes.php';//引入路由文件
 CONFIG['app']['developer_mode'] == false ? Path::rootPath().'/App/error.php' : null ;//引入错误文件
 
 $uri = $_SERVER['REQUEST_URI'];//获取当前请求的uri
-if(strpos($uri,'?')){
-    $uri = substr($uri,0,strpos($uri,'?'));
-}//获取当前请求的uri，去除get参数
+$router->get('/test', 'TestController', 'index')->middleware('/test','test');
 $router->index( $uri);//执行路由
