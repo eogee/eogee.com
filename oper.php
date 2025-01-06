@@ -1,205 +1,272 @@
 <?php
 
-// 检查参数数量
-if ($argc < 3) {
-    echo "Usage: php oper.php must be 2 parameters,<type> <name>\n";
+// 定义常量
+define('BASE_PATH', __DIR__);
+define('CONFIG_DATABASE', require_once BASE_PATH . '/Config/database.php');
+
+// 工具函数：将文件名转换为类名
+function filenameToClassName($filename)
+{
+    $filename = basename($filename, '.php');
+    $filename = preg_replace('/^\d+_/', '', $filename); // 去掉时间戳前缀
+    return str_replace('_', '', ucwords($filename, '_')); // 转换为驼峰命名
+}
+
+// 工具函数：创建文件
+function createFile($filename, $content)
+{
+    if (file_put_contents($filename, $content) !== false) {
+        echo "File '$filename' created successfully!\n";
+        return true;
+    } else {
+        echo "Failed to create file '$filename'.\n";
+        return false;
+    }
+}
+
+// 工具函数：连接数据库
+function connectDatabase()
+{
+    $mysqli = new mysqli(
+        CONFIG_DATABASE['host'],
+        CONFIG_DATABASE['user'],
+        CONFIG_DATABASE['password'],
+        CONFIG_DATABASE['name']
+    );
+
+    if ($mysqli->connect_error) {
+        die("Connection failed: " . $mysqli->connect_error);
+    }
+
+    return $mysqli;
+}
+
+// 处理控制器、模型、请求、响应、验证等文件的创建
+function handleFileCreation($type, $name)
+{
+    $templates = [
+        'controller' => [
+            'path' => 'App/Http/Controller/',
+            'content' => "<?php\n\nnamespace App\Http\Controller;\n\nclass {name} extends BasicController\n{\n\n}\n"
+        ],
+        'model' => [
+            'path' => 'App/Model/',
+            'content' => "<?php\n\nnamespace App\Model;\n\nclass {name} extends Model\n{\n\n}\n"
+        ],
+        'request' => [
+            'path' => 'App/Http/Request/',
+            'content' => "<?php\n\nnamespace App\Http\Request;\n\nclass {name} extends Request\n{\n\n}\n"
+        ],
+        'response' => [
+            'path' => 'App/Http/Response/',
+            'content' => "<?php\n\nnamespace App\Http\Response;\n\nclass {name} extends Response\n{\n\n}\n"
+        ],
+        'verify' => [
+            'path' => 'App/Verify/',
+            'content' => "<?php\n\nnamespace App\Verify;\n\nclass {name} extends Verify\n{\n\n}\n"
+        ],
+        'middleware' => [
+            'path' => 'App/Http/Middleware/',
+            'content' => "<?php\n\nnamespace App\Http\Middleware;\n\nclass {name}\n{\n\n}\n"
+        ]
+    ];
+
+    $type = strtolower($type);
+    if (!isset($templates[$type])) {
+        echo "Invalid type '$type'.\n";
+        return false;
+    }
+
+    $filename = $templates[$type]['path'] . $name . '.php';
+    $content = str_replace('{name}', $name, $templates[$type]['content']);
+
+    return createFile($filename, $content);
+}
+
+// 处理数据迁移
+function handleMigration()
+{
+    $mysqli = connectDatabase();
+
+    // 获取已执行的迁移文件
+    $executedMigrations = [];
+    $result = $mysqli->query("SELECT migration FROM migrations");
+    while ($row = $result->fetch_assoc()) {
+        $executedMigrations[] = $row['migration'];
+    }
+
+    // 扫描迁移文件目录
+    $migrationFiles = glob(BASE_PATH . '/Database/*.php');
+
+    foreach ($migrationFiles as $file) {
+        $migrationName = basename($file, '.php');
+
+        if (!in_array($migrationName, $executedMigrations)) {
+            require_once $file;
+
+            $className = filenameToClassName($migrationName);
+            if (class_exists($className)) {
+                $migration = new $className($mysqli);
+                $migration->up();
+
+                $mysqli->query("INSERT INTO migrations (migration) VALUES ('$migrationName')");
+                echo "Migrated $migrationName.\n";
+            } else {
+                echo "Error: Class $className not found in $file.\n";
+            }
+        }
+    }
+
+    echo "Migration complete.\n";
+    $mysqli->close();
+}
+
+// 处理数据回滚
+function handleRollback()
+{
+    $mysqli = connectDatabase();
+
+    // 获取最后一次执行的迁移文件
+    $result = $mysqli->query("SELECT migration FROM migrations ORDER BY executed_at DESC LIMIT 1");
+    $lastMigration = $result->fetch_assoc();
+
+    if ($lastMigration) {
+        $migrationName = $lastMigration['migration'];
+        $file = BASE_PATH . "/Database/$migrationName.php";
+
+        require_once $file;
+
+        $className = filenameToClassName($migrationName);
+        $migration = new $className($mysqli);
+        $migration->down();
+
+        $stmt = $mysqli->prepare("DELETE FROM migrations WHERE migration = ?");
+        $stmt->bind_param('s', $migrationName);
+        $stmt->execute();
+        $stmt->close();
+
+        echo "Rolled back: $migrationName\n";
+    } else {
+        echo "No migrations to roll back.\n";
+    }
+
+    $mysqli->close();
+}
+
+// 主逻辑
+$type = $argv[1] ?? null;
+$name = $argv[2] ?? null;
+
+if ($type === null) {
+    echo "Usage: php script.php <type> [name]\n";
     exit(1);
 }
 
-// 获取参数
-$type = $argv[1];
-$name = $argv[2];
+switch (strtolower($type)) {
+    case 'add-controller':
+    case 'add-model':
+    case 'add-request':
+    case 'add-response':
+    case 'add-verify':
+    case 'add-middleware':
+        if ($name === null) {
+            echo "Name is required for type '$type'.\n";
+            exit(1);
+        }
+        handleFileCreation($type, $name);
+        break;
 
-if ($type == "create-controller" || $type == "create-Controller") {
-    $filename = "App/Http/Controller/$name.php";
-    $content = <<<EOT
+    case 'add-all':
+        if ($name === null) {
+            echo "Name is required for type '$type'.\n";
+            exit(1);
+        }
+        handleFileCreation('controller', $name . 'Controller');
+        handleFileCreation('model', $name . 'Model');
+        handleFileCreation('request', $name . 'Request');
+        handleFileCreation('response', $name . 'Response');
+        handleFileCreation('verify', $name . 'Verify');
+        break;
+
+    case 'migrate':
+        handleMigration();
+        break;
+
+    case 'rollback':
+        handleRollback();
+        break;
+    
+    case 'migration':
+        $name = $argv[2] ?? null;
+    
+        if ($name === null) {
+            echo "Usage: php oper.php migration <TableName>\n";
+            echo "Example: php oper.php migration users\n";
+            exit(1);
+        }
+    
+        // 生成迁移文件名
+        $dateNum = date('YmdHis');
+        $filename = BASE_PATH . '/Database/' . $dateNum . '_create_' . $name . '_table.php';
+
+        function generateMigrationContent($tableName)
+        {
+            $className = 'Create' . ucfirst($tableName) . 'Table';
+
+            return <<<EOT
 <?php
 
-namespace App\Http\Controller;
-
-class $name extends BasicController
+class $className
 {
+    protected \$tableName = '$tableName';
 
+    private \$mysqli;
+
+    public function __construct(\$mysqli)
+    {
+        \$this->mysqli = \$mysqli;
+    }
+
+    public function up()
+    {
+        \$sql = <<<SQL
+        CREATE TABLE IF NOT EXISTS \$this->tableName (
+            id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+SQL;
+        \$this->executeQuery(\$sql);
+    }
+
+    public function down()
+    {
+        \$sql = "DROP TABLE IF EXISTS \$this->tableName;";
+        \$this->executeQuery(\$sql);
+    }
+
+    private function executeQuery(\$sql)
+    {
+        if (\$this->mysqli->query(\$sql) === TRUE) {
+            echo "Query executed successfully.\n";
+        } else {
+            echo "Error executing query: " . \$this->mysqli->error . "\n";
+        }
+    }
 }
 EOT;
-    // 创建文件并写入控制器文件内容
-    if (file_put_contents($filename, $content) !== false) {
-        echo "Controller '$filename' created successfully!\n";
-    } else {
-        echo "Failed to create Controller '$filename'.\n";
+        }
+        // 生成迁移文件内容
+        $content = generateMigrationContent($name);
+        // 创建文件
+        if (file_put_contents($filename, $content) !== false) {
+            echo "Migration file '$filename' created successfully!\n";
+        } else {
+            echo "Failed to create migration file '$filename'.\n";
+            exit(1);
+        }
+        break;        
+    default:
+        echo "Invalid type '$type'.\n";
         exit(1);
-    }
-}else if ($type == "create-model" || $type == "create-Model") {
-    $filename = "App/Model/$name.php";
-    $content = <<<EOT
-<?php
-
-namespace App\Model;
-
-class $name extends Model
-{
-
-}
-EOT;
-    // 创建文件并写入模型文件内容
-    if (file_put_contents($filename, $content) !== false) {
-        echo "Model '$filename' created successfully!\n";
-    } else {
-        echo "Failed to create Model '$filename'.\n";
-        exit(1);
-    }
-}else if($type == "create-request" || $type == "create-Request") {
-    $filename = "App/Http/Request/$name.php";
-    $content = <<<EOT
-<?php
-
-namespace App\Http\Request;
-
-class $name extends Request
-{
-
-}
-EOT;
-    // 创建文件并写入请求文件内容
-    if (file_put_contents($filename, $content) !== false) {
-        echo "Request '$filename' created successfully!\n";
-    } else {
-        echo "Failed to create Request '$filename'.\n";
-        exit(1);
-    }
-}else if($type == "create-response" || $type == "create-Response") {
-    $filename = "App/Http/Response/$name.php";
-    $content = <<<EOT
-<?php
-
-namespace App\Http\Response;
-
-class $name extends Response
-{
-
-}
-EOT;
-    // 创建文件并写入响应文件内容
-    if (file_put_contents($filename, $content) !== false) {
-        echo "Response '$filename' created successfully!\n";
-    } else {
-        echo "Failed to create Response '$filename'.\n";
-        exit(1);
-    }
-}else if($type == "create-verify" || $type == "Create-Verify") {
-    $filename = "App/Verify/$name.php";
-    $content = <<<EOT
-<?php
-
-namespace App\Verify;
-
-class $name extends Verify
-{
-
-}
-EOT;
-    // 创建文件并写入验证文件内容
-    if (file_put_contents($filename, $content) !== false) {
-        echo "Verify '$filename' created successfully!\n";
-    } else {
-        echo "Failed to create Verify '$filename'.\n";
-        exit(1);
-    }
-}else if($type == "create-all" || $type == "Create-All"){
-    $filenameController = "App/Http/Controller/".$name."Controller.php";
-    $filenameModel = "App/Model/".$name."Model.php";
-    $filenameRequest = "App/Http/Request/".$name."Request.php";
-    $filenameResponse = "App/Http/Response/".$name."Response.php";
-    $filenameVerify = "App/Verify/".$name."Verify.php";
-
-    $nameController = $name."Controller";
-    $nameModel = $name."Model";
-    $nameRequest = $name."Request";
-    $nameResponse = $name."Response";
-    $nameVerify = $name."Verify";
-
-    $contentController = <<<EOT
-<?php
-
-namespace App\Http\Controller;
-
-class $nameController extends BasicController
-{
-
-}
-EOT;
-    $contentModel = <<<EOT
-<?php
-
-namespace App\Model;
-
-class $nameModel extends Model
-{
-
-}
-EOT;
-    $contentRequest = <<<EOT
-<?php
-
-namespace App\Http\Request;
-
-class $nameRequest extends Request
-{
-
-}
-EOT;
-    $contentResponse = <<<EOT
-<?php
-
-namespace App\Http\Response;
-
-class $nameResponse extends Response
-{
-
-}
-EOT;
-    $contentVerify = <<<EOT
-<?php
-
-namespace App\Verify;
-
-class $nameVerify extends Verify
-{
-
-}
-EOT;
-    // 创建文件并写入控制器、模型、请求、响应、验证文件内容
-    if (file_put_contents($filenameController, $contentController) !== false) {
-        echo "Controller '$filenameController' created successfully!\n";
-    } else {
-        echo "Failed to create Controller '$filenameController'.\n";
-        exit(1);
-    }
-    if (file_put_contents($filenameModel, $contentModel) !== false) {
-        echo "Model '$filenameModel' created successfully!\n";
-    } else {
-        echo "Failed to create Model '$filenameModel'.\n";
-        exit(1);
-    }
-    if (file_put_contents($filenameRequest, $contentRequest) !== false) {
-        echo "Request '$filenameRequest' created successfully!\n";
-    } else {
-        echo "Failed to create Request '$filenameRequest'.\n";
-        exit(1);
-    }
-    if (file_put_contents($filenameResponse, $contentResponse) !== false) {
-        echo "Response '$filenameResponse' created successfully!\n";
-    } else {
-        echo "Failed to create Response '$filenameResponse'.\n";
-        exit(1);
-    }
-    if (file_put_contents($filenameVerify, $contentVerify) !== false) {
-        echo "Verify '$filenameVerify' created successfully!\n";
-    } else {
-        echo "Failed to create Verify '$filenameVerify'.\n";
-        exit(1);
-    }
-}else{
-    echo "Invalid type '$type'.\n";
-    exit(1);
 }
