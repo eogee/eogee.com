@@ -13,6 +13,7 @@ return [
     'user'=> 'root',
     'password'=> 'root',
     'charset'=> 'utf8',
+    'collate'=> 'utf8mb4_unicode_ci',
 
     // 引擎配置
     'engine' => 'InnoDB',

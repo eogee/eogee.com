@@ -40,13 +40,13 @@ class Route
         self::$routes = $routes; // 保存路由配置
     }
     /**
-     * 定义单个路由
+     * 定义单个get路由
      * @param string $uri 路由 URI
      * @param string $controller 控制器名称
      * @param string $action 方法名称
      * @return Route
      */
-    public function get($uri, $controller, $action)
+    public function set($uri, $controller, $action)
     {
         self::$routes[$uri] = [
             $controller
@@ -55,7 +55,7 @@ class Route
         ];
         return $this; // 支持链式调用
     }
-
+    
     /**
      * 添加中间件
      * @param string $uri 路由 URI

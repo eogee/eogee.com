@@ -9,6 +9,7 @@ use Easy\Request\Request;
 use Easy\Response\Response;
 use Easy\Verify\LimitVerify;
 use Easy\Log\Log;
+use Easy\Session\Session;
 use Helper\Url;
 
 /**
@@ -25,6 +26,7 @@ class Controller{
     protected $table;//数据表名
     protected $id;//数据表主键
     protected $log;//日志类
+    protected $session;//会话类
 
     public function __construct(){
         $this->model = new Model;
@@ -32,6 +34,7 @@ class Controller{
         $this->request = new Request;//实例化响应类
         $this->log = new Log;//实例化日志类
         $this->limitVerify = new LimitVerify;//实例化权限验证类
+        $this->session = new Session;//实例化会话类
         $this->table = Url::getTable();
         $this->id = Url::getId();
     }
@@ -43,11 +46,8 @@ class Controller{
      */
     public function headData()
     {
-        $ip = $this->request->ip();
-        $url = $this->request->url();
-        $method = $this->request->method();
-        $userAgent = $this->request->userAgent();
-        $this->log->info("ip：{$ip}，url：{$url}，method：{$method}，userAgent：{$userAgent}");
+        // 访问日志记录
+        $this->accessLog();
         // 根据开发模式选择索引 URL
         $indexUrl = CONFIG['app']['developer_mode'] ? '/' : $this->model->show('basicInfo', 1)['data']['indexUrl'];
     
@@ -98,6 +98,23 @@ class Controller{
             'siteName' => $basicInfo['siteName'] ?? '',
             'recordCode' => $basicInfo['recordCode'] ?? '',
         ];
+    }
+    /**
+     * Summary of accessLog
+     * 访问日志
+     * @return void
+     */
+    public function accessLog()
+    {
+        $ip = $this->request->ip();
+        $host = $this->request->host();
+        $url = $this->request->url();
+        $username = $this->session->get('username') ?? '';
+        $userId = $this->session->getUserId() ?? '';
+        $method = $this->request->method();
+        $userAgent = $this->request->userAgent();
+        $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+        $this->log->info("ip：{$ip}，host：{$host}，url：{$url}，username：{$username}，userId：{$userId}，method：{$method}，userAgent：{$userAgent}，referer：{$referer}");
     }
     /**
      * Summary of detail

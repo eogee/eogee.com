@@ -4,7 +4,7 @@ use Helper\Path;
 
 /**
  * Main configuration
- * 配置文件
+ * 配置文件 索引文件
  */
 return [    
     /**
@@ -34,6 +34,5 @@ return [
     /**
      * 日志记录
      */
-    'log' => require_once Path::rootPath().'/Config/log.php',
-    
+    'log' => require_once Path::rootPath().'/Config/log.php',    
 ];

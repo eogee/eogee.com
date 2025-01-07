@@ -28,7 +28,7 @@ class Cache {
      * @param mixed $value 缓存值
      * @param int $expire 缓存过期时间（秒），0 表示永不过期
      */
-    public function set($fileName, $value, $expire = 0) {
+    public function set($fileName, $value, $expire = CONFIG['cache']['default_cache_time']) {
         $cacheFile = $this->getCacheFilePath($fileName);
 
         // 检查目录是否可写

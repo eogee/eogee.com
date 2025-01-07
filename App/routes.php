@@ -108,9 +108,10 @@ if(CONFIG['cache']['router_cache_enabled'] and $cashe->get('routes')){
     $routes = defineRoutes($routes, 'permission', [
         'list', 'listApi', 'tableHeadDataApi', 'show', 'showApi', 'insert', 'edit', 'updateApi', 'fileUploadApi', 'deleteSoft', 'deleteSoftBatch', 'recycle', 'recycleApi', 'restore', 'restoreBatch', 'delete', 'deleteBatch'
     ]);
+    
     /* 如开启路由缓存 则缓存路由 */
     if(CONFIG['cache']['router_cache_enabled']){
-        $cashe->set('routes', $routes, 3600);
+        $cashe->set('routes', $routes, CONFIG['route']['default_cache_time']);
     }
 }
 

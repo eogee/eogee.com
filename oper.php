@@ -212,6 +212,9 @@ switch (strtolower($type)) {
         function generateMigrationContent($tableName)
         {
             $className = 'Create' . ucfirst($tableName) . 'Table';
+            $engine = CONFIG_DATABASE['engine'] ?? 'InnoDB';
+            $charset = CONFIG_DATABASE['charset'] ?? 'utf8';
+            $collate = CONFIG_DATABASE['collate'] ?? 'utf8mb4_unicode_ci';
 
             return <<<EOT
 <?php
@@ -234,7 +237,7 @@ class $className
             id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        ) ENGINE= $engine DEFAULT CHARSET=$charset COLLATE=$collate;
 SQL;
         \$this->executeQuery(\$sql);
     }
