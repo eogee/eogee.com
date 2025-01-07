@@ -32,11 +32,9 @@ SQL;
     private function executeQuery($sql)
     {
         if ($this->mysqli->query($sql) === TRUE) {
-            echo "Query executed successfully.
-";
+            echo "Query executed successfully.";
         } else {
-            echo "Error executing query: " . $this->mysqli->error . "
-";
+            echo "Error executing query: " . $this->mysqli->error . "";
         }
     }
 }

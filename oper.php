@@ -45,27 +45,27 @@ function connectDatabase()
 function handleFileCreation($type, $name)
 {
     $templates = [
-        'controller' => [
+        'add-controller' => [
             'path' => 'App/Http/Controller/',
             'content' => "<?php\n\nnamespace App\Http\Controller;\n\nclass {name} extends BasicController\n{\n\n}\n"
         ],
-        'model' => [
+        'add-model' => [
             'path' => 'App/Model/',
             'content' => "<?php\n\nnamespace App\Model;\n\nclass {name} extends Model\n{\n\n}\n"
         ],
-        'request' => [
+        'add-request' => [
             'path' => 'App/Http/Request/',
             'content' => "<?php\n\nnamespace App\Http\Request;\n\nclass {name} extends Request\n{\n\n}\n"
         ],
-        'response' => [
+        'add-response' => [
             'path' => 'App/Http/Response/',
             'content' => "<?php\n\nnamespace App\Http\Response;\n\nclass {name} extends Response\n{\n\n}\n"
         ],
-        'verify' => [
+        'add-verify' => [
             'path' => 'App/Verify/',
             'content' => "<?php\n\nnamespace App\Verify;\n\nclass {name} extends Verify\n{\n\n}\n"
         ],
-        'middleware' => [
+        'add-middleware' => [
             'path' => 'App/Http/Middleware/',
             'content' => "<?php\n\nnamespace App\Http\Middleware;\n\nclass {name}\n{\n\n}\n"
         ]
@@ -251,9 +251,9 @@ SQL;
     private function executeQuery(\$sql)
     {
         if (\$this->mysqli->query(\$sql) === TRUE) {
-            echo "Query executed successfully.\n";
+            echo "Query executed successfully.\\n";
         } else {
-            echo "Error executing query: " . \$this->mysqli->error . "\n";
+            echo "Error executing query: " . \$this->mysqli->error . "\\n";
         }
     }
 }
