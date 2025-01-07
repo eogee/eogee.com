@@ -131,7 +131,7 @@ class Database
     
         // 创建引用数组
         $refParams = [];
-        foreach ($params as $key => $value) {
+        foreach ($params as $key) {
             $refParams[$key] = &$params[$key]; // 确保每个参数都是引用
         }
     

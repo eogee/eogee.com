@@ -9,7 +9,7 @@ return [
     'log_path' => 'Storage/Log',
 
     // 是否开启访问日志记录
-    'router_cache_enabled' => true,
+    'log_enabled' => true,
 
     // 文件名
     'log_file' => 'app.log',

@@ -13,6 +13,10 @@ class Session
 {
     protected $db;
 
+    protected $userTableName = CONFIG['database']['user_table'];
+
+    protected $userCol = CONFIG['database']['user_col'];
+
     public function __construct()
     {
         $this->db = Database::getInstance();
@@ -88,7 +92,7 @@ class Session
     {
         if(!empty(self::getUser()))
         {
-            $this->db->select('user',"where username = '".self::getUser()."'")[0]['id'];
+            return $this->db->select($this->userTableName,"where ".$this->userCol." = '".self::getUser()."'")[0]['id'];
         }else{
             return null;
         }

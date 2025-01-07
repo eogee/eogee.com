@@ -20,4 +20,5 @@ return [
     
     // 用户表名配置
     'user_table' => 'user',
+    'user_col' => 'username',
 ];

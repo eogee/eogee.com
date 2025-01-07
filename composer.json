@@ -26,7 +26,7 @@
     },
     "scripts": {
         "oper": "php ./oper.php",
-        "oper-run": "php -d max_execution_time=0 -S localhost:8000 -t public"     
+        "oper-run": "php -d max_execution_time=0 -S localhost:80 -t public"     
     },
     "config": {
         "process-timeout": 0

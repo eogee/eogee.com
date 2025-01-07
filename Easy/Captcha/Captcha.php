@@ -15,6 +15,9 @@ use Helper\Path;
 class Captcha
 {
     protected $session;
+    protected $captchaEnable = CONFIG['app']['captcha_enable']; #是否开启验证码
+    protected $captchaFont = CONFIG['app']['captcha_font']; #验证码字体
+    protected $captchaFontSize = CONFIG['app']['captcha_font_size']; #验证码字体
 
     public function __construct()
     {
@@ -51,8 +54,8 @@ class Captcha
             $char = $content[$i];
             $x = 15 + 20 * $i;
             $color = imagecolorallocate($image, mt_rand(0, 100), mt_rand(0, 100), mt_rand(0, 100));
-            $path = Path::rootPath().'/public/font/'.CONFIG['app']['captcha_font'];#字体绝对路径
-            imagefttext($image, 16, mt_rand(-15, 15), $x, 20, $color, $path, $char);
+            $path = Path::rootPath().'/public/font/'.$this->captchaFont;#字体绝对路径
+            imagefttext($image, $this->captchaFontSize, mt_rand(-15, 15), $x, 20, $color, $path, $char);
         }
         header("content-type:image/png");
         imagepng($image);
@@ -64,7 +67,7 @@ class Captcha
      */
     public function checkCaptcha()
     {
-        if(CONFIG['app']['developer_mode'] == false){
+        if($this->captchaEnable){
             if(empty($_POST['captcha']) || empty($_SESSION['captcha']) || $_POST['captcha'] !== $_SESSION['captcha']){
                 Window::alert('输入的验证码不正确，请重新输入！','back');
                 die();

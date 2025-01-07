@@ -29,7 +29,9 @@ class Log
      */
     public function info($message)
     {
-        $this->log('INFO', $message);
+        if($this->logEnable()){
+            $this->log('INFO', $message);
+        }       
     }
 
     /**
@@ -38,7 +40,9 @@ class Log
      */
     public function error($message)
     {
-        $this->log('ERROR', $message);
+        if($this->logEnable()){
+            $this->log('ERROR', $message);
+        }
     }
 
     /**
@@ -47,7 +51,9 @@ class Log
      */
     public function warning($message)
     {
-        $this->log('WARNING', $message);
+        if($this->logEnable()){
+            $this->log('WARNING', $message);
+        }
     }
 
     /**
@@ -56,7 +62,9 @@ class Log
      */
     public function debug($message)
     {
-        $this->log('DEBUG', $message);
+        if($this->logEnable()){
+            $this->log('DEBUG', $message);
+        }
     }
 
     /**
@@ -98,6 +106,18 @@ class Log
         // 如果需要，输出到控制台
         if ($this->logToConsole) {
             echo $logEntry;
+        }
+    }
+    /**
+     * 判断日志是否开启
+     * @return bool
+     */
+    public function logEnable()
+    {
+        if(CONFIG['log']['log_enabled']){
+            return true;
+        }else{
+            return false;
         }
     }
 }

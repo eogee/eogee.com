@@ -10,6 +10,15 @@ use Easy\Cache\Cache;
  * @param mixed $actions 方法数组
  * @return mixed
  */
+
+$routerCacheEnabled = CONFIG['cache']['router_cache_enabled'];
+
+$defaultCacheTime = CONFIG['route']['default_cache_time'];
+
+$defaltController = CONFIG['route']['default_controller'];
+
+$defaltAction = CONFIG['route']['default_action'];
+
 function defineRoutes($routes, $controller, $actions) {
     foreach ($actions as $action) {
         $routes["/$controller/$action"] = ["{$controller}Controller", $action]; // 使用控制器类名
@@ -20,13 +29,13 @@ function defineRoutes($routes, $controller, $actions) {
 $cashe = new Cache();
 
 /* 判定是否开启路由缓存 及 路由缓存是否存在 */ 
-if(CONFIG['cache']['router_cache_enabled'] and $cashe->get('routes')){
+if($routerCacheEnabled and $cashe->get('routes')){
     $routes = $cashe->get('routes');
 }else{
     $routes = [];
     /* 前台 首页 */
-    $routes['/'] = [CONFIG['route']['default_controller'],CONFIG['route']['default_action']];
-    $routes['/index'] = [CONFIG['route']['default_controller'],CONFIG['route']['default_action']];
+    $routes['/'] = [$defaltController,$defaltAction];
+    $routes['/index'] = [$defaltController,$defaltAction];
 
     /* 前台 技术支持 */
     $routes['/support'] = ['SinglePageController','support'];
@@ -35,11 +44,11 @@ if(CONFIG['cache']['router_cache_enabled'] and $cashe->get('routes')){
     $routes['/contentParent/detail'] = ['ContentParentController','detail'];
     $routes['/content/detailChild'] = ['ContentController','detailChild'];
     $routes['/singlePage/detail'] = ['SinglePageController','detailChild'];
-    $routes['/news'] = ['NewsController',CONFIG['route']['default_action']];
+    $routes['/news'] = ['NewsController',$defaltAction];
 
     /* 后台 首页 */
-    $routes['/admin'] = ['AdminController',CONFIG['route']['default_action']];
-    $routes['/admin/index'] = ['AdminController',CONFIG['route']['default_action']];
+    $routes['/admin'] = ['AdminController',$defaltAction];
+    $routes['/admin/index'] = ['AdminController',$defaltAction];
 
     /* 后台 登陆-退出 */
     $routes = defineRoutes($routes, 'auth', [
@@ -110,8 +119,8 @@ if(CONFIG['cache']['router_cache_enabled'] and $cashe->get('routes')){
     ]);
     
     /* 如开启路由缓存 则缓存路由 */
-    if(CONFIG['cache']['router_cache_enabled']){
-        $cashe->set('routes', $routes, CONFIG['route']['default_cache_time']);
+    if($routerCacheEnabled){
+        $cashe->set('routes', $routes, $defaultCacheTime);
     }
 }
 

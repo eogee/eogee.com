@@ -37,6 +37,8 @@ class Controller{
         $this->session = new Session;//实例化会话类
         $this->table = Url::getTable();
         $this->id = Url::getId();
+        //访问日志记录
+        $this->accessLog();
     }
 
     /**
@@ -46,8 +48,6 @@ class Controller{
      */
     public function headData()
     {
-        // 访问日志记录
-        $this->accessLog();
         // 根据开发模式选择索引 URL
         $indexUrl = CONFIG['app']['developer_mode'] ? '/' : $this->model->show('basicInfo', 1)['data']['indexUrl'];
     
