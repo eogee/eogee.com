@@ -11,10 +11,11 @@ use Helper\Path;
  * @email eogee@qq.com 
  */
 class Cache {
-    protected $dir;
+    
+    protected $dir ;
     
     public function __construct() {
-        $this->dir = Path::rootPath() . CONFIG['cache']['cache_path'];
+        $this->dir = Path::rootPath().CONFIG['cache']['cache_path'];
         if (!is_dir($this->dir)) {
             if (!mkdir($this->dir, 0777, true)) {
                 die("无法创建缓存目录: {$this->dir}");
@@ -28,7 +29,8 @@ class Cache {
      * @param mixed $value 缓存值
      * @param int $expire 缓存过期时间（秒），0 表示永不过期
      */
-    public function set($fileName, $value, $expire = CONFIG['cache']['default_cache_time']) {
+    public function set($fileName, $value, $expire = CONFIG['cache']['default_cache_time']) 
+    {
         $cacheFile = $this->getCacheFilePath($fileName);
 
         // 检查目录是否可写

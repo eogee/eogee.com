@@ -10,11 +10,15 @@ namespace Easy\Route;
 class Route
 {
     private static $instance; // 单例实例
+
     protected static $routes = []; // 存储路由配置
+
+    protected static $middleware = CONFIG['middleware']; // 中间件
 
     // 构造函数私有化，防止外部实例化
     private function __construct()
     {
+
     }
 
     /**
@@ -80,7 +84,7 @@ class Route
     protected static function applyMiddleware($middleware,$request,$next)
     {
         // 获取中间件类
-        $middlewareClass = CONFIG['middleware'][$middleware][0] ?? null;
+        $middlewareClass = self::$middleware[$middleware][0] ?? null;
 
         if ($middlewareClass && class_exists($middlewareClass)) {
             $middlewareInstance = new $middlewareClass();

@@ -26,6 +26,7 @@ CONFIG['app']['developer_mode'] == false ? Path::rootPath().'/App/error.php' : n
 
 $uri = $_SERVER['REQUEST_URI'];//获取当前请求的uri
 
-$router->set('/test', 'TestController', 'index')->middleware('/test','test');//中间件测试路由
+$router->set('/test', 'TestController', 'index');//中间件测试路由
+$router->set('/test/listApi', 'TestController', 'listApi');
 
 $router->index( $uri);//执行路由

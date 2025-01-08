@@ -10,11 +10,12 @@ namespace Easy\Database;
  */
 class Database
 {
-    protected $host;
-    protected $username;
-    protected $password;
-    protected $database;
-    protected $charset;
+    protected $host = CONFIG['database']['host'];
+    protected $username = CONFIG['database']['user'];
+    protected $password = CONFIG['database']['password'];
+    protected $database = CONFIG['database']['name'];
+    protected $charset = CONFIG['database']['charset'];
+    protected $developerMode = CONFIG['app']['developer_mode'];
     protected $table;//表名
     public $conn;//数据库连接资源
     private static $instance;//单例模式实例
@@ -25,11 +26,6 @@ class Database
      */
     private function __construct()
     {
-        $this->host = CONFIG['database']['host'];
-        $this->username = CONFIG['database']['user'];
-        $this->password = CONFIG['database']['password'];
-        $this->database = CONFIG['database']['name'];
-        $this->charset = CONFIG['database']['charset'];
         // 连接数据库
         $this->conn = $this->connectDatabase();
     }
@@ -86,7 +82,7 @@ class Database
     {
         $result = mysqli_query($this->conn, $sql);        
         if ($result === false) {
-            if(CONFIG['app']['developer_mode'] == true){
+            if($this->developerMode){
                 return $sql; // 开发模式下返回SQL语句
             }else{
                 return false; // 生产模式下返回false

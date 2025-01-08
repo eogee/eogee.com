@@ -14,6 +14,10 @@ class File
 {
     protected $db;
 
+    protected $picPath = CONFIG['file']['pic_upload_path'];
+
+    protected $filePath = CONFIG['file']['file_upload_path'];
+
     public function __construct()
     {
         $this->db = Database::getInstance();
@@ -30,9 +34,9 @@ class File
     public function fileUploadApi($table = null, $fileName = null, $type = 'pic', $id = null)
     {
         if ($type == 'pic') {
-            $dir = CONFIG['file']['pic_upload_path'];
+            $dir = $this->picPath;
         } else {
-            $dir = CONFIG['file']['file_upload_path'];
+            $dir = $this->filePath;
         }
 
         // 获取 ID，并确保其存在

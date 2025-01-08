@@ -157,8 +157,7 @@ class Base{
     
             if (isset($_GET['search']) && $_GET['search'] != null) {
                 // 如果有搜索参数，则进行搜索
-                self::search($table, $page, $limit, $_GET['search'], $field);
-                die(); // 结束函数执行
+                return $this->search($table, $page, $limit, $_GET['search'], $field);
             }
     
             // 检查是否有 deleted_at 字段
@@ -206,8 +205,7 @@ class Base{
 
         // 处理搜索参数
         if (isset($_GET['search']) && trim($_GET['search']) !== '') {
-            self::searchRecycle($table, $page, $limit, $_GET['search'], $field);
-            die(); // 调用 searchRecycle 后退出方法，避免执行后续查询
+            return $this->searchRecycle($table, $page, $limit, $_GET['search'], $field);
         }
 
         // 计算偏移量
@@ -242,6 +240,10 @@ class Base{
      */
     public function search($table, $page, $limit, $search, $field)
     {
+
+        // todo: 有待bug待修复
+
+
         // 计算偏移量
         $offset = max(0, ceil($page - 1) * $limit);
 
@@ -258,7 +260,7 @@ class Base{
         // 安全处理字段名和搜索内容
         $table = Database::getInstance()->conn->real_escape_string($table);
         $field = Database::getInstance()->conn->real_escape_string($field);
-        $search = Database::getInstance()->conn->real_escape_string($search);
+        $search = Database::getInstance()->conn->real_escape_string($search);              
 
         // 生成 SQL 查询
         $likeClause = "WHERE CONCAT($field) LIKE '%$search%'";
@@ -272,6 +274,7 @@ class Base{
 
         // 准备返回数据
         $data['count'] = $dataCount;
+        $data['searchOption'] = $this->searchOption($field);
 
         // 构建响应数组
         return $data = [
@@ -295,6 +298,9 @@ class Base{
      */
     public function searchRecycle($table, $page, $limit, $search, $field)
     {
+        // todo: 有待bug待修复
+        
+        
         // 验证表名和字段名的有效性
         if (empty($table) || empty($field)) {
             return "表名和搜索字段不能为空"; // 返回错误信息

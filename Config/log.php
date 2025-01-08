@@ -9,7 +9,7 @@ return [
     'log_path' => 'Storage/Log',
 
     // 是否开启访问日志记录
-    'log_enabled' => true,
+    'log_enabled' => false,
 
     // 文件名
     'log_file' => 'app.log',
