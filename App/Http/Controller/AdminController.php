@@ -18,5 +18,5 @@ class AdminController extends BasicController
     {
         $this->limitVerify->verify();
         View::view('/admin/list');
-    }    
+    }
 }

@@ -101,4 +101,29 @@ class File
     {
         return pathinfo(__FILE__, PATHINFO_FILENAME);
     }
+    
+    /**
+     * 下载文件
+     * @param string $filePath 文件路径
+     * @param string $fileName 文件名
+     */
+    public function downloadFile($filePath, $fileName)
+    {
+        if (file_exists($filePath)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename='. $fileName);
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+            header('Pragma: public');
+            header('Content-Length: '. filesize($filePath));
+            ob_clean();
+            flush();
+            readfile($filePath);
+            exit;
+        } else {
+            echo "文件不存在！";
+        }
+    }
 }

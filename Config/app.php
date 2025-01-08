@@ -19,8 +19,8 @@ return [
     //测试环境IP地址
     'test_env_ip'=>'111.227.244.105',//测试环境IP地址
 
-    //Catpcha验证码字体
-    'captcha_enable' => true,
-    'captcha_font' => 'framd.ttf',
-    'captcha_font_size' => 16,
+    //Catpcha验证码
+    'captcha_enable' => true,//是否开启验证码
+    'captcha_font' => 'framd.ttf',//验证码字体
+    'captcha_font_size' => 16,//验证码字体大小
 ];

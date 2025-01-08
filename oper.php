@@ -31,7 +31,8 @@ function connectDatabase()
         CONFIG_DATABASE['host'],
         CONFIG_DATABASE['user'],
         CONFIG_DATABASE['password'],
-        CONFIG_DATABASE['name']
+        CONFIG_DATABASE['name'],
+        CONFIG_DATABASE['port']
     );
 
     if ($mysqli->connect_error) {

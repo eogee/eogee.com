@@ -9,11 +9,13 @@ class TestController extends BasicController
 {
     public function index()
     {
-        $log = new Log;
+        //日志文件下载测试
 
-        $log->logToArray();
+        //$log = new Log;
 
-        //View::view('/test');
+        //$log->downloadLog();
+
+        View::view('/test');
     }
     public function listApi()
     {

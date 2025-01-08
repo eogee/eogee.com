@@ -2,6 +2,8 @@
 
 namespace Easy\Log;
 
+use Easy\File\File;
+
 /**
  * Summary of Log
  * 日志类
@@ -16,6 +18,8 @@ class Log
     private $logEnable = CONFIG['log']['log_enabled'];
 
     private $logFileName = CONFIG['log']['log_file'];
+
+    private $logSortDesc = CONFIG['log']['log_sort_desc'];
 
     /**
      * Logger constructor.
@@ -118,44 +122,6 @@ class Log
      * 日志文件内容格式：[时间戳] [类型]: [数据1]：[值1]，[数据2]：[值2]，...
      * @return array
      */
-/*     public function logToArray()
-    {
-        $data = [];
-        $logText = file_get_contents($this->logFile);
-        // 按行分割日志
-        $logLines = explode("\n", $logText);
-
-        // 初始化结果数组
-        $result = [];
-
-        // 遍历每一行日志
-        foreach ($logLines as $line) {
-            // 跳过空行
-            if (empty(trim($line))) {
-                continue;
-            }
-
-            // 解析日志行
-            if (preg_match('/\[(.*?)\] INFO: (.*)/', $line, $matches)) {
-                $timestamp = $matches[1]; // 时间戳
-                $logData = $matches[2];   // 日志数据部分
-
-                // 解析日志数据部分
-                $dataPairs = explode('，', $logData);
-                $logEntry = ['timestamp' => $timestamp];
-
-                foreach ($dataPairs as $pair) {
-                    list($key, $value) = explode('：', $pair, 2);
-                    $logEntry[trim($key)] = trim($value);
-                }
-
-                // 将解析后的日志条目添加到结果数组中
-                $result[] = $logEntry;
-            }
-        }
-
-        return $result;
-    } */
     public function logToArray()
     {
         $logText = file_get_contents($this->logFile);
@@ -193,11 +159,14 @@ class Log
                 $result[] = $logEntry;
             }
         }
-        var_dump($result);
-    
+
+        if ($this->logSortDesc) // 按时间戳倒序排列
+        {
+            return array_reverse($result);
+        }
+
         return $result;
     }
-    
 
     /**
      * 每次返回10条日志内容(用于前端分页显示)
@@ -247,13 +216,9 @@ class Log
      */
     public function downloadLog()
     {
-        //todo:测试
-        $logText = file_get_contents($this->logFile);
-        header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename='.$this->logFileName);
-        echo $logText;
-        exit();
-    }
+        $file = new File;
+        $file->downloadFile($this->logFile, $this->logFileName);
+    }    
 
     /**
      * 删除一条日志内容

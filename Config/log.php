@@ -16,4 +16,7 @@ return [
 
     // 是否在控制台显示
     'log_to_console' => false,
+
+    // 是否倒序显示
+    'log_sort_desc' => true,
 ];

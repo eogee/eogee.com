@@ -16,6 +16,7 @@ class Database
     protected $database = CONFIG['database']['name'];
     protected $charset = CONFIG['database']['charset'];
     protected $developerMode = CONFIG['app']['developer_mode'];
+    protected $port = CONFIG['database']['port'];
     protected $table;//表名
     public $conn;//数据库连接资源
     private static $instance;//单例模式实例
@@ -33,7 +34,7 @@ class Database
     private function connectDatabase()
     {
         // 创建数据库连接
-        $conn = mysqli_connect($this->host, $this->username, $this->password, $this->database);
+        $conn = mysqli_connect($this->host, $this->username, $this->password, $this->database, $this->port);
         // 检查连接是否成功
         if (!$conn) {
             die("数据库连接失败: " . mysqli_connect_error());
