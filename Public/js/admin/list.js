@@ -5,14 +5,14 @@ tableHeadSet();// 表头设置
 tableHeadData();// 表格及字段数据
 
 /* 表格字段定义 */
-var hides = ['userId','statusCode'];
+var hides = ['userId'];
 var sorts = [];
 var cols = generateColumns(tableFiledComment, hides, sorts, handleColwidth);
 
 /* 表头按钮组定义 */
 var toolbar = document.getElementById("toolbar");
 toolbar.innerHTML = `
-    <button id="deleteBatch" class="layui-btn layui-btn-danger layui-btn-sm" lay-event="deleteBatch">批量删除</button>`;
+    <button id="clear" class="layui-btn layui-btn-danger layui-btn-sm" lay-event="clear">清空全部</button>`;
 /* 桌面端行按钮组定义 */
 var toolbar = document.getElementById("rowToolbar");
 toolbar.innerHTML = `
@@ -29,5 +29,28 @@ toolbar.innerHTML = `
 renderTable();
 searchRow();
 renderPage();
+
+function batch(){
+    layui.use(function(){
+        var layer = layui.layer;
+        var clear = document.getElementById('clear');        
+        clear.onclick = function(){
+            layer.confirm("你确认要执行此操作吗？",{icon: 3, title:'警告'},()=>{
+                ajax('/' + modelName + '/clear',  true, function(response) {
+                    response = JSON.parse(response);
+                    if (response.code === 0) {
+                        layer.msg(response.msg,{icon: 1, time: 1000},()=>{
+                            window.location.reload();
+                        });
+                    } else {
+                        layer.msg(response.msg,{icon: 2, time: 1000});
+                    }
+                });
+            });
+        };
+    });
+}
+
+
 batch();
 rowToolbar(); 

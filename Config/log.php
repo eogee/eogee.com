@@ -14,6 +14,9 @@ return [
     // 文件名
     'log_file' => 'app.log',
 
+    // ID锁文件名
+    'log_id_lock' => 'log_id.lock',
+
     // 是否在控制台显示
     'log_to_console' => false,
 

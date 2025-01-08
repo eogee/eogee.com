@@ -38,6 +38,16 @@ class Request
     }
 
     /**
+     * 获取 GET 请求参数
+     * @param string $key 参数名
+     * @return mixed|null
+     */
+    public function get($key)
+    {
+        return $_GET[$key] ?? null;
+    }
+
+    /**
      * 获取请求参数（GET 或 POST）
      * @param string $key 参数名
      * @param mixed $default 默认值

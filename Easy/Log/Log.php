@@ -21,6 +21,8 @@ class Log
 
     private $logSortDesc = CONFIG['log']['log_sort_desc'];
 
+    private static $lockFile = __DIR__ . '/../../'.CONFIG['log']['log_path'].'/'.CONFIG['log']['log_id_lock']; // 用于文件锁的文件
+
     /**
      * Logger constructor.
      * @param string $logFile 日志文件路径
@@ -29,6 +31,94 @@ class Log
     public function __construct()
     {
 
+    }
+
+    /**
+     * 获取下一个日志ID
+     * @return int
+     */
+    private function getNextLogId()
+    {
+        // 确保文件存在并初始化
+        if (!file_exists(self::$lockFile)) {
+            file_put_contents(self::$lockFile, '0');
+        }
+
+        $fp = fopen(self::$lockFile, 'c+');
+        if (flock($fp, LOCK_EX)) {
+            try {
+                // 重置文件指针到文件开头
+                rewind($fp);
+
+                // 读取当前的ID值（通过文件指针）
+                $fileContent = fread($fp, filesize(self::$lockFile));
+                $currentId = (int)trim($fileContent);
+
+                $nextId = $currentId + 1;
+    
+                // 写入新的ID值
+                ftruncate($fp, 0); // 清空文件
+                rewind($fp); // 重置文件指针
+                fwrite($fp, $nextId); // 写入新的ID
+                flock($fp, LOCK_UN); // 释放锁
+            } catch (\Exception $e) {
+                flock($fp, LOCK_UN); // 确保锁被释放
+                fclose($fp);
+                throw new \RuntimeException("Failed to update log ID: " . $e->getMessage());
+            }
+            fclose($fp);
+    
+            return $nextId;
+        } else {
+            throw new \RuntimeException("Failed to acquire lock for log ID.");
+        }
+    }    
+
+    /**
+     * 记录日志
+     * @param string $level 日志级别
+     * @param string $message 日志信息
+     */
+
+    private function log($level, $message)
+    {
+        // 获取自增ID
+        $logId = $this->getNextLogId();
+
+        $logEntry = sprintf(
+            "[%s] [ID: %d] %s: %s\n",
+            date('Y-m-d H:i:s'),
+            $logId, // 添加自增ID
+            $level,
+            $message
+        );
+
+        // 确保日志目录存在
+        $logDir = dirname($this->logFile);
+
+        if (!is_dir($logDir)) {
+            if (file_exists($logDir)) {
+                // 如果路径存在但不是目录，抛出异常或记录错误
+                throw new \RuntimeException("Path exists but is not a directory: " . $logDir);
+            } else {
+                // 如果路径不存在，创建目录
+                if (!mkdir($logDir, 0777, true)) {
+                    throw new \RuntimeException("Failed to create directory: " . $logDir);
+                }
+            }
+        }
+
+        $fp = fopen($this->logFile, 'a'); // 以追加模式打开文件
+        if (flock($fp, LOCK_EX)) { // 获取独占锁
+            fwrite($fp, $logEntry); // 写入日志
+            flock($fp, LOCK_UN); // 释放锁
+        }
+        fclose($fp); // 关闭文件
+
+        // 如果需要，输出到控制台
+        if ($this->logToConsole) {
+            echo $logEntry;
+        }
     }
 
     /**
@@ -73,49 +163,7 @@ class Log
         if($this->logEnable){
             $this->log('DEBUG', $message);
         }
-    }
-
-    /**
-     * 记录日志
-     * @param string $level 日志级别
-     * @param string $message 日志信息
-     */
-    private function log($level, $message)
-    {
-        $logEntry = sprintf(
-            "[%s] %s: %s\n",
-            date('Y-m-d H:i:s'),
-            $level,
-            $message
-        );
-    
-        // 确保日志目录存在
-        $logDir = dirname($this->logFile);
-    
-        if (!is_dir($logDir)) {
-            if (file_exists($logDir)) {
-                // 如果路径存在但不是目录，抛出异常或记录错误
-                throw new \RuntimeException("Path exists but is not a directory: " . $logDir);
-            } else {
-                // 如果路径不存在，创建目录
-                if (!mkdir($logDir, 0777, true)) {
-                    throw new \RuntimeException("Failed to create directory: " . $logDir);
-                }
-            }
-        }
-
-        $fp = fopen($this->logFile, 'a'); // 以追加模式打开文件
-        if (flock($fp, LOCK_EX)) { // 获取独占锁
-            fwrite($fp, $logEntry); // 写入日志
-            flock($fp, LOCK_UN); // 释放锁
-        }
-        fclose($fp); // 关闭文件
-
-        // 如果需要，输出到控制台
-        if ($this->logToConsole) {
-            echo $logEntry;
-        }
-    }
+    }    
 
     /**
      * 将日志文件内容转换为数组
@@ -139,14 +187,15 @@ class Log
             }            
     
             // 解析日志行
-            if (preg_match('/\[(.*?)\] (\w+): (.*)/', $line, $matches)) {
-                $timestamp = $matches[1];  // 时间戳
-                $type = $matches[2];        // 日志类型（比如 INFO）
-                $logData = $matches[3];     // 日志数据部分
+            if (preg_match('/\[(.*?)\] \[ID: (\d+)\] (\w+): (.*)/', $line, $matches)) {
+                $timestamp = $matches[1];   // 时间戳
+                $id = $matches[2];          // 日志ID
+                $type = $matches[3];        // 日志类型（比如 INFO）
+                $logData = $matches[4];     // 日志数据部分
     
                 // 解析日志数据部分
                 $dataPairs = explode('，', $logData);
-                $logEntry = ['timestamp' => $timestamp, 'type' => $type];  // 添加 type
+                $logEntry = ['timestamp' => $timestamp, 'id' => $id,'type' => $type];  // 添加 type
     
                 foreach ($dataPairs as $pair) {
                     // 分割键值对
@@ -202,14 +251,26 @@ class Log
      */
     public function logShow($id)
     {
-        //todo:测试
         $pageData = $this->logByPage();
-        $logData = $pageData[$id - 1];
-        $data = [];
-        $data['data'] = $logData;
-        $data['code'] = 0;
-        return $data;
+        $logData = $this->findLogById($pageData['data'], $id);
+        return $logData[0];
     }
+    /**
+     * 根据ID查找日志内容
+     * @param array $logs 日志数组
+     * @param int $id 日志ID
+     * @return array
+     */
+    function findLogById($logs, $id) {
+        $result = [];
+        foreach ($logs as $log) {
+            if (isset($log['id']) && $log['id'] == $id) {
+                $result[] = $log;
+            }
+        }
+        return $result;
+    }    
+    
     /**
      * 下载日志文件
      * @return void
@@ -223,45 +284,53 @@ class Log
     /**
      * 删除一条日志内容
      * @param int $id 日志ID
-     * @return void
+     * @return bool
+     * @throws \RuntimeException 如果文件操作失败
      */
     public function logDelete($id)
     {
-        //todo:测试
-        $pageData = $this->logByPage();
-        $logData = $pageData[$id - 1];
-        $logText = file_get_contents($this->logFile);
-        $logLines = explode("\n", $logText);
-        $newLogLines = [];
-        foreach ($logLines as $line) {
-            if (empty(trim($line))) {
-                continue;
-            }
-            if (preg_match('/\[(.*?)\] INFO: (.*)/', $line, $matches)) {
-                $timestamp = $matches[1]; // 时间戳
-                $logData = $matches[2];   // 日志数据部分
-                $dataPairs = explode('，', $logData);
-                $logEntry = ['timestamp' => $timestamp];
-                foreach ($dataPairs as $pair) {
-                    list($key, $value) = explode('：', $pair, 2);
-                    $logEntry[trim($key)] = trim($value);
-                }
-                if ($logEntry['id'] != $id) {
-                    $newLogLines[] = $line;
-                }
-            }
+        // 日志文件路径
+        $logFile = $this->logFile; // 替换为实际的日志文件路径
+
+        // 检查文件是否存在
+        if (!file_exists($logFile)) {
+            throw new \RuntimeException("日志文件不存在: $logFile");
         }
-        $newLogText = implode("\n", $newLogLines);
-        file_put_contents($this->logFile, $newLogText);
+
+        // 读取文件内容
+        $logContent = file_get_contents($logFile);
+        if ($logContent === false) {
+            throw new \RuntimeException("无法读取日志文件: $logFile");
+        }
+
+        // 按行分割日志内容
+        $logLines = explode("\n", trim($logContent));
+
+        // 过滤掉匹配的日志行
+        $newLogLines = array_filter($logLines, function($line) use ($id) {
+            // 使用正则表达式匹配日志ID
+            if (preg_match('/\[ID: (\d+)\]/', $line, $matches)) {
+                $logId = $matches[1]; // 提取日志ID
+                return $logId != $id; // 保留不匹配的日志行
+            }
+            return true; // 保留无法解析的日志行
+        });
+
+        // 将过滤后的日志行重新写入文件
+        $newLogContent = implode("\n", $newLogLines);
+        if (file_put_contents($logFile, $newLogContent) === false) {
+            throw new \RuntimeException("无法写入日志文件: $logFile");
+        }
+        return true;
     }
 
     /**
      * 清空日志文件内容
-     * @return void
+     * @return bool
      */
     public function clearLog()
     {
-        //todo:测试
         file_put_contents($this->logFile, '');
+        return true;
     }
 }
