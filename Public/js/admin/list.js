@@ -12,7 +12,9 @@ var cols = generateColumns(tableFiledComment, hides, sorts, handleColwidth);
 /* 表头按钮组定义 */
 var toolbar = document.getElementById("toolbar");
 toolbar.innerHTML = `
-    <button id="clear" class="layui-btn layui-btn-danger layui-btn-sm" lay-event="clear">清空全部</button>`;
+    <button id="download" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="download">下载日志</button>
+    <button id="clear" class="layui-btn layui-btn-danger layui-btn-sm" lay-event="clear">清空全部</button>
+    `;
 /* 桌面端行按钮组定义 */
 var toolbar = document.getElementById("rowToolbar");
 toolbar.innerHTML = `
@@ -33,7 +35,8 @@ renderPage();
 function batch(){
     layui.use(function(){
         var layer = layui.layer;
-        var clear = document.getElementById('clear');        
+        var clear = document.getElementById('clear');
+        var download = document.getElementById('download');
         clear.onclick = function(){
             layer.confirm("你确认要执行此操作吗？",{icon: 3, title:'警告'},()=>{
                 ajax('/' + modelName + '/clear',  true, function(response) {
@@ -47,6 +50,9 @@ function batch(){
                     }
                 });
             });
+        };
+        download.onclick = function(){
+            window.location.href = '/' + modelName + '/download';
         };
     });
 }

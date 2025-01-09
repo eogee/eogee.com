@@ -27,6 +27,7 @@ class LogController extends BasicController
     public function listApi()
     {
         $data = $this->log->logByPage();
+        $data['searchOption'] = "任意内容";// 搜索选项提示
         $this->response->json($data);
     }
 
@@ -40,8 +41,8 @@ class LogController extends BasicController
         $data = [
             'code' => 0
             ,'msg' => 'success'
-            ,'tableComment' => '日志列表'
-            ,'tableFiledComment' => [
+            ,'tableComment' => '日志列表'// 表格注释
+            ,'tableFiledComment' => [// 表格字段注释
                 'id'=>'ID'                
                 ,'ip'=>'IP'
                 ,'type'=>'类型'
@@ -65,7 +66,8 @@ class LogController extends BasicController
     public function showApi()
     {
         $field = [
-            'id'=>'ID'
+            'timestamp'=>'请求时间'
+            ,'id'=>'ID'            
             ,'type'=>'类型'
             ,'ip'=>'IP'
             ,'host'=>'主机地址'
@@ -74,8 +76,7 @@ class LogController extends BasicController
             ,'userId'=>'用户ID'
             ,'method'=>'请求方式'
             ,'userAgent'=>'用户代理'
-            ,'referer'=>'来源'            
-            ,'timestamp'=>'请求时间'
+            ,'referer'=>'来源'
         ];
         $id = Url::getId();
         $data = $this->log->logShow($id);
@@ -106,6 +107,7 @@ class LogController extends BasicController
             $this->response->json(['code' => 1,'msg' => '删除失败']);
         }
     }
+
     /**
      * Summary of clear
      * 清空日志接口
@@ -119,5 +121,10 @@ class LogController extends BasicController
         }else{
             $this->response->json(['code' => 1,'msg' => '清空失败']);
         }
+    }
+
+    public function download()
+    {
+        $this->log->downloadLog();
     }
 }

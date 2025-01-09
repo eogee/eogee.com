@@ -233,13 +233,13 @@ class $className
 
     public function up()
     {
-        \$sql = <<<SQL
+        \$sql = "
         CREATE TABLE IF NOT EXISTS \$this->tableName (
             id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         ) ENGINE= $engine DEFAULT CHARSET=$charset COLLATE=$collate;
-SQL;
+        ";
         \$this->executeQuery(\$sql);
     }
 

@@ -57,7 +57,7 @@ if($routerCacheEnabled and $cashe->get('routes')){
 
     /* 后台 访问日志 */
     $routes = defineRoutes($routes, 'log', [
-        'listApi', 'tableHeadDataApi', 'clear', 'show', 'showApi', 'delete'
+        'listApi', 'tableHeadDataApi', 'clear', 'download', 'show', 'showApi', 'delete'
     ]);
 
     /* 后台 提交站点 */

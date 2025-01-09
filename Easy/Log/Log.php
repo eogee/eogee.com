@@ -23,6 +23,8 @@ class Log
 
     private static $lockFile = __DIR__ . '/../../'.CONFIG['log']['log_path'].'/'.CONFIG['log']['log_id_lock']; // 用于文件锁的文件
 
+    private $logIdReset = CONFIG['log']['log_id_reset']; // 是否重置日志ID
+
     /**
      * Logger constructor.
      * @param string $logFile 日志文件路径
@@ -167,7 +169,7 @@ class Log
 
     /**
      * 将日志文件内容转换为数组
-     * 日志文件内容格式：[时间戳] [类型]: [数据1]：[值1]，[数据2]：[值2]，...
+     * 日志文件内容格式：[时间戳][ID][类型]: [数据1]：[值1]，[数据2]：[值2]，...
      * @return array
      */
     public function logToArray()
@@ -209,6 +211,8 @@ class Log
             }
         }
 
+        //$this->searchLog();//搜索日志
+
         if ($this->logSortDesc) // 按时间戳倒序排列
         {
             return array_reverse($result);
@@ -227,7 +231,7 @@ class Log
         $page = $_GET['page'] ?? 1;//获取当前页码
         $limit = $_GET['limit'] ?? 10;//获取每页显示条数
 
-        $allData = $this->logToArray();//获取全部日志数据
+        $allData = $this->searchLog();//获取全部日志数据(不分页、带有搜索功能)
         $count = count($allData);
         $pageCount = ceil($count / 10);//计算总页数
         $start = ($page - 1) * $limit;//计算起始位置
@@ -269,8 +273,29 @@ class Log
             }
         }
         return $result;
-    }    
-    
+    }
+    /**
+     * 搜索日志内容
+     * @return array
+     */
+    public function searchLog()
+    {
+        $search = $_GET['search'] ?? '';
+        $allData = $this->logToArray();
+        if (!empty($search)) {
+            $result = [];
+            foreach ($allData as $data) {
+                foreach ($data as $key => $value) {
+                    if (stripos($value, $search)!== false) {
+                        $result[] = $data;
+                        break;
+                    }
+                }
+            }
+            return $result;
+        }        
+        return $allData;
+    }
     /**
      * 下载日志文件
      * @return void
@@ -279,7 +304,7 @@ class Log
     {
         $file = new File;
         $file->downloadFile($this->logFile, $this->logFileName);
-    }    
+    }
 
     /**
      * 删除一条日志内容
@@ -330,7 +355,18 @@ class Log
      */
     public function clearLog()
     {
-        file_put_contents($this->logFile, '');
+        file_put_contents($this->logFile, '');        
+        if ($this->logIdReset) {
+            $this->logIdReset();
+        }
         return true;
+    }
+    /**
+     * 重置日志ID
+     * @return void
+     */
+    public function logIdReset()
+    {
+        file_put_contents(self::$lockFile, '0');
     }
 }
