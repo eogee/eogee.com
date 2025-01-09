@@ -269,7 +269,7 @@ EOT;
             echo "Failed to create migration file '$filename'.\n";
             exit(1);
         }
-        break;        
+        break;
     default:
         echo "Invalid type '$type'.\n";
         exit(1);
