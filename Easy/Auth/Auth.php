@@ -63,8 +63,7 @@ class Auth
             } else {
                 Window::alert('输入的用户名或密码不正确！', 'back');
             }
-        }
-        
+        }        
     }
 
     /**
