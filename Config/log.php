@@ -2,7 +2,7 @@
 
 /**
  * Log configuration
- * 日志保存配置
+ * 日志配置
  */
 return [
     // 保存路径

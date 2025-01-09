@@ -34,5 +34,9 @@ return [
     /**
      * 日志记录
      */
-    'log' => require_once Path::rootPath().'/Config/log.php',    
+    'log' => require_once Path::rootPath().'/Config/log.php',   
+    /**
+     * 邮箱配置
+     */
+    'mail' => require_once Path::rootPath().'/Config/mail.php',
 ];

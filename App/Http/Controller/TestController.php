@@ -10,11 +10,11 @@ class TestController extends BasicController
 {
     public function index()
     {
-        $mail = new Mail('smtp.qq.com', 'eogee@qq.com', 'udcfyfojkbdfcdhj',587);
-        $mail->setFrom('eogee@qq.com', 'eogee');
+        $mail = new Mail();
+        $mail->setFrom();
         $mail->addRecipient('1274925805@qq.com', 'user1');
-        $mail->setSubject('test');
-        $mail->setBody('test', 'test');
+        $mail->setSubject();
+        $mail->setBody('test123', 'test123');
         $mail->send();
     }
     public function listApi()
