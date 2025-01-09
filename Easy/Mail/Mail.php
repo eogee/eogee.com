@@ -12,7 +12,7 @@ class Mail {
     private $password = CONFIG['mail']['password'];// SMTP 密码(授权码)
     private $port = CONFIG['mail']['port'];// SMTP 端口
     private $email = CONFIG['mail']['email'];// 发件人邮箱
-    private $subject = CONFIG['mail']['subject'];// 邮件主题
+    private $subject = CONFIG['mail']['default_subject'];// 邮件主题
 
     public function __construct() {
         $this->mail = new PHPMailer(true);
@@ -78,7 +78,11 @@ class Mail {
      * 发送邮件
      * @return bool 发送成功返回true，发送失败返回false
      */
-    public function send() {
+    public function send( $htmlContent, $altContent, $email, $name, $subject = null) {
+        $this->setFrom();
+        $this->setSubject($subject = null);
+        $this->setBody($htmlContent, $altContent);
+        $this->addRecipient($email, $name);
         try {
             $this->mail->send();
             return true; // 发送成功

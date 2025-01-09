@@ -11,16 +11,12 @@ class TestController extends BasicController
     public function index()
     {
         $mail = new Mail();
-        $mail->setFrom();
-        $mail->addRecipient('1274925805@qq.com', 'user1');
-        $mail->setSubject();
-        $mail->setBody('test123', 'test123');
-        $mail->send();
+        $mail->send('<h1>Hello</h1>','hello Eogeer','1274925805@qq.com','Zophar');
     }
-    public function listApi()
-    {
-        $log = new Log;
-        $data = $log->logByPage();
-        $this->response->json($data);
-    }
+    // public function listApi()
+    // {
+    //     $log = new Log;
+    //     $data = $log->logByPage();
+    //     $this->response->json($data);
+    // }
 }

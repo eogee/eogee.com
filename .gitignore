@@ -1,6 +1,7 @@
 .cache
 .idea
 .vscode
+.env
 sitemap.txt
 sitemap.xml
 956a28048a74486b9974507263c238ea.txt
