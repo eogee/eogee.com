@@ -19,8 +19,8 @@ class Auth
 {    
     protected $tableName = CONFIG['database']['user_table'];//要操作的数据表名
     protected $db;//数据库操作对象
-    protected $captcha;//验证码对象
-    protected $session;//验证码对象
+    protected $captcha;//图形验证码对象
+    protected $session;
     protected $verify;//验证对象
     public function __construct()
     {
@@ -43,9 +43,10 @@ class Auth
         }else{
             $username = $_POST['username'];
             $password = $_POST['password'];
+            $captcha = $_POST['captcha'];
 
-            // 验证验证码
-            $this->captcha->checkCaptcha();
+            // 验证图形验证码
+            $this->captcha->checkCaptcha($captcha);
 
             // 查询用户是否存在
             $user = $this->db->select($this->tableName, "WHERE username = '$username' AND deleted_at IS NULL", );
@@ -64,6 +65,46 @@ class Auth
                 Window::alert('输入的用户名或密码不正确！', 'back');
             }
         }        
+    }
+
+    /**
+     * Summary of register
+     * 注册用户
+     * @return void
+     */
+    public function register()
+    {
+        if (!$this->verify->validate($_POST)) {
+            Window::alert('请填写完整且符合格式的注册信息！', 'back');
+            die();
+        }else{
+            $username = $_POST['username'];
+            $password = $_POST['password'];
+            $email = $_POST['email'];
+            $captcha = $_POST['captcha'];
+
+            // 验证图形验证码
+            $this->captcha->checkCaptcha($captcha);
+
+            // 查询用户是否存在
+            $user = $this->db->select($this->tableName, "WHERE username = '$username' OR email = '$email' AND deleted_at IS NULL", );
+
+            if (!empty($user)) {
+                Window::alert('用户名或邮箱已存在！', 'back');
+                die();
+            }
+
+            // 注册用户
+            $data = [
+                'username' => $username,
+                'password' => Password::encrypt($password),
+                'email' => $email
+            ];
+            $this->db->insert($this->tableName, $data);
+            $this->session->set('username', $username);
+            $this->session->set('csrf_token', $this->setCsrf());
+            Window::redirect("/");
+        }
     }
 
     /**

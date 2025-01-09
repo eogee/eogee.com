@@ -2,6 +2,10 @@
 
 use Helper\Path;
 
+require_once 'env.php';
+
+env();
+
 /**
  * Main configuration
  * 配置文件 索引文件

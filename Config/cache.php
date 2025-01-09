@@ -9,7 +9,7 @@ return [
     'cache_path' => '/Storage/Cache',
 
     // 是否开启路由缓存
-    'router_cache_enabled' => true,
+    'router_cache_enabled' => getenv('ROUTE_CACHE'),
 
     // 路由缓存文件名
     'router_cache_file' => 'route.cache',

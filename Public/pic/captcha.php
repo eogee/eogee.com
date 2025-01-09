@@ -1,5 +1,5 @@
 <?php
-/* 随机生产验证码图片 */
+/* 随机生成验证码图片 */
 
 $str = "1234567890qwertyuiopasdfghjklzxcvbnm";
 $str = str_shuffle($str); #打乱顺序

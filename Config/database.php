@@ -8,11 +8,11 @@
  */
 return [
     // 数据库链接配置
-    'name'=> 'eogee',// 数据库名
-    'host' => 'localhost', // 数据库主机地址
+    'name'=> getenv('DB_NAME'),// 数据库名
+    'host' => getenv('DB_HOST'), // 数据库主机地址
+    'user'=> getenv('DB_USER'),// 数据库用户名
+    'password'=> getenv('DB_PASSWORD'),// 数据库密码    
     'port' => '3306', // 数据库端口
-    'user'=> 'root',// 数据库用户名
-    'password'=> 'root',// 数据库密码
     'charset'=> 'utf8',// 数据库字符集
     'collate'=> 'utf8mb4_unicode_ci',// 数据库排序规则
 

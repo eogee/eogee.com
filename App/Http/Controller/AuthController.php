@@ -44,7 +44,7 @@ class AuthController{
     }
     /**
      * Summary of captcha
-     * 生成验证码
+     * 生成图形验证码
      * @return void
      */
     public function setCaptcha(){
