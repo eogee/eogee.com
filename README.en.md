@@ -1,108 +1,101 @@
-# eogee.com Official Website Source Code (Content Management System)
+# eogee.com Official Website Source Code
 
 ### Introduction
 
-A content management system built based on native `PHP`, the `Layui` front-end framework, and some native `JavaScript`.
+Based on native `PHP`, the `Layui` frontend framework, and some native `Javascript`, the lightweight `WEB` framework: `Eogee` is designed to quickly build enterprise-level `WEB` applications.
 
 **Lightweight**:
 
-The native PHP forms the lightweight framework `EOGEE`, implementing the `MVC` (Model-View-Controller) architectural pattern.
+The native PHP forms a lightweight framework `EOGEE`, implementing the `MVC` (Model-View-Controller) architecture pattern.
 
 **Robust**:
 
-1. **Supports `ORM` (Object-Relational Mapping) database operations**, encapsulating `SQL` through the `Helper\Database.php` class. In addition to basic CRUD operations, it provides a large number of database operation APIs such as filtering specific columns, summing specific column data, soft deletion, etc.
-2. A base model class `App\Model\Model.php` is provided for database-oriented operations, implementing model `CRUD` operations and providing `ORM` query methods.
-3. The `App\Http\Controller\BasicController.php` class is encapsulated to **implement the `MVC` architectural pattern**, enabling request filtering, permission verification, request response, logging, and other functions.
-4. Further encapsulation of `layui.js` into `Public\js\admin\eogee-admin-layui.js` enables components such as data tables, button groups, pop-up layers, forms, form validation, form submission, file upload, pagination, and content search, functionally building front-end pages, **simplifying front-end development**, and being friendly to back-end developers.
-5. The backend management system uses native `ajax` for data interaction, achieving **front-end and back-end separation**.
-6. Front-end pages embed native `PHP` code, and each page can individually define keywords, page descriptions, and other SEO information, making it **SEO-friendly**.
+1. **Supports `ORM` (Object-Relational Mapping) database operations**, encapsulated SQL statements through the `Easy\Database\Database.php` class. Besides basic CRUD operations, it provides numerous database operation APIs such as filtering specific columns, summing specific column data, soft deletion, etc.
+2. A base model class `Easy\Model\Model.php` is provided to facilitate basic model CRUD operations and provide `ORM` query methods.
+3. The `Easy\Controller\Controller.php` class is encapsulated to **implement the `MVC` architecture pattern**, enabling request filtering, permission verification, response handling, logging, etc.
+4. The `Easy\Cache\Cache.php` class allows for **routing cache** functionality.
+5. The `Easy\Log\Log.php` class has a pre-set controller `App\Http\Controller\LogController.php` and a view template `Public\view\admin\list.php`, facilitating **log recording**, listing, details, deletion, downloading, exporting, and clearing functions.
+6. The `Easy\Verify\Verify.php` class provides **form validation** functionality.
+7. The **command-line tool** `oper.php` can **quickly generate** controllers, models, form validations, database tables, middleware, requests, responses, views, etc.
+8. The `Config\config.php` configuration file separates configuration files and allows for custom configurations of core functionalities.
+9. A `Helper` function provides custom functions that can be **globally used**.
+10. Further encapsulates `layui.js` into `Public\js\admin\eogee-admin-layui.js`, allowing for components like data tables, button groups, pop-up layers, forms, form validations, file uploads, pagination, and content searches, thus simplifying frontend development and making it more developer-friendly.
+11. The backend management system communicates data through native `ajax`, achieving **frontend-backend separation**.
+12. The frontend pages embed native `PHP` code, allowing each page to define keywords, page descriptions, and other `SEO` information separately, making it **SEO-friendly**.
 
 **Security**:
 
-Uses `session` verification, `CSRF` verification, and sensitive field encryption to effectively counter `CSRF` attacks, `XSS` attacks, `SQL` injection attacks, and other security issues.
-
-**Ease of Use**:
-
-Deploy this project on an `Apache` server, execute the `Database\eogee.sql` file to complete database initialization, and then use all functions.
+Employs session validation, CSRF validation, and sensitive field encryption, effectively addressing CSRF attacks, XSS attacks, SQL injection attacks, and other security issues.
 
 **Simplicity**:
 
-1. Both the front-end and back-end use the `Layui` front-end framework, simplifying front-end development and enhancing user experience.
-2. Based on `layui.css`, further development and introduction of `public\css\eogee-text-layui.css` achieve a unified style, simple design, and mobile-friendly front-end and back-end interfaces.
+1. Both frontend and backend utilize the `layui` framework, simplifying frontend development and enhancing user experience.
+2. Further styles are based on `layui.css` and introduced through `public\css\eogee-text-layui.css`, creating a unified style, simple appearance, and mobile-friendly backend interface.
 
 ### Functional Modules
 
-1. Front-end modules: Homepage, Content Center, Content Details, Search, Categories, Tags, Technical Support (Messages), Software Tools (Downloads), About, Latest News; Personal Center, Article Favorites, etc.
-2. Back-end modules: Backend Dashboard (Homepage), Content Center Management, Content Details Management, Category Management, Tag Management, User Management, Role Management, Permission (Menu) Management, Log Management, Site Functions, System Settings, Personal Center, etc.
+1. Frontend Modules: Homepage, Content Center, Content Details, Search, Technical Support (Feedback), Software Tools (Download), About, Latest News, etc.
+2. Backend Modules: Dashboard (Homepage), Content Center Management, Content Details Management, User Management, Role Management, Permission (Menu) Management, Log Management, Site Functions, System Settings, etc.
 
-### Demo Addresses
+### Demonstration Links
 
 **Official Website**:
 [https://eogee.com](https://eogee.com)
 
-**Front-end Demo**:
+**Frontend Demo**:
 [https://eogee.com](https://eogee.com)
 
-**Back-end Demo**:
-Currently unavailable
+**Backend Demo**:
+Not available at this time.
 
 **Documentation**:
-[https://eogee.com/docs](https://eogee.com/docs) Currently unavailable
+[https://eogee.com/docs](https://eogee.com/docs) Not available at this time.
 
 **Video Presentation**:
-[https://eogee.com/videos](https://eogee.com/videos) Currently unavailable
+[https://eogee.com/videos](https://eogee.com/videos) Not available at this time.
 
-Default username: `admin` Password: `123456`
+Default Username: `admin` Password: `123456`
 
 ### Directory Structure
 
 ```
 EOGEE
-├── App Application Core
+├── App Core Application
 │   ├── Http Controller Request Response
-│   │   ├── Controllers Controllers
+│   │   ├── Controller Controller
 │   │   ├── Middleware Middleware
 │   │   ├── Request Request
 │   │   └── Response Response
 │   ├── Model Model
+│   ├── Verify Form Verification
 │   ├── Mail Mail
-│   ├── Notice Notification
-│   ├── Notice Verification
-│   ├── autoload.php Autoload
+│   ├── Notice Notice
+│   ├── autoload File Upload // Use when Composer is not available
 │   ├── error.php Error Handling
-│   └── routes.php Routing
+│   └── routes.php Routes
 ├── Config Configuration
 │   ├── app.php Application Configuration
-│   ├── cache.php Cache Configuration
-│   ├── congig.php General Configuration
-│   ├── database.php Database Configuration
-│   ├── file.php File Configuration
-│   ├── mail.php Mail Configuration
-│   └── route.php Routing Configuration
+│   └── ...
 ├── Database Database Initialization Files
+├── Easy Core Libraries
+│   ├── Cache Cache
+│   └── ...
 ├── Helper Helper Functions
-│   ├── Auth.php User Authentication
-│   ├── Cache.php Cache
-│   ├── Captcha.php Captcha
-│   ├── Database.php Database Operations
-│   ├── File.php File Operations
-│   ├── Log.php Logging
 │   ├── Password.php Password Encryption
-│   ├── Session.php Session
+│   ├── Path.php Path Handling
 │   ├── Url.php
-│   ├── View.php View
 │   └── Window.php Window Operations
 ├── Public
 │   ├── css
 │   ├── file Uploaded Files
 │   ├── font
 │   ├── js
-│   ├── layui Front-end Framework
+│   ├── layui Frontend Framework
 │   ├── pic
 │   └── view View Files
 └── Storage
     ├── Cache Cache
-    └── Log Logs
+    └── Log Log
 ```
 
 ### Environment Requirements
@@ -110,21 +103,21 @@ EOGEE
 - PHP >= 7.3
 - MySQL >= 8.0
 - Apache >= 2.4
-- It is recommended to use the `phpstudy` integrated environment.
+- Composer >= 2.0
 
 ### Installation Instructions
 
-1. Download and extract the source code to the server directory.
-2. Configure the `config.php` file to modify the database connection information.
-3. Import the `eogee.sql` file into the database.
-4. Configure the `Apache` server to set the `EOGEE` directory as the site directory.
-5. Open the browser and visit `http://127.0.0.1`.
-6. Log in to the backend management system with the default username `admin` and password `123456`.
+1. Install `composer`, execute `composer create-project eogee/eogee.com` to deploy the project in the PHP installation root directory or in the `www` directory of the Apache server.
+2. Start the `mysql` database, configure the database parameters in `Config\database.php`, and run `composer oper migrate` to initialize the database.
+3. Run `composer oper-run` to start the server and access the website at `http://127.0.0.1` or `http://localhost`.
+4. The backend management system can be accessed at: `http://127.0.0.1/admin`.
+5. Username: `admin`
+6. Password: `123456`
 
 ### Contribution
 
-1. Fork this repository.
-2. Create a new Feat_xxx branch.
+1. Fork the repository.
+2. Create a new branch named `Feat_xxx`.
 3. Submit your code.
 4. Create a Pull Request.
 
@@ -134,25 +127,18 @@ EOGEE
 - Official QQ: 3886370035
 - Official QQ Group: 589912610
 - Official Email: eogee@qq.com
-- You can directly submit an `Issue` or contact us through the official QQ group.
+- You can directly submit `Issues` or contact us via the official QQ group.
 
 ### Open Source License
 
-This project is released under the MIT open-source license and is free for use by enterprises or individuals.
+This project is released under the MIT Open Source License, allowing free use for businesses or individuals.
 
-The copyright information for third-party source code and binary files included in this project is separately noted.
+Copyright information for third-party source codes and binary files included in this project is labeled separately.
 
-### Acknowledgments
+### Acknowledgements
 
-The birth of Eogee-CMS relies on the following open-source projects:
+The birth of Eogee relies on the following open-source projects:
 
-- [Layui](https://layui.dev/): Front-end UI framework Layui
-- [Chart.js](https://www.chartjs.org/): Front-end chart library Chart.js
-- [editor.md](https://pandao.github.io/editor.md/): Markdown editor Editor.md
-
-Tools used in the development and construction of this project:
-
-- [VsCode](https://code.visualstudio.com/): Code editor
-- [phpStudy](https://www.xp.cn/): Integrated environment
-- [HeidiSQL](https://www.HeidiSQL.com/): Database client
-- [FileZilla](https://filezilla-project.org/): FTP client
+- [Layui](https://layui.dev/): Frontend UI Framework Layui
+- [Chart.js](https://www.chartjs.org/): Frontend Chart Library Chart.js
+- [editor.md](https://pandao.github.io/editor.md/): Markdown Editor Editor.md
