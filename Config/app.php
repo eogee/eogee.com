@@ -18,7 +18,6 @@ return [
     'captcha_font' => 'framd.ttf',//验证码字体
     'captcha_font_size' => 16,//验证码字体大小
 
-    
     //开发者模式
     'developer_mode'=>getenv('DEVALOPMENT_MODE'),//开发者模式，开启后将显示错误信息
     

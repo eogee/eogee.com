@@ -12,7 +12,7 @@ return [
     'host' => getenv('DB_HOST'), // 数据库主机地址
     'user'=> getenv('DB_USER'),// 数据库用户名
     'password'=> getenv('DB_PASSWORD'),// 数据库密码    
-    'port' => '3306', // 数据库端口
+    'port' => getenv('DB_PORT'), // 数据库端口
     'charset'=> 'utf8',// 数据库字符集
     'collate'=> 'utf8mb4_unicode_ci',// 数据库排序规则
 

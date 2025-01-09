@@ -4,7 +4,7 @@ use Helper\Path;
 
 require_once 'env.php';
 
-env();
+env();//加载环境变量
 
 /**
  * Main configuration

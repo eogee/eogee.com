@@ -5,13 +5,17 @@
  * 环境变量文件加载
  * @return void
  */
-function env()
+function env($envFile = null)
 {
     // 定义全局变量
     global $_ENV;
 
     // 环境变量文件
-    $envFile = __DIR__. '/../.env';
+    if (empty($envFile)) {
+        $envFile = __DIR__. '/../.env';
+    }else{
+        $envFile = __DIR__. '/../'. $envFile;
+    }
 
     // 读取环境变量文件
     if (file_exists($envFile)) {
