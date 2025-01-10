@@ -19,14 +19,14 @@ class Captcha
     protected $captchaFont; //图形验证码字体
     protected $captchaFontSize; //图形验证码字号
 
-    public function __construct()
+    public function __construct(Session $session ,array $config)
     {
         $this->session = new Session;
 
         // 验证码配置
-        $this->captchaEnable = CONFIG['app']['captcha_enable'];
-        $this->captchaFont = CONFIG['app']['captcha_font']; 
-        $this->captchaFontSize = CONFIG['app']['captcha_font_size'];
+        $this->captchaEnable = $config['app']['captcha_enable'];
+        $this->captchaFont = $config['app']['captcha_font']; 
+        $this->captchaFontSize = $config['app']['captcha_font_size'];
     }
     /**
      * Summary of setCaptcha

@@ -6,8 +6,8 @@ use App\Verify\UserVerify;
 use Easy\Session\Session;
 use Easy\Database\Database;
 use Easy\Captcha\Captcha;
+use Easy\Password\Password;
 use Helper\Window;
-use Helper\Password;
 
 /**
  * Summary of Auth
@@ -21,14 +21,18 @@ class Auth
     protected $db;//数据库操作对象
     protected $captcha;//图形验证码对象
     protected $session;
+    protected $password;
     protected $verify;//验证对象
     public function __construct()
     {
         $this->tableName = CONFIG['database']['user_table'];
 
-        $this->captcha = new Captcha;
+        $session = new Session;
+        $this->captcha = new Captcha($session, CONFIG);
+        
         $this->session = new Session;
         $this->verify = new UserVerify;
+        $this->password = new Password($_POST['password']);
         $this->db = Database::getInstance();
     }
 
@@ -44,7 +48,7 @@ class Auth
             die();
         }else{
             $username = $_POST['username'];
-            $password = $_POST['password'];
+            //$password = $_POST['password'];
             $captcha = $_POST['captcha'];
 
             // 验证图形验证码
@@ -59,7 +63,7 @@ class Auth
             }
 
             // 验证密码
-            if (Password::verify($password, $user[0]["password"])) {
+            if ($this->password->verify($user[0]["password"])) {
                 $this->session->set('username', $username);
                 $this->session->set('csrf_token', $this->setCsrf());
                 Window::redirect("/admin");
@@ -81,7 +85,7 @@ class Auth
             die();
         }else{
             $username = $_POST['username'];
-            $password = $_POST['password'];
+            //$password = $_POST['password'];
             $email = $_POST['email'];
             $captcha = $_POST['captcha'];
 
@@ -99,7 +103,7 @@ class Auth
             // 注册用户
             $data = [
                 'username' => $username,
-                'password' => Password::encrypt($password),
+                'password' => $this->password->encrypt(),
                 'email' => $email
             ];
             $this->db->insert($this->tableName, $data);

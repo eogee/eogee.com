@@ -7,6 +7,7 @@ use Helper\Window;
 use Easy\Auth\Auth;
 use Easy\View\View;
 use Easy\Captcha\Captcha;
+use Easy\Session\Session;
 
 /**
  * Summary of AuthController
@@ -20,7 +21,9 @@ class AuthController{
     protected $verify;
     public function __construct()
     {
-        $this->captcha = new Captcha;
+        $session = new Session;
+        $this->captcha = new Captcha($session, CONFIG);
+        
         $this->auth = new Auth;
         $this->verify = new Verify;
     }
