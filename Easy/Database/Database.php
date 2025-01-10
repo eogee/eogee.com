@@ -29,7 +29,6 @@ class Database
     {
         // 设置链接参数
         $this->host = CONFIG['database']['host'];
-        $this->host = CONFIG['database']['host'];
         $this->username = CONFIG['database']['user'];
         $this->host = CONFIG['database']['host'];
         $this->password = CONFIG['database']['password'];
