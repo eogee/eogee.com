@@ -14,7 +14,6 @@ return [
     'password'=> getenv('DB_PASSWORD'),// 数据库密码    
     'port' => getenv('DB_PORT'), // 数据库端口
     'charset'=> 'utf8',// 数据库字符集
-    'collate'=> 'utf8mb4_unicode_ci',// 数据库排序规则
 
     // 引擎配置
     'engine' => 'InnoDB',// 数据库引擎

@@ -1,8 +1,8 @@
 <?php
 
-// 定义常量
-define('BASE_PATH', __DIR__);
-define('CONFIG_DATABASE', require_once BASE_PATH . '/Config/database.php');
+require_once 'vendor/autoload.php';
+
+define('CONFIG_OPER',require_once __DIR__ . '/Config/config.php');
 
 // 工具函数：将文件名转换为类名
 function filenameToClassName($filename)
@@ -28,11 +28,11 @@ function createFile($filename, $content)
 function connectDatabase()
 {
     $mysqli = new mysqli(
-        CONFIG_DATABASE['host'],
-        CONFIG_DATABASE['user'],
-        CONFIG_DATABASE['password'],
-        CONFIG_DATABASE['name'],
-        CONFIG_DATABASE['port']
+        CONFIG_OPER['database']['host'],
+        CONFIG_OPER['database']['user'],
+        CONFIG_OPER['database']['password'],
+        CONFIG_OPER['database']['name'],
+        CONFIG_OPER['database']['port']
     );
 
     if ($mysqli->connect_error) {
@@ -97,7 +97,7 @@ function handleMigration()
     }
 
     // 扫描迁移文件目录
-    $migrationFiles = glob(BASE_PATH . '/Database/*.php');
+    $migrationFiles = glob(__DIR__ . '/Database/*.php');
 
     foreach ($migrationFiles as $file) {
         $migrationName = basename($file, '.php');
@@ -133,7 +133,7 @@ function handleRollback()
 
     if ($lastMigration) {
         $migrationName = $lastMigration['migration'];
-        $file = BASE_PATH . "/Database/$migrationName.php";
+        $file = __DIR__ . "/Database/$migrationName.php";
 
         require_once $file;
 
@@ -208,14 +208,13 @@ switch (strtolower($type)) {
     
         // 生成迁移文件名
         $dateNum = date('YmdHis');
-        $filename = BASE_PATH . '/Database/' . $dateNum . '_create_' . $name . '_table.php';
+        $filename = __DIR__ . '/Database/' . $dateNum . '_create_' . $name . '_table.php';
 
         function generateMigrationContent($tableName)
         {
             $className = 'Create' . ucfirst($tableName) . 'Table';
-            $engine = CONFIG_DATABASE['engine'] ?? 'InnoDB';
-            $charset = CONFIG_DATABASE['charset'] ?? 'utf8';
-            $collate = CONFIG_DATABASE['collate'] ?? 'utf8mb4_unicode_ci';
+            $engine = CONFIG_OPER['database']['engine'] ?? 'InnoDB';
+            $charset = CONFIG_OPER['database']['charset'] ?? 'utf8';
 
             return <<<EOT
 <?php
@@ -233,12 +232,11 @@ class $className
 
     public function up()
     {
-        \$sql = "
-        CREATE TABLE IF NOT EXISTS \$this->tableName (
+        \$sql = "CREATE TABLE IF NOT EXISTS \$this->tableName (
             id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        ) ENGINE= $engine DEFAULT CHARSET=$charset COLLATE=$collate;
+        ) ENGINE= $engine DEFAULT CHARSET=$charset;
         ";
         \$this->executeQuery(\$sql);
     }
