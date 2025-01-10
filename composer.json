@@ -11,8 +11,7 @@
         "psr-4": {
             "App\\": "app/",
             "Easy\\": "Easy/",
-            "Helper\\" : "Helper/",
-            "Database\\": "Database/"
+            "Helper\\" : "Helper/"
         }
     },
     "authors": [

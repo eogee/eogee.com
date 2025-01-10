@@ -3,12 +3,20 @@
 namespace App\Queue;
 
 use App\Queue\Queue;
+use Easy\Mail\Mail;
 
 /**
  * 邮件队列
  */
 class EmailQueue extends Queue
 {
+    private $mail;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->mail = new Mail;
+    }
     /**
      * Summary of getTableName
      * 获取表名
@@ -16,7 +24,7 @@ class EmailQueue extends Queue
      */
     protected function getTableName()
     {
-        return 'email_queue';
+        return 'emailQueue';
     }
 
     /**
@@ -26,7 +34,7 @@ class EmailQueue extends Queue
      */
     protected function getInsertQuery()
     {
-        return "INSERT INTO {$this->getTableName()} (recipient_email, subject, message, status) VALUES (?, ?, ?, 'pending')";
+        return "INSERT INTO {$this->getTableName()} (recipient, subject, message, status) VALUES (?, ?, ?, 'pending')";
     }
 
     /**
@@ -53,16 +61,17 @@ class EmailQueue extends Queue
 
     /**
      * Summary of processItem
+     * 处理队列项
      * @param mixed $item
      * @return bool
      */
     protected function processItem($item)
     {
-        $recipient = $item['recipient_email'];
+        $recipient = $item['recipient'];
         $subject = $item['subject'];
         $message = $item['message'];
 
         // 发送邮件（使用 mail() 函数或其他邮件发送库）
-        return mail($recipient, $subject, $message);
+        return $this->mail->send($message, $message, $recipient,$subject);
     }
 }
