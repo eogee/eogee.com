@@ -17,13 +17,15 @@ use Helper\Password;
  */
 class Auth
 {    
-    protected $tableName = CONFIG['database']['user_table'];//要操作的数据表名
+    protected $tableName;//要操作的数据表名
     protected $db;//数据库操作对象
     protected $captcha;//图形验证码对象
     protected $session;
     protected $verify;//验证对象
     public function __construct()
     {
+        $this->tableName = CONFIG['database']['user_table'];
+
         $this->captcha = new Captcha;
         $this->session = new Session;
         $this->verify = new UserVerify;

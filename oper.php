@@ -233,9 +233,12 @@ class $className
     public function up()
     {
         \$sql = "CREATE TABLE IF NOT EXISTS \$this->tableName (
-            id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'ID',
+
+            
+
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
         ) ENGINE= $engine DEFAULT CHARSET=$charset;
         ";
         \$this->executeQuery(\$sql);

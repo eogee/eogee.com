@@ -30,13 +30,14 @@ class Controller{
 
     public function __construct(){
         $this->model = new Model;
-        $this->response = new Response;//实例化响应类
-        $this->request = new Request;//实例化响应类
-        $this->log = new Log;//实例化日志类
-        $this->limitVerify = new LimitVerify;//实例化权限验证类
-        $this->session = new Session;//实例化会话类
+        $this->response = new Response;
+        $this->request = new Request;
+        $this->log = new Log;
+        $this->limitVerify = new LimitVerify;
+        $this->session = new Session;
         $this->table = Url::getTable();
         $this->id = Url::getId();
+        
         //访问日志记录
         $this->accessLog();
     }

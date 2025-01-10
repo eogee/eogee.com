@@ -11,19 +11,13 @@ use Easy\File\File;
  */
 class Log
 {
-    private $logFile = __DIR__ . '/../../'.CONFIG['log']['log_path'].'/'.CONFIG['log']['log_file'];
-    
-    private $logToConsole = CONFIG['log']['log_to_console'];
-
-    private $logEnable = CONFIG['log']['log_enabled'];
-
-    private $logFileName = CONFIG['log']['log_file'];
-
-    private $logSortDesc = CONFIG['log']['log_sort_desc'];
-
-    private static $lockFile = __DIR__ . '/../../'.CONFIG['log']['log_path'].'/'.CONFIG['log']['log_id_lock']; // 用于文件锁的文件
-
-    private $logIdReset = CONFIG['log']['log_id_reset']; // 是否重置日志ID
+    private $logFile; // 日志文件路径
+    private $logToConsole; // 是否将日志输出到控制台
+    private $logEnable; // 是否启用日志
+    private $logFileName; // 日志文件名
+    private $logSortDesc; // 是否按时间戳倒序排列
+    private static $lockFile; // 用于文件锁的文件
+    private $logIdReset; // 是否重置日志ID
 
     /**
      * Logger constructor.
@@ -32,7 +26,13 @@ class Log
      */
     public function __construct()
     {
-
+        $this->logFile = __DIR__ . '/../../'.CONFIG['log']['log_path'].'/'.CONFIG['log']['log_file'];
+        $this->logToConsole = CONFIG['log']['log_to_console'];
+        $this->logEnable = CONFIG['log']['log_enabled'];
+        $this->logFileName = CONFIG['log']['log_file'];
+        $this->logSortDesc = CONFIG['log']['log_sort_desc'];
+        self::$lockFile = __DIR__ . '/../../'.CONFIG['log']['log_path'].'/'.CONFIG['log']['log_id_lock']; // 用于文件锁的文件
+        $this->logIdReset = CONFIG['log']['log_id_reset']; // 是否重置日志ID
     }
 
     /**

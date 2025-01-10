@@ -110,8 +110,6 @@ abstract class Verify
         $this->errors[$field][] = $message;
     }
 
-    // ==================== 具体验证方法 ====================
-
     /**
      * 验证必填字段
      * @param string $field 字段名

@@ -15,13 +15,18 @@ use Helper\Path;
 class Captcha
 {
     protected $session;
-    protected $captchaEnable = CONFIG['app']['captcha_enable']; //是否开启图形验证码
-    protected $captchaFont = CONFIG['app']['captcha_font']; //图形验证码字体
-    protected $captchaFontSize = CONFIG['app']['captcha_font_size']; //图形验证码字号
+    protected $captchaEnable; //是否开启图形验证码
+    protected $captchaFont; //图形验证码字体
+    protected $captchaFontSize; //图形验证码字号
 
     public function __construct()
     {
         $this->session = new Session;
+
+        // 验证码配置
+        $this->captchaEnable = CONFIG['app']['captcha_enable'];
+        $this->captchaFont = CONFIG['app']['captcha_font']; 
+        $this->captchaFontSize = CONFIG['app']['captcha_font_size'];
     }
     /**
      * Summary of setCaptcha

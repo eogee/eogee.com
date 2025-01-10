@@ -13,10 +13,10 @@ use mysqli;
 abstract class Queue
 {
     private $conn;
-    protected $host = CONFIG['database']['host'];
-    protected $username = CONFIG['database']['user'];
-    protected $password = CONFIG['database']['password'];
-    protected $database = CONFIG['database']['name'];
+    protected $host;
+    protected $user;
+    protected $password;
+    protected $database;
 
     /**
      * Summary of __construct
@@ -24,7 +24,12 @@ abstract class Queue
      */
     public function __construct()
     {
-        $this->conn = new mysqli($this->host, $this->username, $this->password, $this->database);
+        $this->host = CONFIG['database']['host'];
+        $this->user = CONFIG['database']['user'];
+        $this->password = CONFIG['database']['password'];
+        $this->database = CONFIG['database']['database'];
+
+        $this->conn = new mysqli($this->host, $this->user, $this->password, $this->database);
 
         if ($this->conn->connect_error) {
             die("连接失败: " . $this->conn->connect_error);

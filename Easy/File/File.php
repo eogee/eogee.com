@@ -14,13 +14,18 @@ class File
 {
     protected $db;
 
-    protected $picPath = CONFIG['file']['pic_upload_path'];
+    protected $picPath; // 图片上传路径
 
-    protected $filePath = CONFIG['file']['file_upload_path'];
+    protected $filePath; // 文件上传路径
 
     public function __construct()
     {
+        // 实例化数据库
         $this->db = Database::getInstance();
+
+        // 设置上传路径
+        $this->picPath = CONFIG['file']['pic_upload_path'];
+        $this->filePath = CONFIG['file']['file_upload_path'];
     }
     /**
      * Summary of fileUploadApi
@@ -169,14 +174,11 @@ class File
      */
     function insertContentAfter($filename, $searchContent, $newContent) {
         // 读取文件内容
-        $fileContent = $this->readFileContent($filename);
-    
+        $fileContent = $this->readFileContent($filename);    
         // 查找插入点
         $insertPos = $this->insertPos($fileContent, $searchContent);
-
         // 插入新内容
-        $newFileContent = substr_replace($fileContent, $newContent, $insertPos, 0);
-    
+        $newFileContent = substr_replace($fileContent, $newContent, $insertPos, 0);    
         // 写回文件
         if (file_put_contents($filename, $newFileContent) !== false) {
             echo "Content inserted successfully in file '$filename'.\n";
@@ -196,14 +198,11 @@ class File
      */
     public function insertContentBefore($filename, $searchContent, $newContent) {
         // 读取文件内容
-        $fileContent = $this->readFileContent($filename);
-    
+        $fileContent = $this->readFileContent($filename);    
         // 查找插入点
-        $insertPos = $this->insertPos($fileContent, $searchContent);
-    
+        $insertPos = $this->insertPos($fileContent, $searchContent);    
         // 插入新内容
-        $newFileContent = substr_replace($fileContent, $newContent, $insertPos, 0);
-    
+        $newFileContent = substr_replace($fileContent, $newContent, $insertPos, 0);    
         // 写回文件
         if (file_put_contents($filename, $newFileContent) !== false) {
             echo "Content inserted successfully in file '$filename'.\n";
