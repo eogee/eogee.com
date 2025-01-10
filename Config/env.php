@@ -42,6 +42,14 @@ function env($envFile = null)
                         
                         // 去除值两边的引号
                         $value = trim($value, '"\'');
+
+                        // 处理布尔值
+                        if (strcasecmp($value, 'true') === 0) {
+                            $value = true;
+                        } elseif (strcasecmp($value, 'false') === 0) {
+                            $value = false;
+                        }
+                        
                         putenv("$key=$value"); // 设置环境变量
                         $_ENV[$key] = $value;  // 同时设置 $_ENV 中的变量
                     }
