@@ -18,7 +18,7 @@ class File
 
     protected $filePath; // 文件上传路径
 
-    public function __construct()
+    public function __construct(Database $db,array $config)
     {
         // 实例化数据库
         $this->db = Database::getInstance();

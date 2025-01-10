@@ -10,6 +10,7 @@ use Easy\Response\Response;
 use Easy\Verify\LimitVerify;
 use Easy\Log\Log;
 use Easy\Session\Session;
+use Easy\Database\Database;
 use Helper\Url;
 
 /**
@@ -22,6 +23,7 @@ class Controller{
     protected $model;//模型类
     protected $response;//响应类
     protected $request;//请求类
+    protected $file;//文件类
     protected $limitVerify;//权限验证
     protected $table;//数据表名
     protected $id;//数据表主键
@@ -32,6 +34,10 @@ class Controller{
         $this->model = new Model;
         $this->response = new Response;
         $this->request = new Request;
+
+        $db = Database::getInstance();
+        $this->file = new File($db,CONFIG);
+        
         $this->log = new Log;
         $this->limitVerify = new LimitVerify;
         $this->session = new Session;
@@ -281,8 +287,8 @@ class Controller{
      */
     public function fileUploadApi()
     {
-        $file = new File();
-        $data = $file->fileUploadApi();
+        
+        $data = $this->file->fileUploadApi();
         $this->response->json($data);
     }
     /**

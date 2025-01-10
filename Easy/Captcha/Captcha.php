@@ -21,7 +21,8 @@ class Captcha
 
     public function __construct(Session $session ,array $config)
     {
-        $this->session = new Session;
+        //获取session实例
+        $this->session = $session;
 
         // 验证码配置
         $this->captchaEnable = $config['app']['captcha_enable'];

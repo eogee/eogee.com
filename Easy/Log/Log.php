@@ -3,6 +3,7 @@
 namespace Easy\Log;
 
 use Easy\File\File;
+use Easy\Database\Database;
 
 /**
  * Summary of Log
@@ -11,6 +12,7 @@ use Easy\File\File;
  */
 class Log
 {
+    private $file; // 文件类
     private $logFile; // 日志文件路径
     private $logToConsole; // 是否将日志输出到控制台
     private $logEnable; // 是否启用日志
@@ -26,6 +28,9 @@ class Log
      */
     public function __construct()
     {
+        $db = Database::getInstance();
+        $this->file = new File($db,CONFIG);
+
         $this->logFile = __DIR__ . '/../../'.CONFIG['log']['log_path'].'/'.CONFIG['log']['log_file'];
         $this->logToConsole = CONFIG['log']['log_to_console'];
         $this->logEnable = CONFIG['log']['log_enabled'];
@@ -302,8 +307,7 @@ class Log
      */
     public function downloadLog()
     {
-        $file = new File;
-        $file->downloadFile($this->logFile, $this->logFileName);
+        $this->file->downloadFile($this->logFile, $this->logFileName);
     }
 
     /**
