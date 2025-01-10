@@ -10,7 +10,7 @@ use App\Model\User;
  * Summary of UserController
  * 用户管理 控制器
  */
-class UserController extends BasicController
+class UserController extends Controller
 {    
     protected $user;
     public function __construct()

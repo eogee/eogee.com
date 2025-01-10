@@ -6,7 +6,7 @@ use Easy\Log\Log;
 use Easy\View\View;
 use Easy\Mail\Mail;
 
-class TestController extends BasicController
+class TestController extends Controller
 {
     public function index()
     {

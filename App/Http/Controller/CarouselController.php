@@ -6,7 +6,7 @@ namespace App\Http\Controller;
  * Summary of CarouselController
  * 轮播图 控制器
  */
-class CarouselController extends BasicController
+class CarouselController extends Controller
 {    
     public function listApi()
     {

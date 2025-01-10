@@ -9,7 +9,7 @@ use App\Model\News;
  * Summary of NewsController
  * 最新动态 控制器
  */
-class NewsController extends BasicController
+class NewsController extends Controller
 {
     protected $news;
 

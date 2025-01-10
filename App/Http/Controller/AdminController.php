@@ -8,7 +8,7 @@ use Easy\View\View;
  * Summary of AdminController
  * 后台首页 控制器
  */
-class AdminController extends BasicController
+class AdminController extends Controller
 {
     /**
      * Summary of index

@@ -8,7 +8,7 @@ use Helper\Window;
  * Summary of SinglePageController
  * 单页内容 控制器
  */
-class SinglePageController extends BasicController
+class SinglePageController extends Controller
 {    
     public function listApi()
     {

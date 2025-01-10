@@ -6,7 +6,7 @@ namespace App\Http\Controller;
  * Summary of FootUrlController
  * 底部链接 控制器
  */
-class FootUrlController extends BasicController
+class FootUrlController extends Controller
 {
     
     public function listApi()

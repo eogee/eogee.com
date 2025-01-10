@@ -4,7 +4,7 @@ namespace Easy\Controller;
 
 use Easy\View\View;
 use Easy\File\File;
-use Easy\Model\Base as Model;
+use Easy\Model\Model;
 use Easy\Request\Request;
 use Easy\Response\Response;
 use Easy\Verify\LimitVerify;

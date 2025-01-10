@@ -13,7 +13,7 @@ use Helper\Url;
  * @author Eogee
  * @email eogee@qq.com 
  */
-class Base{
+class Model{
     protected $db;//数据库连接资源
     protected $table;//数据表名
     protected $id;//数据表主键

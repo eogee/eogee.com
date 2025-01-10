@@ -11,7 +11,7 @@ use App\Model\News;
  * @author Eogee
  * @email eogee@qq.com 
  */
-class IndexController extends BasicController
+class IndexController extends Controller
 {
     protected $news;
     public function __construct()

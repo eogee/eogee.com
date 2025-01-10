@@ -6,7 +6,7 @@ namespace App\Http\Controller;
  * Summary of SiteController
  * 站点功能 控制器
  */
-class SiteController extends indexController
+class SiteController extends Controller
 {
     public static function post()
     {

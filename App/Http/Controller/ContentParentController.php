@@ -6,7 +6,7 @@ namespace App\Http\Controller;
  * Summary of ContentParentController
  * 内容中心 控制器
  */
-class ContentParentController extends BasicController
+class ContentParentController extends Controller
 {
     
     public function listApi()

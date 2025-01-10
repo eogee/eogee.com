@@ -9,7 +9,7 @@ use Easy\View\View;
  * Summary of BasicInfoController
  * 网站基本信息 控制器
  */
-class BasicInfoController extends BasicController
+class BasicInfoController extends Controller
 {
     protected $request; //请求对象
     public function __construct()

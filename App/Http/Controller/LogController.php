@@ -9,14 +9,29 @@ use Helper\Url;
  * Summary of LogController
  * 访问日志 控制器
  */
-class LogController extends BasicController
+class LogController extends Controller
 {
     public $log;//日志类
+
+    private $fieldComments;
     
     public function __construct()
     {
         parent::__construct();
         $this->log = new Log;
+        $this->fieldComments = [
+            'timestamp'=>'请求时间'
+            ,'id'=>'ID'            
+            ,'type'=>'类型'
+            ,'ip'=>'IP'
+            ,'host'=>'主机地址'
+            ,'url'=>'请求地址'
+            ,'username'=>'用户名'
+            ,'userId'=>'用户ID'
+            ,'method'=>'请求方式'
+            ,'userAgent'=>'用户代理'
+            ,'referer'=>'来源'
+        ];
     }
 
     /**
@@ -42,19 +57,7 @@ class LogController extends BasicController
             'code' => 0
             ,'msg' => 'success'
             ,'tableComment' => '日志列表'// 表格注释
-            ,'tableFiledComment' => [// 表格字段注释
-                'id'=>'ID'                
-                ,'ip'=>'IP'
-                ,'type'=>'类型'
-                ,'host'=>'主机地址'
-                ,'url'=>'请求地址'
-                ,'username'=>'用户名'
-                ,'userId'=>'用户ID'
-                ,'method'=>'请求方式'
-                ,'userAgent'=>'用户代理'
-                ,'referer'=>'来源'
-                ,'timestamp'=>'请求时间']
-        ];
+            ,'tableFiledComment' => $this->fieldComments];
         $this->response->json($data);
     }
 
@@ -65,19 +68,7 @@ class LogController extends BasicController
      */
     public function showApi()
     {
-        $field = [
-            'timestamp'=>'请求时间'
-            ,'id'=>'ID'            
-            ,'type'=>'类型'
-            ,'ip'=>'IP'
-            ,'host'=>'主机地址'
-            ,'url'=>'请求地址'
-            ,'username'=>'用户名'
-            ,'userId'=>'用户ID'
-            ,'method'=>'请求方式'
-            ,'userAgent'=>'用户代理'
-            ,'referer'=>'来源'
-        ];
+        $field = $this->fieldComments;
         $id = Url::getId();
         $data = $this->log->logShow($id);
 

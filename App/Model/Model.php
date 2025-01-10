@@ -2,9 +2,9 @@
 
 namespace App\Model;
 
-use Easy\Model\Base;
+use Easy\Model\Model as BasicModel;
 
-class Model extends Base
+class Model extends BasicModel
 {
     
 }
