@@ -312,6 +312,23 @@
         tabIndex('<?= $content[1]['id'] ?>');
         tabIndex('<?= $content[2]['id'] ?>');
         tabIndex('<?= $content[3]['id'] ?>');
+
+        var login = document.getElementById('login')
+            login.onclick = function() {
+                layui.use(function() {
+                var layer = layui.layer;
+                layer.open({
+                    title: '登陆/注册',
+                    type: 2,
+                    area: ['400px', '550px'],
+                    content: '/index/login',
+                    end: function() {
+                        window.location.reload();
+                    }
+                });
+            });
+        }
+        
     </script>
 <?php
     View::view('/index/foot',$indexData);

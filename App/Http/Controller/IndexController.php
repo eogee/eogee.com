@@ -35,5 +35,9 @@ class IndexController extends Controller
 
         View::view('/index/index',$data);
     }
+    public function login()
+    {
+        View::view('/index/login');
+    }
     
 }

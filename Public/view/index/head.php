@@ -89,7 +89,7 @@ $indexData = $data;
                         </a>
                     </div>
                     <div>
-                        <a href="https://www.eogee.com/">
+                        <a id = "login" href="javascript:;">
                             登录/注册
                         </a>
                     </div>
