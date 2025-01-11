@@ -13,12 +13,12 @@ class Route
 
     protected static $routes = []; // 存储路由配置
 
-    protected static $middleware = CONFIG['middleware']; // 中间件
+    protected static $middleware; // 中间件
 
     // 构造函数私有化，防止外部实例化
-    private function __construct()
+    private function __construct($config)
     {
-
+        self::$middleware = $config['middleware']; // 中间件
     }
 
     /**
@@ -28,7 +28,7 @@ class Route
     public static function getInstance()
     {
         if (!isset(self::$instance)) {
-            self::$instance = new self();
+            self::$instance = new self(CONFIG);
         }
         return self::$instance;
     }

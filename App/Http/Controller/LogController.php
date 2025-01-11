@@ -3,6 +3,7 @@
 namespace App\Http\Controller;
 
 use Easy\Log\Log;
+use Easy\Database\Database;
 use Helper\Url;
 
 /**
@@ -18,7 +19,10 @@ class LogController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->log = new Log;
+
+        $db = Database::getInstance(CONFIG);
+        $this->log = new Log($db,CONFIG);
+
         $this->fieldComments = [
             'timestamp'=>'请求时间'
             ,'id'=>'ID'            

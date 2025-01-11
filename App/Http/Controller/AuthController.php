@@ -21,10 +21,10 @@ class AuthController{
     protected $verify;
     public function __construct()
     {
-        $session = new Session;
+        $session = new Session(CONFIG);
         $this->captcha = new Captcha($session, CONFIG);
         
-        $this->auth = new Auth;
+        $this->auth = new Auth(CONFIG);
         $this->verify = new Verify;
     }
     /**

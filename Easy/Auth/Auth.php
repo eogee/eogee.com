@@ -23,17 +23,17 @@ class Auth
     protected $session;
     protected $password;
     protected $verify;//验证对象
-    public function __construct()
+    public function __construct($config)
     {
-        $this->tableName = CONFIG['database']['user_table'];
+        $this->tableName = $config['database']['user_table'];
 
-        $session = new Session;
-        $this->captcha = new Captcha($session, CONFIG);
+        $session = new Session($config);
+        $this->captcha = new Captcha($session, $config);
         
-        $this->session = new Session;
+        $this->session = new Session($config);
         $this->verify = new UserVerify;
         $this->password = new Password($_POST['password']);
-        $this->db = Database::getInstance();
+        $this->db = Database::getInstance($config);
     }
 
     /**

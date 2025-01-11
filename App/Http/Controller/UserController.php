@@ -43,7 +43,11 @@ class UserController extends Controller
         $this->limitVerify->verify();
         View::view('/admin/'.Url::getTable().'/update');
         if(isset($_POST) and !empty($_POST)){
-            $this->user->insert();
+            if($this->user->insert() > 0){
+                $this->response->json(['code' => 0,'msg' => '新增成功']);
+            }else{
+                $this->response->json(['code' => 1,'msg' => '新增失败']);
+            }
         }
     }
     public function edit()
@@ -53,7 +57,11 @@ class UserController extends Controller
         if(isset($id)){
             View::view('/admin/'.Url::getTable().'/update');
         }else{
-            $this->user->edit();
+            if($this->user->edit()){
+                $this->response->json(['code' => 0,'msg' => '更新成功']);
+            }else{
+                $this->response->json(['code' => 1,'msg' => '更新失败']);
+            }
         }
     }
 }

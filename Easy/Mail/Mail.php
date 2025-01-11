@@ -9,7 +9,7 @@ use PHPMailer\PHPMailer\Exception;
  * Summary of Mail
  * 邮件发送类
  * @author eogee
- * @email <eogee@qq.com>
+ * @email eogee@qq.com
  */
 class Mail {
     private $mail;// 邮件对象
@@ -17,22 +17,22 @@ class Mail {
     private $email;// 发件人邮箱
     private $subject;// 邮件主题
 
-    public function __construct() {
+    public function __construct($config) {
         $this->mail = new PHPMailer(true);
         
         // 服务器设置
         $this->mail->isSMTP();
-        $this->mail->Host = CONFIG['mail']['smtpHost']; // SMTP 服务器
+        $this->mail->Host = $config['mail']['smtpHost']; // SMTP 服务器
         $this->mail->SMTPAuth = true; // 启用 SMTP 身份验证
-        $this->mail->Username = CONFIG['mail']['username']; // 发件人邮箱
-        $this->mail->Password = CONFIG['mail']['password']; // 发件人邮箱密码
+        $this->mail->Username = $config['mail']['username']; // 发件人邮箱
+        $this->mail->Password = $config['mail']['password']; // 发件人邮箱密码
         $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // 加密方式
-        $this->mail->Port = CONFIG['mail']['port']; // SMTP 端口
+        $this->mail->Port = $config['mail']['port']; // SMTP 端口
 
         // 其他设置
-        $this->username = CONFIG['mail']['username']; // 发件人邮箱
-        $this->email = CONFIG['mail']['email']; // 发件人邮箱
-        $this->subject = CONFIG['mail']['email']; // 邮件主题
+        $this->username = $config['mail']['username']; // 发件人邮箱
+        $this->email = $config['mail']['email']; // 发件人邮箱
+        $this->subject = $config['mail']['email']; // 邮件主题
     }
 
     /**

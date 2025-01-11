@@ -12,20 +12,18 @@ use Helper\Url;
  */
 class File
 {
-    protected $db;
-
+    protected $db; // 数据库实例
     protected $picPath; // 图片上传路径
-
     protected $filePath; // 文件上传路径
 
     public function __construct(Database $db,array $config)
     {
         // 实例化数据库
-        $this->db = Database::getInstance();
+        $this->db = $db;
 
         // 设置上传路径
-        $this->picPath = CONFIG['file']['pic_upload_path'];
-        $this->filePath = CONFIG['file']['file_upload_path'];
+        $this->picPath = $config['file']['pic_upload_path'];
+        $this->filePath = $config['file']['file_upload_path'];
     }
     /**
      * Summary of fileUploadApi

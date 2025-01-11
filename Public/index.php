@@ -16,7 +16,7 @@ require __DIR__ . '/../vendor/autoload.php';//引入自动加载文件
 
 define('CONFIG',require_once Path::rootPath().'/Config/config.php');//引入配置文件
 
-$session = new Session;
+$session = new Session(CONFIG);
 $session->start();
 
 $router = Route::getInstance();//实例化路由

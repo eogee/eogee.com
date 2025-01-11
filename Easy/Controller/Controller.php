@@ -35,12 +35,12 @@ class Controller{
         $this->response = new Response;
         $this->request = new Request;
 
-        $db = Database::getInstance();
-        $this->file = new File($db,CONFIG);
+        $db = Database::getInstance(CONFIG);
+        $this->file = new File($db,CONFIG);        
+        $this->log = new Log($db,CONFIG);
         
-        $this->log = new Log;
         $this->limitVerify = new LimitVerify;
-        $this->session = new Session;
+        $this->session = new Session(CONFIG);
         $this->table = Url::getTable();
         $this->id = Url::getId();
         

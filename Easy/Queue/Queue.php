@@ -22,12 +22,12 @@ abstract class Queue
      * Summary of __construct
      * 构造函数：连接数据库
      */
-    public function __construct()
+    public function __construct($config)
     {
-        $this->host = CONFIG['database']['host'];
-        $this->user = CONFIG['database']['user'];
-        $this->password = CONFIG['database']['password'];
-        $this->database = CONFIG['database']['database'];
+        $this->host = $config['database']['host'];
+        $this->user = $config['database']['user'];
+        $this->password = $config['database']['password'];
+        $this->database = $config['database']['name'];
 
         $this->conn = new mysqli($this->host, $this->user, $this->password, $this->database);
 
@@ -45,6 +45,9 @@ abstract class Queue
     public function addToQueue($data)
     {
         $stmt = $this->conn->prepare($this->getInsertQuery());
+        if ($stmt === false) {
+            throw new \Exception("SQL预处理失败: " . $this->conn->error);
+        }
         $this->bindInsertParams($stmt, $data);
 
         if ($stmt->execute()) {

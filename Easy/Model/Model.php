@@ -21,8 +21,8 @@ class Model{
 
     public function __construct()
     {
-        $this->db = Database::getInstance();//获取数据库连接资源
-        $this->session = new Session;//获取数据库连接资源
+        $this->db = Database::getInstance(CONFIG);//获取数据库连接资源
+        $this->session = new Session(CONFIG);//获取数据库连接资源
         $this->table =  Url::getTable(); // 获取数据表名
         $this->id =  Url::getId(); // 获取数据表主键
     }
@@ -258,9 +258,9 @@ class Model{
         }
 
         // 安全处理字段名和搜索内容
-        $table = Database::getInstance()->conn->real_escape_string($table);
-        $field = Database::getInstance()->conn->real_escape_string($field);
-        $search = Database::getInstance()->conn->real_escape_string($search);              
+        $table = Database::getInstance(CONFIG)->conn->real_escape_string($table);
+        $field = Database::getInstance(CONFIG)->conn->real_escape_string($field);
+        $search = Database::getInstance(CONFIG)->conn->real_escape_string($search);              
 
         // 生成 SQL 查询
         $likeClause = "WHERE CONCAT($field) LIKE '%$search%'";
@@ -310,9 +310,9 @@ class Model{
         $offset = max(0, ceil($page - 1) * $limit);
     
         // 使用参数化查询构建 SQL 查询
-        $table = Database::getInstance()->conn->real_escape_string($table);
-        $field = Database::getInstance()->conn->real_escape_string($field);
-        $search = Database::getInstance()->conn->real_escape_string($search);
+        $table = Database::getInstance(CONFIG)->conn->real_escape_string($table);
+        $field = Database::getInstance(CONFIG)->conn->real_escape_string($field);
+        $search = Database::getInstance(CONFIG)->conn->real_escape_string($search);
     
         // 构建 WHERE 子句，防止 SQL 注入
         $where = "WHERE CONCAT($field) LIKE '%$search%' AND deleted_at IS NOT NULL";

@@ -25,17 +25,17 @@ class Database
      * Summary of __construct
      * 构造函数，连接数据库
      */
-    private function __construct()
+    private function __construct($config)
     {
         // 设置链接参数
-        $this->host = CONFIG['database']['host'];
-        $this->username = CONFIG['database']['user'];
-        $this->host = CONFIG['database']['host'];
-        $this->password = CONFIG['database']['password'];
-        $this->database = CONFIG['database']['name'];
-        $this->charset = CONFIG['database']['charset'];
-        $this->developerMode = CONFIG['app']['developer_mode'];
-        $this->port = CONFIG['database']['port'];
+        $this->host = $config['database']['host'];
+        $this->username = $config['database']['user'];
+        $this->host = $config['database']['host'];
+        $this->password = $config['database']['password'];
+        $this->database = $config['database']['name'];
+        $this->charset = $config['database']['charset'];
+        $this->developerMode = $config['app']['developer_mode'];
+        $this->port = $config['database']['port'];
         
         // 连接数据库
         $this->conn = $this->connectDatabase();
@@ -76,10 +76,10 @@ class Database
      * Summary of getInstance
      * 单例模式获取实例
      */
-    public static function getInstance()
+    public static function getInstance($config)
     {
         if(!isset(self::$instance)){
-            self::$instance = new self();
+            self::$instance = new self($config);
         }
         return self::$instance;
     }

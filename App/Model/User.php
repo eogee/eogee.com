@@ -3,7 +3,7 @@ namespace App\Model;
 
 use Helper\Url;
 use Helper\Window;
-use Helper\Password;
+use Easy\Password\Password;
 use App\Verify\Verify;
 
 /**
@@ -76,6 +76,48 @@ class User extends Model
             'enterId' => $this->session->getUserId() ?? null // 确保返回有效的用户 ID
         ];
     }
+
+    /**
+     * Summary of insert
+     * 插入数据
+     * @return string 插入结果信息
+     */
+    public function insert()
+    {
+        // 验证 CSRF Token
+        Verify::crsfVerify();
+
+        // 移除不需要的字段
+        if (isset($_POST['file'])) {
+            unset($_POST['file']); // 移除 file 字段，如果存在
+        }
+
+        // 验证 POST 数据是否有效
+        if (empty($_POST) || !is_array($_POST)) {
+            return "没有有效的数据进行插入"; // 返回错误信息
+        }
+
+        // 验证密码是否一致
+        if ($_POST['password'] !== $_POST['passwordRepeat']) {
+            return "两次输入密码不一致，请重新输入！"; // 返回错误信息
+        }
+
+        // 检查用户名是否已存在
+        $username = $_POST['username'];
+        $usernameExist = $this->db->select(Url::getTable(), "WHERE username = '" . $this->db->conn->real_escape_string($username) . "'");
+        if (count($usernameExist) > 0) {
+            return "该用户名已存在！"; // 返回错误信息
+        }
+
+        // 处理密码加密
+        if (!empty($_POST['password'])) {
+            $Password = new Password($_POST['password']); // 密码加密
+            $_POST['password'] = $Password->encrypt();
+        }
+
+        // 执行插入操作并返回结果
+        return $this->db->insert(Url::getTable(), $_POST);
+    }
     
     /**
      * Summary of edit
@@ -131,7 +173,8 @@ class User extends Model
 
         // 处理密码更新
         if ($_POST['password'] !== $passwordOld) {
-            $password = Password::encrypt($_POST['password']);
+            $Password = new Password($_POST['password']); // 密码加密
+            $password = $Password->encrypt();
         } else {
             $password = $passwordOld; // 如果密码未更改，使用旧密码
         }
@@ -143,6 +186,13 @@ class User extends Model
         ];
 
         // 执行更新
-        return $this->db->update($table, $dataToUpdate, "WHERE id = " . intval($id));
+        $result = $this->db->update($table, $dataToUpdate, "WHERE id = " . intval($id));
+
+        // 处理更新结果
+        if (is_string($result)) {
+            return $result; // 如果返回的是字符串，则为错误信息
+        }
+
+        return true; // 返回成功信息
     }
 }

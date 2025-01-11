@@ -21,7 +21,7 @@ class TestController extends Controller
             'subject' => 'Test',
             'message' => '<h1>test123</h1>'
         ];
-        $queue = new EmailQueue;
+        $queue = new EmailQueue(CONFIG);
         $queue->addToQueue($data);
         $queue->processQueue();
 

@@ -26,18 +26,17 @@ class Log
      * @param string $logFile 日志文件路径
      * @param bool $logToConsole 是否将日志输出到控制台
      */
-    public function __construct()
+    public function __construct(Database $db,array $config)
     {
-        $db = Database::getInstance();
         $this->file = new File($db,CONFIG);
-
-        $this->logFile = __DIR__ . '/../../'.CONFIG['log']['log_path'].'/'.CONFIG['log']['log_file'];
-        $this->logToConsole = CONFIG['log']['log_to_console'];
-        $this->logEnable = CONFIG['log']['log_enabled'];
-        $this->logFileName = CONFIG['log']['log_file'];
-        $this->logSortDesc = CONFIG['log']['log_sort_desc'];
-        self::$lockFile = __DIR__ . '/../../'.CONFIG['log']['log_path'].'/'.CONFIG['log']['log_id_lock']; // 用于文件锁的文件
-        $this->logIdReset = CONFIG['log']['log_id_reset']; // 是否重置日志ID
+        
+        $this->logFile = __DIR__ . '/../../'.$config['log']['log_path'].'/'.$config['log']['log_file'];
+        $this->logToConsole = $config['log']['log_to_console'];
+        $this->logEnable = $config['log']['log_enabled'];
+        $this->logFileName = $config['log']['log_file'];
+        $this->logSortDesc = $config['log']['log_sort_desc'];
+        self::$lockFile = __DIR__ . '/../../'.$config['log']['log_path'].'/'.$config['log']['log_id_lock']; // 用于文件锁的文件
+        $this->logIdReset = $config['log']['log_id_reset']; // 是否重置日志ID
     }
 
     /**

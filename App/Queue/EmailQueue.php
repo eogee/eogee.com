@@ -12,10 +12,10 @@ class EmailQueue extends Queue
 {
     private $mail;
 
-    public function __construct()
+    public function __construct($config)
     {
-        parent::__construct();
-        $this->mail = new Mail;
+        parent::__construct($config);
+        $this->mail = new Mail($config);
     }
     /**
      * Summary of getTableName

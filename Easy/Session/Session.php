@@ -13,13 +13,18 @@ class Session
 {
     protected $db;
 
-    protected $userTableName = CONFIG['database']['user_table'];
+    protected $userTableName;
 
-    protected $userCol = CONFIG['database']['user_col'];
+    protected $userCol;
 
-    public function __construct()
+    public function __construct($config)
     {
-        $this->db = Database::getInstance();
+        // 获取数据库实例
+        $this->db = Database::getInstance($config);
+
+        // 设置默认的user表名和user列名
+        $this->userTableName = $config['database']['user_table'];
+        $this->userCol = $config['database']['user_col'];
     }
     /**
      * Summary of start
