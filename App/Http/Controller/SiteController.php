@@ -2,6 +2,8 @@
 
 namespace App\Http\Controller;
 
+use Easy\View\View;
+
 /**
  * Summary of SiteController
  * 站点功能 控制器
@@ -34,6 +36,6 @@ class SiteController extends Controller
         curl_setopt_array($ch, $options);
         $result = curl_exec($ch);
         
-        require_once '/view/admin/site/post.php';
+        View::view('/admin/site/post',$result);
     }
 }

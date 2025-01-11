@@ -11,7 +11,7 @@
                         提交站点
                     </div>
                     <div class="layui-card-body">
-                        结果：<?=$result?>
+                        结果：<?=$data?>
                     </div>
                 </div>
                 <br><br>
