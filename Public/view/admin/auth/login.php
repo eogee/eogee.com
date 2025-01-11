@@ -5,32 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>EOGEE</title>
     <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/auth.css">
     <script src="/layui/layui.js"></script>
-    <style>
-        img {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .demo-login-container {
-            width: 350px;
-            margin: 21px auto 0;
-        }
-
-        .demo-login-other .layui-icon {
-            position: relative;
-            display: inline-block;
-            margin: 0 2px;
-            top: 2px;
-            font-size: 26px;
-        }
-        h1{
-            text-align: center;
-            color: #fff;
-            font-size: 40px;
-        }
-    </style>
 </head>
 
 <body style="background-color:#2f363c">

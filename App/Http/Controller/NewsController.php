@@ -35,7 +35,7 @@ class NewsController extends Controller
     }
     public function edit()
     {
-        $this->limitVerify->verify();
+        $this->verify->adminLimit();
         $id = $this->id;
         if(isset($id)){
             View::view('/admin/'.$this->table.'/update');

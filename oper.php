@@ -48,7 +48,7 @@ function handleFileCreation($type, $name)
     $templates = [
         'add-controller' => [
             'path' => 'App/Http/Controller/',
-            'content' => "<?php\n\nnamespace App\Http\Controller;\n\nclass {name} extends BasicController\n{\n\n}\n"
+            'content' => "<?php\n\nnamespace App\Http\Controller;\n\nclass {name} extends Controller\n{\n\n}\n"
         ],
         'add-model' => [
             'path' => 'App/Model/',
@@ -182,11 +182,11 @@ switch (strtolower($type)) {
             echo "Name is required for type '$type'.\n";
             exit(1);
         }
-        handleFileCreation('controller', $name . 'Controller');
-        handleFileCreation('model', $name . 'Model');
-        handleFileCreation('request', $name . 'Request');
-        handleFileCreation('response', $name . 'Response');
-        handleFileCreation('verify', $name . 'Verify');
+        handleFileCreation('add-controller', $name . 'Controller');
+        handleFileCreation('add-model', $name . 'Model');
+        handleFileCreation('add-request', $name . 'Request');
+        handleFileCreation('add-response', $name . 'Response');
+        handleFileCreation('add-verify', $name . 'Verify');
         break;
 
     case 'migrate':

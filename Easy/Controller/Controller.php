@@ -7,7 +7,7 @@ use Easy\File\File;
 use Easy\Model\Model;
 use Easy\Request\Request;
 use Easy\Response\Response;
-use Easy\Verify\LimitVerify;
+use Easy\Verify\Verify;
 use Easy\Log\Log;
 use Easy\Session\Session;
 use Easy\Database\Database;
@@ -24,7 +24,7 @@ class Controller{
     protected $response;//响应类
     protected $request;//请求类
     protected $file;//文件类
-    protected $limitVerify;//权限验证
+    protected $verify;//权限验证
     protected $table;//数据表名
     protected $id;//数据表主键
     protected $log;//日志类
@@ -39,7 +39,7 @@ class Controller{
         $this->file = new File($db,CONFIG);        
         $this->log = new Log($db,CONFIG);
         
-        $this->limitVerify = new LimitVerify;
+        $this->verify = new Verify;
         $this->session = new Session(CONFIG);
         $this->table = Url::getTable();
         $this->id = Url::getId();
@@ -190,7 +190,7 @@ class Controller{
      */
     public function list()
     {
-        $this->limitVerify->verify();
+        $this->verify->adminLimit();
         View::view('/admin/'.$this->table.'/list');
     }
     /**
@@ -200,7 +200,7 @@ class Controller{
      */
     public function recycle()
     {
-        $this->limitVerify->verify();
+        $this->verify->adminLimit();
         View::view('/admin/'.$this->table.'/list');      
     }
     /**
@@ -230,7 +230,7 @@ class Controller{
      */
     public function show()
     {
-        $this->limitVerify->verify();
+        $this->verify->adminLimit();
         View::view('/admin/show');
     }
     /**
@@ -250,7 +250,7 @@ class Controller{
      */
     public function insert()
     {
-        $this->limitVerify->verify();        
+        $this->verify->adminLimit();
         if(isset($_POST) and !empty($_POST)){
             if($this->model->insert() > 0){
                 $this->response->json(['code' => 0,'msg' => '新增成功']);
@@ -268,7 +268,7 @@ class Controller{
      */
     public function edit()
     {
-        $this->limitVerify->verify();
+        $this->verify->adminLimit();
         $id = $this->id;
         if(isset($id)){
             View::view('/admin/'.$this->table.'/update');

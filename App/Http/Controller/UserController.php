@@ -40,7 +40,7 @@ class UserController extends Controller
     }
     public function insert()
     {
-        $this->limitVerify->verify();
+        $this->verify->adminLimit();
         View::view('/admin/'.Url::getTable().'/update');
         if(isset($_POST) and !empty($_POST)){
             if($this->user->insert() > 0){
@@ -52,7 +52,7 @@ class UserController extends Controller
     }
     public function edit()
     {
-        $this->limitVerify->verify();
+        $this->verify->adminLimit();
         $id = Url::getId();
         if(isset($id)){
             View::view('/admin/'.Url::getTable().'/update');

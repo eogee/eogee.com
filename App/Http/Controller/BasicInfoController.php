@@ -19,7 +19,7 @@ class BasicInfoController extends Controller
     }
     public function edit()
     {
-        $this->limitVerify->verify(); //权限验证
+        $this->verify->adminLimit();
         $id = $this->id;
         if(isset($id)){
             View::view('/admin/'.$this->table.'/update');

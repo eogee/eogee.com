@@ -5,41 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>EOGEE</title>
     <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/auth.css">
     <script src="/layui/layui.js"></script>
-    <style>
-        img {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .demo-login-container {
-            width: 350px;
-            margin: 21px auto 0;
-        }
-
-        .demo-login-other .layui-icon {
-            position: relative;
-            display: inline-block;
-            margin: 0 2px;
-            top: 2px;
-            font-size: 26px;
-        }
-        h1{
-            text-align: center;
-            color: #2f363c;
-            font-size: 40px;
-        }
-    </style>
+    <script src="/js/admin/eogee-admin-layui.js"></script>
 </head>
 
 <body>
-    <div class="layui-row layui-hide layui-show-md-block layui-show-sm-block" style="height: 130px"></div>
+    <div class="layui-row layui-hide layui-show-md-block layui-show-sm-block" style="height: 100px"></div>
     <div class="layui-row">
         <div class="layui-col-xs12 layui-col-sm4 layui-col-md4" style="height: 50px"></div>
         <div class="layui-col-xs12 layui-col-sm4 layui-col-md4">
-            <h1>EOGEE</h1>
-            <form class="layui-form"  method="post">
+            <img src="<?=$data?>" alt="EOGEE" class="logo">
+            <form class="layui-form" id="loginForm" method="post">
                 <div class="demo-login-container">
                     <div class="layui-form-item">
                         <div class="layui-input-wrap">
@@ -77,7 +54,7 @@
 
                     <!-- 找回密码 -->
                     <div class="layui-form-item" style = "text-align: right;">
-                        <a href="/auth/forget">忘记密码？</a>                        
+                        <a href="/auth/forget">忘记密码？点击找回</a>                        
                     </div>
 
                     <div class="layui-form-item">
@@ -91,9 +68,12 @@
                 </div>
             </form>
         </div>
+    </div>
     <script>
         layui.use(function() {
             var form = layui.form;
+            var layer = layui.layer;
+
             // 自定义验证规则
             form.verify({
                 // 验证用户名，且为必填项
@@ -112,8 +92,48 @@
                     }
                 }
             });
+
+            // 监听表单提交事件
+            form.on('submit', function(data) {
+                // 阻止表单默认提交
+                event.preventDefault();
+
+                // 使用 fetch 提交表单数据
+                fetch('/index/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded', // 使用表单数据格式
+                    },
+                    body: new URLSearchParams(data.field), // 将表单数据转换为 URL 编码格式
+                })
+
+                .then(response => response.json()) // 解析 JSON 响应
+                .then(result => {
+                    if (result.code === 0) {
+                        // 显示成功提示
+                        layer.msg(result.msg, {
+                            icon: 1,
+                            time: 1500 // 提示框显示 1.5 秒
+                        }, function() {
+                            // 在提示框消失后关闭弹窗
+                            window.parent.layer.closeAll(); // 关闭所有弹窗
+                            // 登录成功后跳转到首页
+                            window.location.href = '/';
+                        });
+                    } else {
+                        layer.msg(result.msg || '登录失败', { icon: 2 });
+                    }
+                })
+
+
+                .catch(error => {
+                    console.error('提交失败:', error);
+                    layer.msg('网络错误，请重试', { icon: 2 });
+                });
+
+                return false; // 阻止表单默认提交
+            });
         });
     </script>
 </body>
-
 </html>

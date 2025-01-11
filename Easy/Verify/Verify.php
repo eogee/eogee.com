@@ -9,8 +9,7 @@ use Helper\Window;
  * @author Eogee
  * @email eogee@qq.com
  */
-
-abstract class Verify
+class Verify
 {
     // 存储表单数据
     protected $data = [];

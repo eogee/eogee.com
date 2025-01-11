@@ -39,38 +39,52 @@ class Auth
     /**
      * Summary of login
      * 登录验证
-     * @return void
+     * @return bool
      */
     public function login()
     {
         if (!$this->verify->validate($_POST)) {
             Window::alert('请填写完整且符合格式的登录信息！', 'back');
             die();
-        }else{
-            $username = $_POST['username'];
-            //$password = $_POST['password'];
-            $captcha = $_POST['captcha'];
+        }
+    
+        $username = $_POST['username'];
+        $captcha = $_POST['captcha'];
+    
+        // 验证图形验证码
+        if (!$this->captcha->checkCaptcha($captcha)) {
+            Window::alert('验证码不正确！', 'back');
+            die();
+        }
+    
+        // 查询用户是否存在
+        $user = $this->getUserByUsername($username);
+    
+        if (empty($user)) {
+            Window::alert('输入的用户名或密码不正确！', 'back');
+            die();
+        }
+        // 验证密码
+        if ($this->password->verify($user[0]["password"])) {
+            $this->createUserSession($username);
+        } else {
+            Window::alert('输入的用户名或密码不正确！', 'back');
+            die();
+        }
+        //登陆验证成功，删除session中的图形验证码
+        $this->session->delete('captcha');
+        return true;
+    }
 
-            // 验证图形验证码
-            $this->captcha->checkCaptcha($captcha);
+    private function getUserByUsername($username)
+    {
+        return $this->db->select($this->tableName, "WHERE username = '$username' AND deleted_at IS NULL");
+    }
 
-            // 查询用户是否存在
-            $user = $this->db->select($this->tableName, "WHERE username = '$username' AND deleted_at IS NULL", );
-
-            if (empty($user)) {
-                Window::alert('输入的用户名或密码不正确！', 'back');
-                die();
-            }
-
-            // 验证密码
-            if ($this->password->verify($user[0]["password"])) {
-                $this->session->set('username', $username);
-                $this->session->set('csrf_token', $this->setCsrf());
-                Window::redirect("/admin");
-            } else {
-                Window::alert('输入的用户名或密码不正确！', 'back');
-            }
-        }        
+    private function createUserSession($username)
+    {
+        $this->session->set('username', $username);
+        $this->session->set('csrf_token', $this->setCsrf());
     }
 
     /**

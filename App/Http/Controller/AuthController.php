@@ -39,7 +39,9 @@ class AuthController{
                 Window::alert('请填写完整且符合格式的登录信息！', 'back');
                 die();
             }else{
-                $this->auth->login();
+                if($this->auth->login()){
+                    Window::redirect('/admin');
+                }
             }
         }else{
             View::view('/admin/auth/login');

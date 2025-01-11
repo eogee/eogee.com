@@ -75,19 +75,16 @@ class Captcha
     /**
      * Summary of checkCaptcha
      * 图形验证码验证
-     * @return void
+     * @return bool;
      */
     public function checkCaptcha($captcha)
     {
         if($this->captchaEnable){
             if(empty($captcha) || empty($_SESSION['captcha']) || $captcha !== $_SESSION['captcha']){
-                Window::alert('输入的验证码不正确，请重新输入！','back');
-                die();
+                return false;
             }
-
-            //图形验证码验证成功，删除session中的图形验证码
-            $this->session->delete('captcha'); 
         }
+        return true;
     }
 
 }

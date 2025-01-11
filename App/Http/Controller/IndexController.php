@@ -4,6 +4,10 @@ namespace App\Http\Controller;
 
 use Easy\View\View;
 use App\Model\News;
+use Easy\Auth\Auth;
+use App\Verify\UserVerify;
+use Helper\Window;
+use Easy\Database\Database;
 
 /**
  * Summary of IndexController
@@ -14,10 +18,16 @@ use App\Model\News;
 class IndexController extends Controller
 {
     protected $news;
+    protected $verify;
+    protected $auth;
+    protected $db;
     public function __construct()
     {
         parent::__construct();
+        $this->verify = new UserVerify;
+        $this->db = Database::getInstance(CONFIG);
         $this->news = new News;
+        $this->auth = new Auth(CONFIG);
     }
     /**
      * Summary of index
@@ -37,7 +47,19 @@ class IndexController extends Controller
     }
     public function login()
     {
-        View::view('/index/login');
+        if(isset($_POST["username"])){
+            if (!$this->verify->validate($_POST)) {
+                Window::alert('请填写完整且符合格式的登录信息！', 'back');
+                die();
+            }else{
+                if($this->auth->login()){
+                    $this->response->json(['code' => 0,'msg' => '登录成功！', 'url' => '/index']);
+                }
+            }
+        }else{
+            $data = $this->db->select('basicinfo',"where id = 1")[0]['logoImage'];
+            View::view('/index/auth/login',$data);
+        }
     }
     
 }

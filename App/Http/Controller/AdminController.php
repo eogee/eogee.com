@@ -16,7 +16,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $this->limitVerify->verify();
+        $this->verify->adminLimit();
         View::view('/admin/list');
     }
 }
