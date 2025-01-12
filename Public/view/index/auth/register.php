@@ -23,7 +23,49 @@
                             <div class="layui-input-prefix">
                                 <i class="layui-icon layui-icon-username"></i>
                             </div>
-                            <input type="text" name="username" placeholder="请输入用户名" class="layui-input" lay-verify="required|username">
+                            <input id = "usernameInput" type="text" name="username" placeholder="请输入用户名" class="layui-input" lay-verify="required|username">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-wrap">
+                            <div class="layui-input-prefix">
+                                <i class="layui-icon layui-icon-email"></i>
+                            </div>
+                            <input id = "emailInput" type="text" name="email" placeholder="请输入邮箱" class="layui-input" lay-verify="required|email">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-row">
+                            <div class="layui-col-xs8">
+                                <div class="layui-input-wrap">
+                                    <div class="layui-input-prefix">
+                                        <i class="layui-icon layui-icon-vercode"></i>
+                                    </div>
+                                    <input type="text" name="captcha" placeholder="请输入验证码" class="layui-input" lay-verify="required">
+                                </div>
+                            </div>
+                            <div class="layui-col-xs4">
+                                <div style="margin-left: 10px;">
+                                    <img src="/auth/setCaptcha" alt="" style="margin:3px 0 3px 0;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-row">
+                            <div class="layui-col-xs8">
+                                <div class="layui-input-wrap">
+                                    <div class="layui-input-prefix">
+                                        <i class="layui-icon layui-icon-vercode"></i>
+                                    </div>
+                                    <input type="text" name="emailCaptcha" placeholder="请输入邮箱验证码" class="layui-input" lay-verify="required">
+                                </div>
+                            </div>
+                            <div class="layui-col-xs4">
+                                <div style="margin-left: 10px;">
+                                    <a href="javascript:;" class="layui-btn layui-btn-primary" id="sendEmailCaptcha">发送验证码</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -34,35 +76,21 @@
                             <input type="password" name="password" placeholder="请输入密码" class="layui-input" lay-affix="eye" lay-verify="required|password">
                         </div>
                     </div>
-                    <div class="layui-form-item <?=CONFIG['app']['developer_mode'] == true ? 'layui-hide' : null ?>">
-                        <div class="layui-row">
-                            <div class="layui-col-xs8">
-                                <div class="layui-input-wrap">
-                                    <div class="layui-input-prefix">
-                                        <i class="layui-icon layui-icon-vercode"></i>
-                                    </div>
-                                    <input type="text" name="captcha" placeholder="请输入验证码" class="layui-input" lay-verify="<?=CONFIG['app']['developer_mode'] == false ? 'required' : null ?>">
-                                </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-wrap">
+                            <div class="layui-input-prefix">
+                                <i class="layui-icon layui-icon-password"></i>
                             </div>
-                            <div class="layui-col-xs4">
-                                <div style="margin-left: 10px;">
-                                    <img src="/auth/setCaptcha" alt="" style="margin:3px 0 3px 0;">
-                                </div>
-                            </div>
+                            <input type="password" name="passwordRepeat" placeholder="请再次输入密码" class="layui-input" lay-affix="eye" lay-verify="required|password">
                         </div>
                     </div>
 
-                    <!-- 找回密码 -->
-                    <div class="layui-form-item" style = "text-align: right;">
-                        <a href="/auth/forget">忘记密码？点击找回</a>                        
+                    <div class="layui-form-item">
+                        <input type="submit" value="注册" class="layui-btn layui-btn layui-btn-fluid" lay-submit>
                     </div>
 
                     <div class="layui-form-item">
-                        <input type="submit" value="登录" class="layui-btn layui-btn layui-btn-fluid" lay-submit>
-                    </div>
-
-                    <div class="layui-form-item">
-                        <a href="/auth/register">没有账号？点击注册</a>
+                        <a href="/index/login">已有账号，返回登陆</a>
                     </div>
                     
                 </div>
@@ -70,6 +98,7 @@
         </div>
     </div>
     <script>
+
         layui.use(function() {
             var form = layui.form;
             var layer = layui.layer;
@@ -93,13 +122,45 @@
                 }
             });
 
+            // 用户名重复验证
+            document.getElementById('usernameInput').addEventListener('blur', function() {
+                var username = document.getElementById('usernameInput').value;
+                if (username == '') {
+                    return;
+                }
+                ajax('/user/checkUsernameApi/'+username, false, function(response) {
+                    response = JSON.parse(response);
+                    if (response.code > 0) {
+                        layer.msg(response.msg,{icon: 2, time: 1000});
+                    }else{
+                        layer.msg(response.msg,{icon: 1, time: 1000});
+                    }
+                });
+            });
+
+            // 邮箱重复验证
+            document.getElementById('emailInput').addEventListener('blur', function() {
+                var email = document.getElementById('emailInput').value;
+                if (email == '') {
+                    return;
+                }
+                ajaxPost('/user/checkEmailApi', "email="+email, false, function(response) {
+                    response = JSON.parse(response);
+                    if (response.code > 0) {
+                        layer.msg(response.msg,{icon: 2, time: 1000});
+                    }else{
+                        layer.msg(response.msg,{icon: 1, time: 1000});
+                    }
+                });
+            });
+
             // 监听表单提交事件
             form.on('submit', function(data) {
                 // 阻止表单默认提交
                 event.preventDefault();
 
                 // 使用 fetch 提交表单数据
-                fetch('/index/login', {
+                fetch('/index/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded', // 使用表单数据格式

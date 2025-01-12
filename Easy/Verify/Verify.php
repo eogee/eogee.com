@@ -31,7 +31,7 @@ class Verify
             die();
         }
         
-        if($_SESSION['userIdentity']!= '管理员'){
+        if($_SESSION['user_identity'] !== '管理员'){
             Window::redirect('/auth/login');//判断是否为管理员
             die();
         }

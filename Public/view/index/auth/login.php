@@ -34,14 +34,14 @@
                             <input type="password" name="password" placeholder="请输入密码" class="layui-input" lay-affix="eye" lay-verify="required|password">
                         </div>
                     </div>
-                    <div class="layui-form-item <?=CONFIG['app']['developer_mode'] == true ? 'layui-hide' : null ?>">
+                    <div class="layui-form-item">
                         <div class="layui-row">
                             <div class="layui-col-xs8">
                                 <div class="layui-input-wrap">
                                     <div class="layui-input-prefix">
                                         <i class="layui-icon layui-icon-vercode"></i>
                                     </div>
-                                    <input type="text" name="captcha" placeholder="请输入验证码" class="layui-input" lay-verify="<?=CONFIG['app']['developer_mode'] == false ? 'required' : null ?>">
+                                    <input type="text" name="captcha" placeholder="请输入验证码" class="layui-input" lay-verify="required">
                                 </div>
                             </div>
                             <div class="layui-col-xs4">
@@ -124,7 +124,6 @@
                         layer.msg(result.msg || '登录失败', { icon: 2 });
                     }
                 })
-
 
                 .catch(error => {
                     console.error('提交失败:', error);

@@ -33,6 +33,11 @@ class UserController extends Controller
         $data = $this->user->checkUsernameApi();
         $this->response->json($data);
     }
+    public function checkEmailApi()
+    {
+        $data = $this->user->checkEmailApi();
+        $this->response->json($data);
+    }
     public function updateApi()
     {
         $data = $this->user->updateApi();

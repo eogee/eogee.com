@@ -38,6 +38,33 @@ class User extends Model
             ];
         }
     }
+    /**
+     * Summary of checkUsernameApi
+     * 检查邮箱是否存在 API
+     */
+    public function checkEmailApi()
+    {
+        // 获取 email
+        $email = $_POST['email'];
+
+        // 安全处理
+        $email = $this->db->conn->real_escape_string($email);
+
+        // 查询数据库判断email是否存在
+        $emailExist = $this->db->select(Url::getTable(), "WHERE email = '$email'");
+        
+        if (count($emailExist) > 0) {
+            return [
+                'code' => 1
+                ,'msg' => '该邮箱已存在'
+            ];
+        }else{
+            return [
+                'code' => 0
+                ,'msg' => '邮箱可用'
+            ];
+        }
+    }
 
     /**
      * Summary of updateApi

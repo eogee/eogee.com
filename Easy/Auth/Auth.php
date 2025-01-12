@@ -98,7 +98,7 @@ class Auth
     private function createUserSession($username)
     {
         $this->session->set('username', $username);
-        $this->session->set('userIdentity', $this->getUserByUsername($username))[0]['identity'];
+        $this->session->set('user_identity', $this->getUserByUsername($username)[0]['identity']);
         $this->session->set('csrf_token', $this->setCsrf());
     }
 

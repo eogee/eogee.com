@@ -320,7 +320,7 @@
                 layer.open({
                     title: '登陆/注册',
                     type: 2,
-                    area: ['400px', '550px'],
+                    area: ['400px', '650px'],
                     content: '/index/login',
                     end: function() {
                         window.location.reload();
