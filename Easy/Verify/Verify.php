@@ -30,6 +30,11 @@ class Verify
             Window::redirect('/auth/login');//判断是否登录
             die();
         }
+        
+        if($_SESSION['userIdentity']!= '管理员'){
+            Window::redirect('/auth/login');//判断是否为管理员
+            die();
+        }
     }
     /**
      * CSRF 验证

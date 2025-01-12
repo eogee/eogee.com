@@ -61,5 +61,21 @@ class IndexController extends Controller
             View::view('/index/auth/login',$data);
         }
     }
+    public function register()
+    {
+        if(isset($_POST["username"])){
+            if (!$this->verify->validate($_POST)) {
+                Window::alert('请填写完整且符合格式的登录信息！', 'back');
+                die();
+            }else{
+                if($this->auth->login()){
+                    $this->response->json(['code' => 0,'msg' => '登录成功！', 'url' => '/index']);
+                }
+            }
+        }else{
+            $data = $this->db->select('basicinfo',"where id = 1")[0]['logoImage'];
+            View::view('/index/auth/register',$data);
+        }
+    }
     
 }

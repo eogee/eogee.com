@@ -76,14 +76,29 @@ class Auth
         return true;
     }
 
+    /**
+     * Summary of getUserByUsername
+     * 根据用户名查询用户信息
+     * @param string $username 用户名
+     * @return array 用户信息
+     */
     private function getUserByUsername($username)
     {
         return $this->db->select($this->tableName, "WHERE username = '$username' AND deleted_at IS NULL");
     }
 
+    /**
+     * Summary of createUserSession
+     * 创建用户session
+     * @param string $username 用户名
+     * @param string $identity 用户身份
+     * @param string $csrf_token csrf_token
+     * @return void
+     */
     private function createUserSession($username)
     {
         $this->session->set('username', $username);
+        $this->session->set('userIdentity', $this->getUserByUsername($username))[0]['identity'];
         $this->session->set('csrf_token', $this->setCsrf());
     }
 
@@ -137,6 +152,7 @@ class Auth
         Session::destroy();
         Window::alert('退出登录成功！','/auth/login');
     }
+    
     /**
      * Summary of setCsrf
      * 设置csrf_token

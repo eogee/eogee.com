@@ -54,7 +54,7 @@
 
                     <!-- 找回密码 -->
                     <div class="layui-form-item" style = "text-align: right;">
-                        <a href="/forget">忘记密码？点击找回</a>                        
+                        <a href="/auth/forget">忘记密码？点击找回</a>                        
                     </div>
 
                     <div class="layui-form-item">
@@ -62,7 +62,7 @@
                     </div>
 
                     <div class="layui-form-item">
-                        <a href="/index/register">没有账号？点击注册</a>
+                        <a href="/auth/register">没有账号？点击注册</a>
                     </div>
                     
                 </div>

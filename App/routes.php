@@ -37,6 +37,7 @@ if($routerCacheEnabled and $cashe->get('routes')){
     $routes['/'] = [$defaltController,$defaltAction];
     $routes['/index'] = [$defaltController,$defaltAction];
     $routes['/index/login'] = [$defaltController,'login'];
+    $routes['/index/register'] = [$defaltController,'register'];
 
     /* 前台 技术支持 */
     $routes['/support'] = ['SinglePageController','support'];
