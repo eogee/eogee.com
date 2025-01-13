@@ -308,33 +308,11 @@
     <script>
         // 轮播图
         carousel('indexCarousel');
+        
         // 自定义选项卡
         tabIndex('<?= $content[1]['id'] ?>');
         tabIndex('<?= $content[2]['id'] ?>');
         tabIndex('<?= $content[3]['id'] ?>');
-
-        if (window.innerWidth < 850){
-            var area = ['100%', '100%'];
-        }else{
-            var area = ['400px', '650px'];
-        }
-
-        var login = document.getElementById('login')
-            login.onclick = function() {
-                layui.use(function() {
-                var layer = layui.layer;
-                layer.open({
-                    title: '登录/注册',
-                    type: 2,
-                    area: area,
-                    content: '/index/login',
-                    end: function() {
-                        window.location.reload();
-                    }
-                });
-            });
-        }
-        
     </script>
 <?php
     View::view('/index/foot',$indexData);

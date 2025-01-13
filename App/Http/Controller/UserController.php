@@ -61,7 +61,7 @@ class UserController extends Controller
         $data = [
             'recipient' => $email,
             'subject' => 'Email verification code',
-            'message' => "<h2>HELLO $username</h2><h1>你的验证码是:$captcha</h1>" 
+            'message' => "<h2>Hello $username,</h2><h1>您的验证码是:$captcha</h1>" 
         ];
         $this->queue->addToQueue($data);//添加到队列
         if($this->queue->processQueue()){

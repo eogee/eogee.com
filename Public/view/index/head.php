@@ -90,10 +90,36 @@ $indexData = $data;
                     </div>
                     <div>
                         <a id = "login" href="javascript:;">
-                            登录/注册
+                            <?= $_SESSION['username'] ?? '登录/注册' ?>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+
+        // 移动端弹窗尺寸
+        if (window.innerWidth < 850){
+            var area = ['100%', '100%'];
+        }else{
+            var area = ['400px', '650px'];
+        }
+
+        // 登录弹窗
+        var login = document.getElementById('login')
+            login.onclick = function() {
+                layui.use(function() {
+                var layer = layui.layer;
+                layer.open({
+                    title: '登录/注册',
+                    type: 2,
+                    area: area,
+                    content: '/index/login',
+                    end: function() {
+                        window.location.reload();
+                    }
+                });
+            });
+        }
+    </script>

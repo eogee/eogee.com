@@ -19,8 +19,8 @@ use Easy\Database\Database;
 class IndexController extends Controller
 {
     protected $news;
-    protected $verify;
-    protected $verifyRegister;
+    protected $verify; // 登录验证
+    protected $verifyRegister; // 注册验证
     protected $auth;
     protected $db;
     public function __construct()
@@ -51,12 +51,14 @@ class IndexController extends Controller
     public function login()
     {
         if(isset($_POST["username"])){
-            if (!$this->verifyRegister->validate($_POST)) {
+            if (!$this->verify->validate($_POST)) {
                 Window::alert('请填写完整且符合格式的登录信息！', 'back');
                 die();
             }else{
-                if($this->auth->register()){
-                    $this->response->json(['code' => 0,'msg' => '注册成功！', 'url' => '/index']);
+                if($this->auth->login()){
+                    $this->response->json(['code' => 0,'msg' => '登录成功！', 'url' => '/index']);
+                }else{
+                    $this->response->json(['code' => 1,'msg' => '登录失败！']);
                 }
             }
         }else{
@@ -71,7 +73,9 @@ class IndexController extends Controller
                 $this->response->json(['code' => 1,'msg' => '请填写完整且符合格式的注册信息！']);
             }else{
                 if($this->auth->register()){
-                    $this->response->json(['code' => 0,'msg' => '注册成功！', 'url' => '/index']);
+                    $this->response->json(['code' => 0,'msg' => '注册成功！', 'url' => '/index/login']);
+                }else{
+                    $this->response->json(['code' => 1,'msg' => '注册失败！']);
                 }
             }
         }else{

@@ -110,47 +110,35 @@ class Database
      * @param string $table 表名
      * @param array $data 要插入的数据
      */
-    public function insert($table, array $data)
+    public function insert($table, $data)
     {
-        // 确保数据不为空
-        if (empty($data)) {
-            return "插入数据不能为空"; // 返回错误信息
-        }
-    
-        // 使用参数化查询以增强安全性，防止 SQL 注入
-        $columns = implode(', ', array_keys($data));
-        $placeholders = implode(', ', array_fill(0, count($data), '?'));
-    
-        $sql = "INSERT INTO $table ($columns) VALUES ($placeholders)";
-    
-        // 准备 SQL 语句
-        $stmt = $this->prepare($sql);
-    
-        // 确保准备成功
+        // 获取字段名
+        $fields = implode(", ", array_keys($data));
+        
+        // 创建占位符
+        $placeholders = implode(", ", array_fill(0, count($data), '?'));
+        
+        // 构建 SQL 语句
+        $sql = "INSERT INTO $table ($fields) VALUES ($placeholders)";
+        
+        // 准备语句
+        $stmt = $this->conn->prepare($sql);
         if ($stmt === false) {
-            return "准备 SQL 语句失败: " . mysqli_error($this->conn);
+            throw new \Exception("SQL prepare failed: " . $this->conn->error);
         }
     
         // 创建类型字符串
-        $types = str_repeat('s', count($data)); // 默认为字符串类型
-        $params = array_merge([$types], array_values($data)); // 结合类型和数据
-    
-        // 创建引用数组
-        $refParams = [];
-        foreach ($params as $key) {
-            $refParams[$key] = &$params[$key]; // 确保每个参数都是引用
-        }
-    
-        // 将参数作为引用绑定
-        call_user_func_array([$stmt, 'bind_param'], $refParams);
+        $types = str_repeat('s', count($data)); // 所有列为字符串
+        $stmt->bind_param($types, ...array_values($data)); // 绑定参数
     
         // 执行语句
         if (!$stmt->execute()) {
-            return "执行插入失败: " . $stmt->error; // 返回错误信息
+            throw new \Exception("Execute failed: " . $stmt->error);
         }
     
-        return $stmt->insert_id; // 返回插入的自增ID
+        return $stmt->insert_id; // 返回插入的ID
     }
+    
     /**
      * Summary of delete
      * 删除数据

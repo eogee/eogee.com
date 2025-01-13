@@ -17,7 +17,7 @@ class UserVerify extends Verify
                 'required' => true,
                 'minLength' => 6,
                 'maxLength' => 16
-            ],
+            ]
         ]);
     }
 }

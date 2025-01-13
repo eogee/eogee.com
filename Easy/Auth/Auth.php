@@ -17,11 +17,11 @@ use Helper\Window;
  */
 class Auth
 {    
-    protected $tableName;//要操作的数据表名
-    protected $db;//数据库操作对象
-    protected $captcha;//图形验证码对象
-    protected $session;
-    protected $password;
+    protected $tableName; // 要操作的数据表名
+    protected $db; // 数据库操作对象
+    protected $captcha; // 图形验证码对象
+    protected $session; // session对象
+    protected $password; // 密码加密对象
     protected $verify;//验证对象
     public function __construct($config)
     {
@@ -42,12 +42,7 @@ class Auth
      * @return bool
      */
     public function login()
-    {
-        if (!$this->verify->validate($_POST)) {
-            Window::alert('请填写完整且符合格式的登录信息！', 'back');
-            die();
-        }
-    
+    {    
         $username = $_POST['username'];
         $captcha = $_POST['captcha'];
     
@@ -58,12 +53,12 @@ class Auth
         }
     
         // 查询用户是否存在
-        $user = $this->getUserByUsername($username);
-    
+        $user = $this->getUserByUsername($username);    
         if (empty($user)) {
             Window::alert('输入的用户名或密码不正确！', 'back');
             die();
         }
+
         // 验证密码
         if ($this->password->verify($user[0]["password"])) {
             $this->createUserSession($username);
@@ -71,6 +66,7 @@ class Auth
             Window::alert('输入的用户名或密码不正确！', 'back');
             die();
         }
+
         // 登录验证成功，删除session中的图形验证码
         $this->session->delete('captcha');
         return true;
@@ -105,12 +101,33 @@ class Auth
     /**
      * Summary of register
      * 注册用户
-     * @return void
+     * @return bool
      */
     public function register()
     {
-        echo '注册功能暂未开放！';
-        die();
+        $username = $_POST['username'];
+        $email = $_POST['email'];
+        $identity = '用户'; // 用户身份：默认用户
+
+        // 密码哈希处理
+        $hashedPassword = $this->password->encrypt();
+
+        // 插入用户信息到数据库
+        $data = [
+            'username' => $username,
+            'email' => $email,
+            'password' => $hashedPassword,
+            'identity' => $identity
+        ];
+        
+        // 执行数据库插入操作
+        if ($this->db->insert($this->tableName, $data)>0) {
+            $this->session->delete('captcha');
+            $this->session->delete('emailCaptcha');
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

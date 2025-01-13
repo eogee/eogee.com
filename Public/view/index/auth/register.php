@@ -217,8 +217,8 @@
                                     icon: 1,
                                     time: 1500 // 提示框显示 1.5 秒
                                 }, function() {
-                                    // 注册成功后跳转到登录
-                                    window.location.href = '/';
+                                    // 注册成功后跳转到登录页面
+                                    window.location.href = result.url;
                                 });
                             } else {
                                 layer.msg(result.msg || '注册失败', { icon: 2 });
