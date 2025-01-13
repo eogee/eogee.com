@@ -2,6 +2,8 @@
 
 /**
  * 类自动加载
+ * @param string $className 类名
+ * @return void
  */
 function autoload($className) 
 {

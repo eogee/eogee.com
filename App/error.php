@@ -6,6 +6,7 @@ use Helper\Window;
  * 自定义错误处理函数
  * @param int $errNo 错误码
  * @param string $errStr 错误信息
+ * @return void
  */
 function error($errNo, $errStr) 
 {

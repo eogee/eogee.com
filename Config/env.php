@@ -2,7 +2,8 @@
 
 /**
  * Summary of env
- * 环境变量文件加载
+ * 环境变量文件加载函数
+ * @param string $envFile 环境变量文件路径，默认为.env
  * @return void
  */
 function env($envFile = null)
