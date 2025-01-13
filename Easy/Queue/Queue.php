@@ -50,9 +50,7 @@ abstract class Queue
         }
         $this->bindInsertParams($stmt, $data);
 
-        if ($stmt->execute()) {
-            echo "队列项已添加。\n";
-        } else {
+        if (!$stmt->execute()) {
             echo "添加队列项失败: " . $stmt->error . "\n";
         }
 
@@ -62,22 +60,27 @@ abstract class Queue
     /**
      * Summary of processQueue
      * 处理队列项
-     * @return void
+     * @return bool
      */
+
     public function processQueue()
     {
         $result = $this->conn->query($this->getPendingQuery());
+        $allProcessed = true; // 初始化变量，假设所有项都处理成功
 
         while ($row = $result->fetch_assoc()) {
             if ($this->processItem($row)) {
                 $this->updateStatus($row['id'], 'processed');
-                echo "队列项处理成功: {$row['id']}\n";
             } else {
                 $this->updateStatus($row['id'], 'failed');
                 echo "队列项处理失败: {$row['id']}\n";
+                $allProcessed = false; // 一旦有失败项，设置为 false
             }
         }
+
+        return $allProcessed; // 返回处理结果
     }
+
 
     /**
      * Summary of updateStatus

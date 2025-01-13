@@ -72,6 +72,19 @@ class Captcha
         imagepng($image);
         imagedestroy($image); // 释放图像资源
     }
+
+    public function setEmailCaptcha()
+    {
+        //生成验证码
+        $str = "1234567890";
+        $str = str_shuffle($str); //打乱顺序
+        $content = substr($str, 0, 6); //截取前六位
+
+        //验证码存入session
+        $this->session->set('email_captcha', $content); //将验证码存入session中
+        
+        return $content;
+    }
     /**
      * Summary of checkCaptcha
      * 图形验证码验证
@@ -81,6 +94,15 @@ class Captcha
     {
         if($this->captchaEnable){
             if(empty($captcha) || empty($_SESSION['captcha']) || $captcha !== $_SESSION['captcha']){
+                return false;
+            }
+        }
+        return true;
+    }
+    public function checkEmailCaptcha($captcha)
+    {
+        if($this->captchaEnable){
+            if(empty($captcha) || empty($_SESSION['email_captcha']) || $captcha !== $_SESSION['email_captcha']){
                 return false;
             }
         }

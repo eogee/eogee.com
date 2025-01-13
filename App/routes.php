@@ -102,7 +102,7 @@ if($routerCacheEnabled and $cashe->get('routes')){
 
     /* 管理员管理 */
     $routes = defineRoutes($routes, 'user', [
-        'list', 'listApi', 'tableHeadDataApi', 'show', 'showApi',  'checkUsernameApi','checkEmailApi', 'insert', 'edit', 'updateApi', 'fileUploadApi', 'deleteSoft', 'deleteSoftBatch', 'recycle',  'recycleApi', 'restore', 'restoreBatch', 'delete', 'deleteBatch'
+        'list', 'listApi', 'tableHeadDataApi', 'show', 'showApi',  'checkUsernameApi','checkEmailApi', 'checkCaptchaApi','sendEmailCaptchaApi','checkEmailCaptchaApi','insert', 'edit', 'updateApi', 'fileUploadApi', 'deleteSoft', 'deleteSoftBatch', 'recycle',  'recycleApi', 'restore', 'restoreBatch', 'delete', 'deleteBatch'
     ]);
 
     /* 用户管理 */

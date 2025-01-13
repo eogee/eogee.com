@@ -41,7 +41,7 @@
                                     <div class="layui-input-prefix">
                                         <i class="layui-icon layui-icon-vercode"></i>
                                     </div>
-                                    <input type="text" name="captcha" placeholder="请输入验证码" class="layui-input" lay-verify="required|captcha">
+                                    <input id = "captchaInput" type="text" name="captcha" placeholder="请输入验证码" class="layui-input" lay-verify="required|captcha">
                                 </div>
                             </div>
                             <div class="layui-col-xs4">
@@ -58,7 +58,7 @@
                                     <div class="layui-input-prefix">
                                         <i class="layui-icon layui-icon-vercode"></i>
                                     </div>
-                                    <input type="text" name="emailCaptcha" placeholder="请输入邮箱验证码" class="layui-input" lay-verify="required|emailCaptcha">
+                                    <input id = "emailCaptchaInput" type="text" name="emailCaptcha" placeholder="请输入邮箱验证码" class="layui-input" lay-verify="required|emailCaptcha">
                                 </div>
                             </div>
                             <div class="layui-col-xs4">
@@ -169,10 +169,12 @@
                                 sendButton.innerText = '发送验证码'; // 恢复按钮文本
                                 sendButton.disabled = false; // 启用按钮
                             }
-                        }, 1000); // 每秒执行一次
+                        }, 1000); // 每秒执行一次                        
 
-                        // 发送验证码
-                        ajaxPost('/user/sendEmailCaptchaApi', "email="+email, false, function(response) {
+                        // 发送邮箱验证码
+                        const email = document.getElementById('emailInput').value;
+                        const username = document.getElementById('usernameInput').value;
+                        ajaxPost('/user/sendEmailCaptchaApi', "email="+email+"&username="+username, false, function(response) {
                             response = JSON.parse(response);
                             if (response.code > 0) {
                                 layer.msg(response.msg,{icon: 2, time: 1000});
@@ -192,9 +194,9 @@
             form.on('submit', function(data) {
                 // 阻止表单默认提交
                 event.preventDefault();
-
-                // 调用 check 方法
-                check()
+                
+                // 调用 passwordCheck 方法
+                passwordCheck()
                 .then(result => {
                     if (result) {
 
@@ -219,7 +221,7 @@
                                     window.location.href = '/';
                                 });
                             } else {
-                                layer.msg(result.msg || '登录失败', { icon: 2 });
+                                layer.msg(result.msg || '注册失败', { icon: 2 });
                             }
                         })
 
@@ -237,50 +239,87 @@
                 });
             }); 
 
-
-            function check() {
-                return new Promise((resolve, reject) => {
-                    // 表单提交前验证用户名
-                    var username = document.getElementById('usernameInput').value;
-                    if (username === '') {
-                        layer.msg('请先输入用户名', { icon: 2, time: 1000 });
-                        reject(false); // 验证失败
-                    } else {
-                        ajax('/user/checkUsernameApi/' + username, false, function(response) {
-                            response = JSON.parse(response);
-                            if (response.code > 0) {
-                                layer.msg(response.msg, { icon: 2, time: 1000 });
-                                reject(false); // 验证失败
-                            } else {
-                                // 表单提交前验证邮箱
-                                var email = document.getElementById('emailInput').value;
-                                if (email === '') {
-                                    layer.msg('请先输入邮箱地址', { icon: 2, time: 1000 });
-                                    reject(false); // 验证失败
-                                } else {
-                                    ajaxPost('/user/checkEmailApi', "email=" + email, false, function(response) {
-                                        response = JSON.parse(response);
-                                        if (response.code > 0) {
-                                            layer.msg(response.msg, { icon: 2, time: 1000 });
-                                            reject(false); // 验证失败
-                                        } else {
-                                            // 表单提交前验证密码一致性
-                                            var passwordRepeat = document.getElementById('passwordRepeat').value;
-                                            var password = document.getElementById('password').value;
-                                            if (password !== passwordRepeat) {
-                                                layer.msg('两次输入的密码不一致', { icon: 2, time: 1000 });
-                                                reject(false); // 验证失败
-                                            } else {
-                                                resolve(true); // 验证成功
-                                            }
-                                        }
-                                    });
-                                }                        
-                            }
-                        });
+            // 验证用户名、邮箱、验证码有效性
+            async function check() {
+                try {
+                    // 验证用户名
+                    const username = document.getElementById('usernameInput').value;
+                    if (!username) {
+                        throw new Error('请先输入用户名');
                     }
-                });
-            }               
+
+                    const usernameResponse = await fetch(`/user/checkUsernameApi/${username}`);
+                    const usernameData = await usernameResponse.json();
+                    if (usernameData.code > 0) {
+                        throw new Error(usernameData.msg);
+                    }
+
+                    // 验证邮箱
+                    const email = document.getElementById('emailInput').value;
+                    if (!email) {
+                        throw new Error('请先输入邮箱地址');
+                    }
+
+                    const emailResponse = await fetch('/user/checkEmailApi', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `email=${email}`
+                    });
+                    const emailData = await emailResponse.json();
+                    if (emailData.code > 0) {
+                        throw new Error(emailData.msg);
+                    }
+
+                    // 验证验证码
+                    const captcha = document.getElementById('captchaInput').value;
+                    if (!captcha) {
+                        throw new Error('请先输入图形验证码');
+                    }
+
+                    const captchaResponse = await fetch('/user/checkCaptchaApi', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `captcha=${captcha}`
+                    });
+                    const captchaData = await captchaResponse.json();
+                    if (captchaData.code > 0) {
+                        throw new Error(captchaData.msg);
+                    }
+
+                    return true; // 验证成功
+                } catch (error) {
+                    layer.msg(error.message, { icon: 2, time: 1000 });
+                    return false; // 验证失败
+                }
+            }
+
+            async function passwordCheck() {
+                try {
+                    // 验证验证码
+                    const emailCaptcha = document.getElementById('emailCaptchaInput').value;
+                    const emailCaptchaResponse = await fetch('/user/checkEmailCaptchaApi', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `emailCaptcha=${emailCaptcha}`
+                    });
+                    const emailCaptchaData = await emailCaptchaResponse.json();
+                    if (emailCaptchaData.code > 0) {
+                        throw new Error(emailCaptchaData.msg);
+                    }
+
+                    // 验证密码
+                    const password = document.getElementById('password').value;
+                    const passwordRepeat = document.getElementById('passwordRepeat').value;
+                    if (password !== passwordRepeat) {
+                        throw new Error('两次输入的密码不一致');
+                    }
+
+                    return true; // 验证成功
+                } catch (error) {
+                    layer.msg(error.message, { icon: 2, time: 1000 });
+                    return false; // 验证失败
+                }
+            }
         });
     </script>
 </body>

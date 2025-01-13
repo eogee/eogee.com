@@ -5,6 +5,8 @@ namespace App\Http\Controller;
 use Easy\View\View;
 use Helper\Url;
 use App\Model\User;
+use Easy\Captcha\Captcha;
+use App\Queue\EmailQueue;
 
 /**
  * Summary of UserController
@@ -13,10 +15,14 @@ use App\Model\User;
 class UserController extends Controller
 {    
     protected $user;
+    protected $captcha;
+    protected $queue;
     public function __construct()
     {
         parent::__construct();
         $this->user = new User;
+        $this->captcha = new Captcha($this->session,CONFIG);
+        $this->queue = new EmailQueue(CONFIG);
     }
     public function listApi()
     {
@@ -37,6 +43,40 @@ class UserController extends Controller
     {
         $data = $this->user->checkEmailApi();
         $this->response->json($data);
+    }
+    public function checkCaptchaApi()
+    {
+        if(!$this->captcha->checkCaptcha($_POST['captcha'])){
+            $this->response->json(['code' => 1,'msg' => '图形验证码错误']);
+        }else{
+            $this->response->json(['code' => 0,'msg' => '验证成功']);
+        }
+    }
+    public function sendEmailCaptchaApi()
+    {
+        $email = $_POST['email'];
+        $username = $_POST['username'];
+        $captcha = $this->captcha->setEmailCaptcha();
+        //发送邮件验证码
+        $data = [
+            'recipient' => $email,
+            'subject' => 'Email verification code',
+            'message' => "<h2>HELLO $username</h2><h1>你的验证码是:$captcha</h1>" 
+        ];
+        $this->queue->addToQueue($data);//添加到队列
+        if($this->queue->processQueue()){
+            $this->response->json(['code' => 0,'msg' => '验证码已发送至邮箱']);
+        }else{
+            $this->response->json(['code' => 1,'msg' => '验证码发送失败']);
+        }
+    }
+    public function checkEmailCaptchaApi()
+    {
+        if(!$this->captcha->checkEmailCaptcha($_POST['emailCaptcha'])){
+            $this->response->json(['code' => 1,'msg' => '邮箱验证码错误']);
+        }else{
+            $this->response->json(['code' => 0,'msg' => '验证成功']);
+        }
     }
     public function updateApi()
     {
