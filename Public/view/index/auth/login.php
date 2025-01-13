@@ -16,7 +16,7 @@
         <div class="layui-col-xs12 layui-col-sm4 layui-col-md4" style="height: 50px"></div>
         <div class="layui-col-xs12 layui-col-sm4 layui-col-md4">
             <img src="<?=$data?>" alt="EOGEE" class="logo">
-            <form class="layui-form" id="loginForm" method="post">
+            <form class="layui-form" id="form" method="post">
                 <div class="demo-login-container">
                     <div class="layui-form-item">
                         <div class="layui-input-wrap">
@@ -46,7 +46,7 @@
                             </div>
                             <div class="layui-col-xs4">
                                 <div style="margin-left: 10px;">
-                                    <img src="/auth/setCaptcha" alt="" style="margin:3px 0 3px 0;">
+                                    <img id = "captchaImg" src="/auth/setCaptcha" alt="" style="margin:3px 0 3px 0;">
                                 </div>
                             </div>
                         </div>
@@ -70,6 +70,12 @@
         </div>
     </div>
     <script>
+        // 图形验证码刷新
+        document.getElementById('captchaImg').addEventListener('click', function() {
+            var captchaImg = document.getElementById('captchaImg');
+            captchaImg.src = '/auth/setCaptcha';
+        });
+
         layui.use(function() {
             var form = layui.form;
             var layer = layui.layer;

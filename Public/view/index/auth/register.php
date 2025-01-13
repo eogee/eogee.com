@@ -16,7 +16,7 @@
         <div class="layui-col-xs12 layui-col-sm4 layui-col-md4" style="height: 50px"></div>
         <div class="layui-col-xs12 layui-col-sm4 layui-col-md4">
             <img src="<?=$data?>" alt="EOGEE" class="logo">
-            <form class="layui-form" id="loginForm" method="post">
+            <form class="layui-form" id="form" method="post">
                 <div class="demo-login-container">
                     <div class="layui-form-item">
                         <div class="layui-input-wrap">
@@ -41,12 +41,12 @@
                                     <div class="layui-input-prefix">
                                         <i class="layui-icon layui-icon-vercode"></i>
                                     </div>
-                                    <input type="text" name="captcha" placeholder="请输入验证码" class="layui-input" lay-verify="required">
+                                    <input type="text" name="captcha" placeholder="请输入验证码" class="layui-input" lay-verify="required|captcha">
                                 </div>
                             </div>
                             <div class="layui-col-xs4">
                                 <div style="margin-left: 10px;">
-                                    <img src="/auth/setCaptcha" alt="" style="margin:3px 0 3px 0;">
+                                    <img id = "captchaImg" src="/auth/setCaptcha" alt="" style="margin:3px 0 3px 0;">
                                 </div>
                             </div>
                         </div>
@@ -58,12 +58,12 @@
                                     <div class="layui-input-prefix">
                                         <i class="layui-icon layui-icon-vercode"></i>
                                     </div>
-                                    <input type="text" name="emailCaptcha" placeholder="请输入邮箱验证码" class="layui-input" lay-verify="required">
+                                    <input type="text" name="emailCaptcha" placeholder="请输入邮箱验证码" class="layui-input" lay-verify="required|emailCaptcha">
                                 </div>
                             </div>
                             <div class="layui-col-xs4">
                                 <div style="margin-left: 10px;">
-                                    <a href="javascript:;" class="layui-btn layui-btn-primary" id="sendEmailCaptcha">发送验证码</a>
+                                    <button type="button" class="layui-btn layui-btn-primary" id="sendEmailCaptcha">发送验证码</button>
                                 </div>
                             </div>
                         </div>
@@ -73,7 +73,7 @@
                             <div class="layui-input-prefix">
                                 <i class="layui-icon layui-icon-password"></i>
                             </div>
-                            <input type="password" name="password" placeholder="请输入密码" class="layui-input" lay-affix="eye" lay-verify="required|password">
+                            <input id = "password" type="password" name="password" placeholder="请输入密码" class="layui-input" lay-affix="eye" lay-verify="required|password">
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -81,7 +81,7 @@
                             <div class="layui-input-prefix">
                                 <i class="layui-icon layui-icon-password"></i>
                             </div>
-                            <input type="password" name="passwordRepeat" placeholder="请再次输入密码" class="layui-input" lay-affix="eye" lay-verify="required|password">
+                            <input id = "passwordRepeat" type="password" name="passwordRepeat" placeholder="请再次输入密码" class="layui-input" lay-affix="eye" lay-verify="required|password">
                         </div>
                     </div>
 
@@ -90,7 +90,7 @@
                     </div>
 
                     <div class="layui-form-item">
-                        <a href="/index/login">已有账号，返回登陆</a>
+                        <a href="/index/login">已有账号，返回登录</a>
                     </div>
                     
                 </div>
@@ -119,38 +119,72 @@
                     if (!/^[\S]{6,16}$/.test(value)) {
                         return '密码必须为 6 到 16 位的非空字符';
                     }
+                },
+                // 验证图形验证码为4位
+                captcha: function(value, elem) {
+                    if (!/^[\S]{4}$/.test(value)) {
+                        return '验证码为4位的非空字符';
+                    }
+                },
+                // 验证邮箱验证码为6位
+                emailCaptcha: function(value, elem) {
+                    if (!/^\d{6}$/.test(value)) {
+                        return '邮箱验证码为6位数字';
+                    }
+                }
+            });
+            // 图形验证码刷新
+            document.getElementById('captchaImg').addEventListener('click', function() {
+                var captchaImg = document.getElementById('captchaImg');
+                captchaImg.src = '/auth/setCaptcha';
+            });
+
+            // 密码一致验证
+            document.getElementById('passwordRepeat').addEventListener('blur', function() {
+                var passwordRepeat = document.getElementById('passwordRepeat').value;
+                var password = document.getElementById('password').value;
+                if (password !== passwordRepeat) {
+                    layer.msg('两次输入的密码不一致', { icon: 2, time: 1000 });
                 }
             });
 
-            // 用户名重复验证
-            document.getElementById('usernameInput').addEventListener('blur', function() {
-                var username = document.getElementById('usernameInput').value;
-                if (username == '') {
-                    return;
-                }
-                ajax('/user/checkUsernameApi/'+username, false, function(response) {
-                    response = JSON.parse(response);
-                    if (response.code > 0) {
-                        layer.msg(response.msg,{icon: 2, time: 1000});
-                    }else{
-                        layer.msg(response.msg,{icon: 1, time: 1000});
-                    }
-                });
-            });
+            // 发送邮箱验证码
+            document.getElementById('sendEmailCaptcha').addEventListener('click', function() {
+                // 调用 check 方法
+                check()
+                .then(result => {
+                    if (result) {
+                        // 禁用按钮，并开始倒计时
+                        var sendButton = this;
+                        sendButton.disabled = true; // 禁用按钮                
+                        var count = 60;
+                        sendButton.innerText = count + '秒再试';
 
-            // 邮箱重复验证
-            document.getElementById('emailInput').addEventListener('blur', function() {
-                var email = document.getElementById('emailInput').value;
-                if (email == '') {
-                    return;
-                }
-                ajaxPost('/user/checkEmailApi', "email="+email, false, function(response) {
-                    response = JSON.parse(response);
-                    if (response.code > 0) {
-                        layer.msg(response.msg,{icon: 2, time: 1000});
-                    }else{
-                        layer.msg(response.msg,{icon: 1, time: 1000});
+                        var timer = setInterval(function() {
+                            count--;
+                            sendButton.innerText = count + '秒再试';
+
+                            if (count <= 0) {
+                                clearInterval(timer); // 清除定时器
+                                sendButton.innerText = '发送验证码'; // 恢复按钮文本
+                                sendButton.disabled = false; // 启用按钮
+                            }
+                        }, 1000); // 每秒执行一次
+
+                        // 发送验证码
+                        ajaxPost('/user/sendEmailCaptchaApi', "email="+email, false, function(response) {
+                            response = JSON.parse(response);
+                            if (response.code > 0) {
+                                layer.msg(response.msg,{icon: 2, time: 1000});
+                            }else{
+                                layer.msg(response.msg,{icon: 1, time: 1000});
+                            }
+                        });
                     }
+                })
+                .catch(error => {
+                    console.log('验证失败');
+                    // 处理验证失败的情况
                 });
             });
 
@@ -159,41 +193,94 @@
                 // 阻止表单默认提交
                 event.preventDefault();
 
-                // 使用 fetch 提交表单数据
-                fetch('/index/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded', // 使用表单数据格式
-                    },
-                    body: new URLSearchParams(data.field), // 将表单数据转换为 URL 编码格式
-                })
-
-                .then(response => response.json()) // 解析 JSON 响应
+                // 调用 check 方法
+                check()
                 .then(result => {
-                    if (result.code === 0) {
-                        // 显示成功提示
-                        layer.msg(result.msg, {
-                            icon: 1,
-                            time: 1500 // 提示框显示 1.5 秒
-                        }, function() {
-                            // 在提示框消失后关闭弹窗
-                            window.parent.layer.closeAll(); // 关闭所有弹窗
-                            // 登录成功后跳转到首页
-                            window.location.href = '/';
+                    if (result) {
+
+                        // 使用 fetch 提交表单数据
+                        fetch('/index/register', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded', // 使用表单数据格式
+                            },
+                            body: new URLSearchParams(data.field), // 将表单数据转换为 URL 编码格式
+                        })
+
+                        .then(response => response.json()) // 解析 JSON 响应
+                        .then(result => {
+                            if (result.code === 0) {
+                                // 显示成功提示
+                                layer.msg(result.msg, {
+                                    icon: 1,
+                                    time: 1500 // 提示框显示 1.5 秒
+                                }, function() {
+                                    // 注册成功后跳转到登录
+                                    window.location.href = '/';
+                                });
+                            } else {
+                                layer.msg(result.msg || '登录失败', { icon: 2 });
+                            }
+                        })
+
+                        .catch(error => {
+                            console.error('提交失败:', error);
+                            layer.msg('网络错误，请重试', { icon: 2 });
                         });
-                    } else {
-                        layer.msg(result.msg || '登录失败', { icon: 2 });
+
+                        return false; // 阻止表单默认提交
                     }
                 })
-
-
                 .catch(error => {
-                    console.error('提交失败:', error);
-                    layer.msg('网络错误，请重试', { icon: 2 });
+                    console.log('验证失败');
+                    // 处理验证失败的情况
                 });
+            }); 
 
-                return false; // 阻止表单默认提交
-            });
+
+            function check() {
+                return new Promise((resolve, reject) => {
+                    // 表单提交前验证用户名
+                    var username = document.getElementById('usernameInput').value;
+                    if (username === '') {
+                        layer.msg('请先输入用户名', { icon: 2, time: 1000 });
+                        reject(false); // 验证失败
+                    } else {
+                        ajax('/user/checkUsernameApi/' + username, false, function(response) {
+                            response = JSON.parse(response);
+                            if (response.code > 0) {
+                                layer.msg(response.msg, { icon: 2, time: 1000 });
+                                reject(false); // 验证失败
+                            } else {
+                                // 表单提交前验证邮箱
+                                var email = document.getElementById('emailInput').value;
+                                if (email === '') {
+                                    layer.msg('请先输入邮箱地址', { icon: 2, time: 1000 });
+                                    reject(false); // 验证失败
+                                } else {
+                                    ajaxPost('/user/checkEmailApi', "email=" + email, false, function(response) {
+                                        response = JSON.parse(response);
+                                        if (response.code > 0) {
+                                            layer.msg(response.msg, { icon: 2, time: 1000 });
+                                            reject(false); // 验证失败
+                                        } else {
+                                            // 表单提交前验证密码一致性
+                                            var passwordRepeat = document.getElementById('passwordRepeat').value;
+                                            var password = document.getElementById('password').value;
+                                            if (password !== passwordRepeat) {
+                                                layer.msg('两次输入的密码不一致', { icon: 2, time: 1000 });
+                                                reject(false); // 验证失败
+                                            } else {
+                                                resolve(true); // 验证成功
+                                            }
+                                        }
+                                    });
+                                }                        
+                            }
+                        });
+                    }
+                });
+            }               
         });
     </script>
 </body>

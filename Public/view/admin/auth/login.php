@@ -45,7 +45,7 @@
                             </div>
                             <div class="layui-col-xs4">
                                 <div style="margin-left: 10px;">
-                                    <img src="/auth/setCaptcha" alt="" style="margin:3px 0 3px 0;">
+                                    <img id ="captchaImg" src="/auth/setCaptcha" alt="" style="margin:3px 0 3px 0;">
                                 </div>
                             </div>
                         </div>
@@ -57,6 +57,12 @@
             </form>
         </div>
     <script>
+        // 图形验证码刷新
+        document.getElementById('captchaImg').addEventListener('click', function() {
+            var captchaImg = document.getElementById('captchaImg');
+            captchaImg.src = '/auth/setCaptcha';
+        });
+
         layui.use(function() {
             var form = layui.form;
             // 自定义验证规则

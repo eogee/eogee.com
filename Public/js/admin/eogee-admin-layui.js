@@ -71,7 +71,7 @@ function mobileNav(){
  */
 function ajax(url,async,callback){
     var request = new XMLHttpRequest();
-    request.open('GET', url, async);  
+    request.open('GET', url, async);
     request.onload = function() {
         if (request.status == 200) {
             callback(request.responseText);

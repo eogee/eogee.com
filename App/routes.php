@@ -52,7 +52,7 @@ if($routerCacheEnabled and $cashe->get('routes')){
     $routes['/admin'] = ['AdminController',$defaltAction];
     $routes['/admin/index'] = ['AdminController',$defaltAction];
 
-    /* 后台 登陆-退出 */
+    /* 后台 登录-退出 */
     $routes = defineRoutes($routes, 'auth', [
         'login', 'logout', 'setCaptcha'
     ]);

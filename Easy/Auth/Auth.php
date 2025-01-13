@@ -71,7 +71,7 @@ class Auth
             Window::alert('输入的用户名或密码不正确！', 'back');
             die();
         }
-        //登陆验证成功，删除session中的图形验证码
+        // 登录验证成功，删除session中的图形验证码
         $this->session->delete('captcha');
         return true;
     }
