@@ -6,6 +6,7 @@ use Easy\View\View;
 use App\Model\News;
 use Easy\Auth\Auth;
 use App\Verify\UserVerify;
+use App\Verify\UserRegisterVerify;
 use Helper\Window;
 use Easy\Database\Database;
 
@@ -19,12 +20,14 @@ class IndexController extends Controller
 {
     protected $news;
     protected $verify;
+    protected $verifyRegister;
     protected $auth;
     protected $db;
     public function __construct()
     {
         parent::__construct();
         $this->verify = new UserVerify;
+        $this->verifyRegister = new UserRegisterVerify;
         $this->db = Database::getInstance(CONFIG);
         $this->news = new News;
         $this->auth = new Auth(CONFIG);
@@ -48,12 +51,12 @@ class IndexController extends Controller
     public function login()
     {
         if(isset($_POST["username"])){
-            if (!$this->verify->validate($_POST)) {
+            if (!$this->verifyRegister->validate($_POST)) {
                 Window::alert('请填写完整且符合格式的登录信息！', 'back');
                 die();
             }else{
-                if($this->auth->login()){
-                    $this->response->json(['code' => 0,'msg' => '登录成功！', 'url' => '/index']);
+                if($this->auth->register()){
+                    $this->response->json(['code' => 0,'msg' => '注册成功！', 'url' => '/index']);
                 }
             }
         }else{
@@ -64,9 +67,8 @@ class IndexController extends Controller
     public function register()
     {
         if(isset($_POST["username"])){
-            if (!$this->verify->validate($_POST)) {
-                Window::alert('请填写完整且符合格式的登录信息！', 'back');
-                die();
+            if (!$this->verifyRegister->validate($_POST)) {
+                $this->response->json(['code' => 1,'msg' => '请填写完整且符合格式的注册信息！']);
             }else{
                 if($this->auth->register()){
                     $this->response->json(['code' => 0,'msg' => '注册成功！', 'url' => '/index']);

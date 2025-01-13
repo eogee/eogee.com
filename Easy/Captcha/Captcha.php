@@ -85,7 +85,7 @@ class Captcha
         $content = substr($str, 0, 6); //截取前六位
 
         //验证码存入session
-        $this->session->set('email_captcha', $content); //将验证码存入session中
+        $this->session->set('emailCaptcha', $content); //将验证码存入session中
         
         return $content;
     }
@@ -112,7 +112,7 @@ class Captcha
     public function checkEmailCaptcha($captcha)
     {
         if($this->captchaEnable){
-            if(empty($captcha) || empty($_SESSION['email_captcha']) || $captcha !== $_SESSION['email_captcha']){
+            if(empty($captcha) || empty($_SESSION['emailCaptcha']) || $captcha !== $_SESSION['emailCaptcha']){
                 return false;
             }
         }

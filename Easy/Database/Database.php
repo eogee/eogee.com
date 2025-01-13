@@ -30,7 +30,6 @@ class Database
         // 设置链接参数
         $this->host = $config['database']['host'];
         $this->username = $config['database']['user'];
-        $this->host = $config['database']['host'];
         $this->password = $config['database']['password'];
         $this->database = $config['database']['name'];
         $this->charset = $config['database']['charset'];

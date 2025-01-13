@@ -64,7 +64,7 @@ function handleFileCreation($type, $name)
         ],
         'add-verify' => [
             'path' => 'App/Verify/',
-            'content' => "<?php\n\nnamespace App\Verify;\n\nclass {name} extends Verify\n{\n\n}\n"
+            'content' => "<?php\n\nnamespace App\Verify;\n\nclass {name} extends Verify\n{\n    public function __construct()\n    {\n        // 设置验证规则\n".'        $this->setRules'."([\n\n        ]);\n    }\n}\n"
         ],
         'add-middleware' => [
             'path' => 'App/Http/Middleware/',

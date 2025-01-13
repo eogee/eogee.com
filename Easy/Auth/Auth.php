@@ -109,37 +109,8 @@ class Auth
      */
     public function register()
     {
-        if (!$this->verify->validate($_POST)) {
-            Window::alert('请填写完整且符合格式的注册信息！', 'back');
-            die();
-        }else{
-            $username = $_POST['username'];
-            //$password = $_POST['password'];
-            $email = $_POST['email'];
-            $captcha = $_POST['captcha'];
-
-            // 验证图形验证码
-            $this->captcha->checkCaptcha($captcha);
-
-            // 查询用户是否存在
-            $user = $this->db->select($this->tableName, "WHERE username = '$username' OR email = '$email' AND deleted_at IS NULL", );
-
-            if (!empty($user)) {
-                Window::alert('用户名或邮箱已存在！', 'back');
-                die();
-            }
-
-            // 注册用户
-            $data = [
-                'username' => $username,
-                'password' => $this->password->encrypt(),
-                'email' => $email
-            ];
-            $this->db->insert($this->tableName, $data);
-            $this->session->set('username', $username);
-            $this->session->set('csrf_token', $this->setCsrf());
-            Window::redirect("/");
-        }
+        echo '注册功能暂未开放！';
+        die();
     }
 
     /**

@@ -10,15 +10,16 @@ use Helper\Window;
  * @email eogee@qq.com
  */
 class Verify
-{
-    // 存储表单数据
-    protected $data = [];
-
-    // 存储验证规则
-    protected $rules = [];
-
-    // 存储错误信息
-    protected $errors = [];
+{    
+    protected $data; // 存储表单数据    
+    protected $rules; // 存储验证规则   
+    protected $errors; // 存储错误信息
+    public function __construct()
+    {
+        $this->data = [];
+        $this->rules = [];
+        $this->errors = [];
+    }
 
     /**
      * 后台访问限制
@@ -173,6 +174,75 @@ class Verify
     {
         if (!preg_match($pattern, $value)) {
             $this->addError($field, "$field 格式不正确！");
+            return false;
+        }
+        return true;
+    }
+    /**
+     * Summary of validateUnique
+     * 验证唯一性
+     * @param mixed $field
+     * @param mixed $value
+     * @param mixed $tableName
+     * @return bool
+     */
+    protected function validateUnique($field, $value, $tableName)
+    {
+        // 连接数据库
+        $mysql = new \mysqli(CONFIG['database']['host'], CONFIG['database']['user'], CONFIG['database']['password'], CONFIG['database']['name']);
+
+        // 检查连接是否成功
+        if ($mysql->connect_error) {
+            die("连接失败: " . $mysql->connect_error);
+        }
+        $sql = "SELECT * FROM $tableName WHERE $field = ?";
+        $stmt = $mysql->prepare($sql);
+
+        // 绑定参数
+        $stmt->bind_param("s", $value);
+
+        // 执行查询
+        $stmt->execute();
+
+        // 获取结果
+        $result = $stmt->get_result();
+
+        // 检查是否有结果
+        if ($result->num_rows > 0) {
+            $this->addError($field, "$field 已存在！");
+            return false;
+        }
+
+        // 关闭连接
+        $stmt->close();
+        $mysql->close();
+
+        return true;
+
+    }
+
+    /**
+     * Summary of validateEqual
+     * 验证两个字段是否相等
+     * @param mixed $field
+     * @param mixed $value
+     * @param mixed $equalField
+     * @return bool
+     */
+    protected function validateEqual($field, $value, $equalField)
+    {
+        if ($value !== $this->data[$equalField]) {
+            $this->addError($field, "$field 与 $equalField 不匹配！");
+            return false;
+        }
+        return true;
+    }
+
+    // 验证与session中的值是否一致
+    protected function validateSession($field, $value, $sessionName)
+    {
+        if ($value !== $_SESSION[$sessionName]) {
+            $this->addError($field, "$field 与 $sessionName 不匹配！");
             return false;
         }
         return true;
