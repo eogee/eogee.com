@@ -248,18 +248,22 @@
                         throw new Error('请先输入用户名');
                     }
 
+                    // 验证用户名是否已被注册
                     const usernameResponse = await fetch(`/user/checkUsernameApi/${username}`);
                     const usernameData = await usernameResponse.json();
                     if (usernameData.code > 0) {
                         throw new Error(usernameData.msg);
                     }
 
-                    // 验证邮箱
+                    // 验证邮箱有效性
                     const email = document.getElementById('emailInput').value;
                     if (!email) {
                         throw new Error('请先输入邮箱地址');
+                    } else if (!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(email)) {
+                        throw new Error('邮箱格式不正确');
                     }
 
+                    // 验证邮箱是否已被注册
                     const emailResponse = await fetch('/user/checkEmailApi', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

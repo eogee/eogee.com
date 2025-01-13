@@ -89,6 +89,17 @@ function handleMigration()
 {
     $mysqli = connectDatabase();
 
+    $engine = CONFIG_OPER['database']['engine'] ?? 'InnoDB';
+    $charset = CONFIG_OPER['database']['charset'] ?? 'utf8';
+
+    // 创建migrations表
+    $sql = "CREATE TABLE IF NOT EXISTS migrations (
+        id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        migration VARCHAR(255) NOT NULL,
+        executed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE=$engine DEFAULT CHARSET=$charset;";
+    $mysqli->query($sql);
+
     // 获取已执行的迁移文件
     $executedMigrations = [];
     $result = $mysqli->query("SELECT migration FROM migrations");

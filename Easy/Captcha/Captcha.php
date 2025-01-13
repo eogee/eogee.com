@@ -3,7 +3,6 @@
 namespace Easy\Captcha;
 
 use Easy\Session\Session;
-use Helper\Window;
 use Helper\Path;
 
 /**
@@ -73,6 +72,11 @@ class Captcha
         imagedestroy($image); // 释放图像资源
     }
 
+    /**
+     * Summary of setEmailCaptcha
+     * 生成邮箱验证码
+     * @return string
+     */
     public function setEmailCaptcha()
     {
         //生成验证码
@@ -99,6 +103,12 @@ class Captcha
         }
         return true;
     }
+
+    /**
+     * Summary of checkEmailCaptcha
+     * 邮箱验证码验证
+     * @return bool;
+     */
     public function checkEmailCaptcha($captcha)
     {
         if($this->captchaEnable){
