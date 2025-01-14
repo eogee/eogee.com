@@ -7,6 +7,7 @@ use App\Model\News;
 use Easy\Auth\Auth;
 use App\Verify\UserVerify;
 use App\Verify\UserRegisterVerify;
+use App\Verify\UserForgetVerify;
 use Helper\Window;
 use Easy\Database\Database;
 
@@ -19,8 +20,9 @@ use Easy\Database\Database;
 class IndexController extends Controller
 {
     protected $news;
-    protected $verify; // 登录验证
-    protected $verifyRegister; // 注册验证
+    protected $verify; // 登录表单验证
+    protected $verifyRegister; // 注册表单验证
+    protected $verifyForget; // 重置表单验证
     protected $auth;
     protected $db;
     public function __construct()
@@ -28,6 +30,7 @@ class IndexController extends Controller
         parent::__construct();
         $this->verify = new UserVerify;
         $this->verifyRegister = new UserRegisterVerify;
+        $this->verifyForget = new UserForgetVerify;
         $this->db = Database::getInstance(CONFIG);
         $this->news = new News;
         $this->auth = new Auth(CONFIG);
@@ -86,7 +89,15 @@ class IndexController extends Controller
     public function forget()
     {
         if(isset($_POST["email"])){
-            // todo 重置密码
+            if (!$this->verifyForget->validate($_POST)) {
+                $this->response->json(['code' => 1,'msg' => '请填写完整且符合格式的表单信息！']);
+            }else{
+                if($this->auth->resetPasswordByEmail()){
+                    $this->response->json(['code' => 0,'msg' => '重置成功！', 'url' => '/index/login']);
+                }else{
+                    $this->response->json(['code' => 1,'msg' => '重置失败！']);
+                }
+            }
         }else{
             $data = $this->db->select('basicinfo',"where id = 1")[0]['logoImage'];
             View::view('/index/auth/forget',$data);

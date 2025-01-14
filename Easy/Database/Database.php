@@ -190,7 +190,6 @@ class Database
         $setStr = implode(', ', $setClause);
 
         $table = $this->conn->real_escape_string($table);
-        $where = $this->conn->real_escape_string($where);
 
         $sql = "UPDATE $table SET $setStr $where";
 

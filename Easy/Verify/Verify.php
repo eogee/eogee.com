@@ -221,6 +221,41 @@ class Verify
 
     }
 
+    // 验证是否存在
+    protected function validateExists($field, $value, $tableName)
+    {
+        // 连接数据库
+        $mysql = new \mysqli(CONFIG['database']['host'], CONFIG['database']['user'], CONFIG['database']['password'], CONFIG['database']['name']);
+
+        // 检查连接是否成功
+        if ($mysql->connect_error) {
+            die("连接失败: " . $mysql->connect_error);
+        }
+        $sql = "SELECT * FROM $tableName WHERE $field = ?";
+        $stmt = $mysql->prepare($sql);
+
+        // 绑定参数
+        $stmt->bind_param("s", $value);
+
+        // 执行查询
+        $stmt->execute();
+
+        // 获取结果
+        $result = $stmt->get_result();
+
+        // 检查是否有结果
+        if ($result->num_rows < 1) {
+            $this->addError($field, "$field 不存在！");
+            return false;
+        }
+
+        // 关闭连接
+        $stmt->close();
+        $mysql->close();
+
+        return true;
+    }
+
     /**
      * Summary of validateEqual
      * 验证两个字段是否相等

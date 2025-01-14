@@ -240,7 +240,7 @@
                         body: `email=${email}`
                     });
                     const emailData = await emailResponse.json();
-                    if (emailData.code > 0) {
+                    if (!emailData.code > 0) {
                         throw new Error(emailData.msg);
                     }
 

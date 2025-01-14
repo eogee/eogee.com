@@ -130,6 +130,28 @@ class Auth
         }
     }
 
+    // 根据邮箱重置密码
+    public function resetPasswordByEmail()
+    {
+        $email = $_POST['email'];
+
+        // 密码哈希处理
+        $hashedPassword = $this->password->encrypt();
+
+        // 更新用户密码
+        $data = [
+            'password' => $hashedPassword
+        ];
+        $where = "where email = '$email'";
+        if ($this->db->update($this->tableName, $data, $where)>0) {
+            $this->session->delete('captcha');
+            $this->session->delete('emailCaptcha');
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * Summary of logout
      * 退出登录

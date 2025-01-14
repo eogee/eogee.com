@@ -61,7 +61,7 @@ class User extends Model
         }else{
             return [
                 'code' => 0
-                ,'msg' => '邮箱可用'
+                ,'msg' => '该邮箱未被注册'
             ];
         }
     }
