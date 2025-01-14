@@ -62,7 +62,6 @@ abstract class Queue
      * 处理队列项
      * @return bool
      */
-
     public function processQueue()
     {
         $result = $this->conn->query($this->getPendingQuery());

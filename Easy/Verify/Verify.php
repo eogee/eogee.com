@@ -178,8 +178,20 @@ class Verify
         }
         return true;
     }
+    
     /**
-     * Summary of validateUnique
+     * 验证是否存在
+     * @param mixed $field
+     * @param mixed $value
+     * @param mixed $tableName
+     * @return bool
+     */
+    protected function validateExists($field, $value, $tableName)
+    {
+        return $this->validateField($field, $value, $tableName, 'exists');
+    }
+    
+    /**
      * 验证唯一性
      * @param mixed $field
      * @param mixed $value
@@ -188,71 +200,69 @@ class Verify
      */
     protected function validateUnique($field, $value, $tableName)
     {
-        // 连接数据库
-        $mysql = new \mysqli(CONFIG['database']['host'], CONFIG['database']['user'], CONFIG['database']['password'], CONFIG['database']['name']);
-
-        // 检查连接是否成功
-        if ($mysql->connect_error) {
-            die("连接失败: " . $mysql->connect_error);
-        }
-        $sql = "SELECT * FROM $tableName WHERE $field = ?";
-        $stmt = $mysql->prepare($sql);
-
-        // 绑定参数
-        $stmt->bind_param("s", $value);
-
-        // 执行查询
-        $stmt->execute();
-
-        // 获取结果
-        $result = $stmt->get_result();
-
-        // 检查是否有结果
-        if ($result->num_rows > 0) {
-            $this->addError($field, "$field 已存在！");
-            return false;
-        }
-
-        // 关闭连接
-        $stmt->close();
-        $mysql->close();
-
-        return true;
-
+        return $this->validateField($field, $value, $tableName, 'unique');
     }
 
-    // 验证是否存在
-    protected function validateExists($field, $value, $tableName)
+    /**
+     * 验证字段是否存在或唯一
+     * @param mixed $field
+     * @param mixed $value
+     * @param mixed $tableName
+     * @param mixed $validateType
+     * @return bool
+     */
+    protected function validateField($field, $value, $tableName, $validateType = 'exists')
     {
         // 连接数据库
         $mysql = new \mysqli(CONFIG['database']['host'], CONFIG['database']['user'], CONFIG['database']['password'], CONFIG['database']['name']);
-
+    
         // 检查连接是否成功
         if ($mysql->connect_error) {
             die("连接失败: " . $mysql->connect_error);
         }
-        $sql = "SELECT * FROM $tableName WHERE $field = ?";
+    
+        if ($validateType === 'exists') {
+            $sql = "SELECT * FROM $tableName WHERE $field = ?";
+        } elseif ($validateType === 'unique') {
+            $sql = "SELECT * FROM $tableName WHERE $field = ?";
+        } else {
+            // 如果传递了未知的验证类型，则抛出异常
+            die("未知的验证类型: $validateType");
+        }
+    
         $stmt = $mysql->prepare($sql);
-
+    
+        // 检查预处理是否成功
+        if ($stmt === false) {
+            die("SQL准备失败: " . $mysql->error);
+        }
+    
         // 绑定参数
         $stmt->bind_param("s", $value);
-
+    
         // 执行查询
         $stmt->execute();
-
+    
         // 获取结果
         $result = $stmt->get_result();
-
-        // 检查是否有结果
-        if ($result->num_rows < 1) {
-            $this->addError($field, "$field 不存在！");
-            return false;
+    
+        // 根据验证类型检查结果
+        if ($validateType === 'exists') {
+            if ($result->num_rows < 1) {
+                $this->addError($field, "$field 不存在！");
+                return false;
+            }
+        } elseif ($validateType === 'unique') {
+            if ($result->num_rows > 0) {
+                $this->addError($field, "$field 已存在！");
+                return false;
+            }
         }
-
+    
         // 关闭连接
         $stmt->close();
         $mysql->close();
-
+    
         return true;
     }
 
