@@ -83,4 +83,13 @@ class IndexController extends Controller
             View::view('/index/auth/register',$data);
         }
     }
+    public function forget()
+    {
+        if(isset($_POST["email"])){
+            // todo 重置密码
+        }else{
+            $data = $this->db->select('basicinfo',"where id = 1")[0]['logoImage'];
+            View::view('/index/auth/forget',$data);
+        }
+    }
 }

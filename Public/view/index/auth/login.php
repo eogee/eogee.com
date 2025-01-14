@@ -54,7 +54,7 @@
 
                     <!-- 找回密码 -->
                     <div class="layui-form-item" style = "text-align: right;">
-                        <a href="/forget">忘记密码？点击找回</a>                        
+                        <a href="/index/forget">忘记密码？点击找回</a>                        
                     </div>
 
                     <div class="layui-form-item">
