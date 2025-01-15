@@ -10,6 +10,7 @@ use App\Verify\UserRegisterVerify;
 use App\Verify\UserForgetVerify;
 use Helper\Window;
 use Easy\Database\Database;
+use Easy\Session\Session;
 
 /**
  * Summary of IndexController
@@ -117,8 +118,7 @@ class IndexController extends Controller
     }
     public function logout()
     {
-        $this->auth->logout();
-        $this->response->redirect('/index');
+        Session::destroy();
+        $this->response->json(['code' => 0,'msg' => '退出成功！']);
     }
-
 }

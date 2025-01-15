@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>EOGEE</title>
+    <title>登录EOGEE</title>
     <link rel="stylesheet" href="/layui/css/layui.css">
     <link rel="stylesheet" href="/css/auth.css">
     <script src="/layui/layui.js"></script>
@@ -123,8 +123,6 @@
                         }, function() {
                             // 在提示框消失后关闭弹窗
                             window.parent.layer.closeAll(); // 关闭所有弹窗
-                            // 登录成功后跳转到首页
-                            window.location.href = '/';
                         });
                     } else {
                         layer.msg(result.msg || '登录失败', { icon: 2 });

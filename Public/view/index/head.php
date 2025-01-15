@@ -130,6 +130,9 @@ $indexData = $data;
                             shade: 0.1,
                             shadeClose: true,
                             content: '/index/personal',
+                            end: function() {
+                                window.location.reload();
+                            }
                         });
                     }else{
                         // 打开登录弹窗
