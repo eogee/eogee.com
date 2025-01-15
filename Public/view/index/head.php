@@ -106,6 +106,13 @@ $indexData = $data;
             var area = ['400px', '650px'];
         }
 
+        // 从右侧弹窗尺寸
+        if (window.innerWidth < 850){
+            var areaRight = ['100%',  '100%'];
+        }else{
+            var areaRight = ['400px', '100%'];
+        }        
+
         // 获取登录用户名
         fetch('/index/getUserSessionInfo')
             .then(response => response.json())
@@ -114,7 +121,16 @@ $indexData = $data;
                 var login = document.getElementById('login')
                 login.onclick = function() {
                     if (value) {
-                        alert('您已登录，无需重复登录！');
+                        layer.open({
+                            title: '个人中心',
+                            type: 2,
+                            offset: 'r',
+                            anim: 'slideLeft', // 从右往左
+                            area: areaRight,
+                            shade: 0.1,
+                            shadeClose: true,
+                            content: '/index/personal',
+                        });
                     }else{
                         // 打开登录弹窗
                         layui.use(function() {

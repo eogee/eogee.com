@@ -39,6 +39,7 @@ if($routerCacheEnabled and $cashe->get('routes')){
     $routes['/index/login'] = [$defaltController,'login'];
     $routes['/index/register'] = [$defaltController,'register'];
     $routes['/index/forget'] = [$defaltController,'forget'];
+    $routes['/index/personal'] = [$defaltController,'personal'];
     $routes['/index/getUserSessionInfo'] = [$defaltController,'getUserSessionInfo'];
 
     /* 前台 技术支持 */

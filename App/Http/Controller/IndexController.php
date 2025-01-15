@@ -51,6 +51,14 @@ class IndexController extends Controller
 
         View::view('/index/index',$data);
     }
+    public function getUserSessionInfo()
+    {
+        if (isset($_SESSION['username'])) {
+            echo json_encode(['username' => $_SESSION['username']]);
+        } else {
+            echo json_encode(['username' => null]);
+        }
+    }
     public function login()
     {
         if(isset($_POST["username"])){
@@ -103,17 +111,14 @@ class IndexController extends Controller
             View::view('/index/auth/forget',$data);
         }
     }
+    public function personal()
+    {
+        View::view('/index/personal');
+    }
     public function logout()
     {
         $this->auth->logout();
         $this->response->redirect('/index');
     }
-    public function getUserSessionInfo()
-    {
-        if (isset($_SESSION['username'])) {
-            echo json_encode(['username' => $_SESSION['username']]);
-        } else {
-            echo json_encode(['username' => null]);
-        }
-    }
+
 }
