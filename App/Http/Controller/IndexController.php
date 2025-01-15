@@ -103,4 +103,17 @@ class IndexController extends Controller
             View::view('/index/auth/forget',$data);
         }
     }
+    public function logout()
+    {
+        $this->auth->logout();
+        $this->response->redirect('/index');
+    }
+    public function getUserSessionInfo()
+    {
+        if (isset($_SESSION['username'])) {
+            echo json_encode(['username' => $_SESSION['username']]);
+        } else {
+            echo json_encode(['username' => null]);
+        }
+    }
 }

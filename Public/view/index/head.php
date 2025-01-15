@@ -106,20 +106,33 @@ $indexData = $data;
             var area = ['400px', '650px'];
         }
 
-        // 登录弹窗
-        var login = document.getElementById('login')
-            login.onclick = function() {
-                layui.use(function() {
-                var layer = layui.layer;
-                layer.open({
-                    title: '登录/注册',
-                    type: 2,
-                    area: area,
-                    content: '/index/login',
-                    end: function() {
-                        window.location.reload();
-                    }
-                });
-            });
-        }
+        // 获取登录用户名
+        fetch('/index/getUserSessionInfo')
+            .then(response => response.json())
+            .then(data => {
+                var value = data.username;
+                var login = document.getElementById('login')
+                login.onclick = function() {
+                    if (value) {
+                        alert('您已登录，无需重复登录！');
+                    }else{
+                        // 打开登录弹窗
+                        layui.use(function() {
+                            var layer = layui.layer;
+                            layer.open({
+                                title: '登录/注册',
+                                type: 2,
+                                area: area,
+                                content: '/index/login',
+                                end: function() {
+                                    window.location.reload();
+                                }
+                            });
+                        });
+                    }                    
+                }
+            })
+            .catch(error => {
+                console.error('获取会话数据失败:', error);
+            });        
     </script>
