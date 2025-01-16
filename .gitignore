@@ -8,3 +8,4 @@ sitemap.xml
 /Storage/Cache/**
 /Storage/Log/**
 vendor/
+node_modules/

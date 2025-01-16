@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>个人中心</title>
     <link rel="stylesheet" href="/layui/css/layui.css">
-    <link rel="stylesheet" href="/css/auth.css">
     <script src="/layui/layui.js"></script>
     <script src="/js/admin/eogee-admin-layui.js"></script>
 </head>
@@ -15,6 +14,7 @@
         <br><br>
         <button id = "logout" class="layui-btn layui-btn-primary">退出登录</button> <br><br>
     </div>
+
     <script>
         layui.use( function () {
             var layer = layui.layer;
