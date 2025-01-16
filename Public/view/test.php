@@ -1,63 +1,66 @@
 <?php
+    $indexData = $data['indexData'];
     use Easy\View\View;
-    View::view('/admin/head');
-?> 
-    <div class="layui-body">
-        <!-- 内容主体区域 -->
-        <div style="padding: 15px;">
-            <h1 id = "tableComment"></h1>
-            <div class="layui-tab layui-tab-brief">
-                <ul class="layui-tab-title">
-                    <li id = "list"><h2>数据列表</h2></li>
-                    <li id = "recycle"><h2>回收站</a></li>
-                </ul>
-                <div class="layui-tab-content">
-                    <div class="layui-tab-item layui-show">
-                        <!-- 搜索栏 -->
-                        <form class="layui-form layui-row layui-col-space15" id = "search" method="get"></form>
-                        <!-- 表工具栏 -->
-                        <script type="text/html" id="toolbar"></script>
-                        <!-- 行工具栏 -->
-                        <script type="text/html" id="rowToolbar"></script>
-                        <!-- 移动端 行工具栏 -->
-                        <script type="text/html" id="rowToolbarMobile"></script>                         
-                        <table id="table" class="layui-table layui-hide" lay-filter="table"></table>
-                        <!-- 移动端 列显示内容 -->
-                        <script type="text/html" id="mobileCol"></script>
-                    </div>
-                    <br><br>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>
-        layui.use(function() {
-            var table = layui.table;
-            // 表格初始化
-            table.render({
-                elem: '#table',
-                url: '/test/listApi',
-                toolbar: '#toolbar',
-                cols: [[
-                    {type: 'checkbox', fixed: 'left'},
-                    {field: 'ip', title: 'IP', width: 80, fixed: 'left'},
-                    {field: 'host', title: 'host',  fixed: 'left'},
-                    {field: 'url', title: 'url', },
-                    {field: 'username', title: 'username'},
-                    {field: 'userId', title: 'userId'},
-                    {field: 'method', title: 'method'},
-                    {field: 'userAgent', title: 'userAgent'},
-                    {field: 'referer', title: 'referer'},
-                    {field: 'timestamp', title: 'timestamp'},
-                    {fixed: 'right', title: '操作', align: 'center', toolbar: '#rowToolbar'}
-                ]],
-                page: true,
-                text: {
-                    none: '暂无数据'
-                }
-            });
-        });
-    </script>
+    View::view('/index/head', $indexData);
+    $data = $data['data'];
+    // 创建 ParsedownExtra 实例
+    $ParsedownExtra = new ParsedownExtra();
+
+    // 创建 Highlighter 实例
+    $Highlighter = new Highlight\Highlighter();
+
+    $markdownText = "
+# 这是一个标题
+## 这是一个副标题
+**这是一个加粗的文本**
+
+*这是一个斜体的文本*
+
+~~这是一个删除线的文本~~
+
+> 这是一个引用
+
+`eogee.com`
+
+1. 列表项1
+2. 列表项2
+3. 列表项3
+
+[这是一个链接](https://eogee.com)
+
+这是普通文本。
+- 列表项1
+- 列表项2
+```php
 <?php
-    View::view('/admin/foot');
+echo 'Hello, World!';
 ?>
+```";
+
+    $html = $ParsedownExtra->text($markdownText);
+
+    $highlightedHtml = preg_replace_callback(
+        '/<code class="language-(.*?)">(.*?)<\/code>/s',
+        function ($matches) use ($Highlighter) {
+            $language = $matches[1];
+            $code = htmlspecialchars_decode($matches[2]); // 解码 HTML 实体
+            $result = $Highlighter->highlight($language, $code);
+            return '<code class="hljs language-' . $language . '">' . $result->value . '</code>';
+        },
+        $html
+    );
+    
+?> 
+<div class="eog-container">
+    <div class="layui-container">
+        <?php
+            echo $highlightedHtml;
+        ?>
+    </div>
+</div>
+
+<?php
+    View::view('/index/foot',$indexData);
+?>
+
+

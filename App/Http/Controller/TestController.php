@@ -9,21 +9,13 @@ use App\Queue\EmailQueue;
 
 class TestController extends Controller
 {
+    
     public function index()
     {
-        /* 直接发送邮件 */
-        /* $mail = new Mail();
-        $mail->send('<h1>Hello</h1>','hello Eogeer','1274925805@qq.com','Zophar'); */
-        
-        /* 使用队列发送邮件 */
+        $indexData = $this->headData();//获取前台头部数据
         $data = [
-            'recipient' => '1274925805@qq.com',
-            'subject' => 'Test',
-            'message' => '<h1>test123</h1>'
+            'indexData' => $indexData
         ];
-        $queue = new EmailQueue(CONFIG);
-        $queue->addToQueue($data);
-        $queue->processQueue();
-
+        View::view('/test',$data);
     }
 }

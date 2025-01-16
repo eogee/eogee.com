@@ -26,7 +26,7 @@
                         <br><br>
                     </div>
                 </div>
-            </div>                
+            </div>
         </div>
     </div>
     <script src = "/js/admin/list.js"></script>
