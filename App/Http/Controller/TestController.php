@@ -12,10 +12,6 @@ class TestController extends Controller
     
     public function index()
     {
-        $indexData = $this->headData();//获取前台头部数据
-        $data = [
-            'indexData' => $indexData
-        ];
-        View::view('/test',$data);
+        View::view('/test');
     }
 }
