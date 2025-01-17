@@ -2,6 +2,8 @@
 
 require_once 'vendor/autoload.php';
 
+use Easy\File\InsertContentToFile;
+
 define('CONFIG_OPER',require_once __DIR__ . '/Config/config.php');
 
 // 工具函数：将文件名转换为类名
@@ -72,6 +74,9 @@ function handleFileCreation($type, $name)
         ]
     ];
 
+    // 首字母大写
+    $name = ucfirst($name);
+
     $type = strtolower($type);
     if (!isset($templates[$type])) {
         echo "Invalid type '$type'.\n";
@@ -82,6 +87,25 @@ function handleFileCreation($type, $name)
     $content = str_replace('{name}', $name, $templates[$type]['content']);
 
     return createFile($filename, $content);
+}
+
+// 处理新增路由组内容
+function handleAddRouter($name)
+{
+    $filename = __DIR__ . '/App/routes.php';
+    $newContent = <<<EOT
+
+    \$routes = defineRoutes(\$routes, '$name', [
+        'list', 'listApi', 'tableHeadDataApi', 'show', 'showApi', 'insert', 'edit', 'updateApi', 'fileUploadApi', 'deleteSoft', 'deleteSoftBatch', 'recycle', 'recycleApi', 'restore', 'restoreBatch', 'delete', 'deleteBatch'
+    ]); 
+
+
+EOT;
+    $searchContent = 'if($routerCacheEnabled){';
+
+    $file = new InsertContentToFile;
+    $file->insertContentBefore($filename, $searchContent, $newContent);
+
 }
 
 // 处理数据迁移
@@ -232,6 +256,13 @@ switch (strtolower($type)) {
         }
         handleFileCreation($type, $name);
         break;
+    case 'add-router':
+        if ($name === null) {
+            echo "Name is required for type '$type'.\n";
+            exit(1);
+        }
+        handleAddRouter($name);
+        break;
 
     case 'add-all':
         if ($name === null) {
@@ -239,10 +270,11 @@ switch (strtolower($type)) {
             exit(1);
         }
         handleFileCreation('add-controller', $name . 'Controller');
-        handleFileCreation('add-model', $name . 'Model');
+        handleFileCreation('add-model', $name);
         handleFileCreation('add-request', $name . 'Request');
         handleFileCreation('add-response', $name . 'Response');
         handleFileCreation('add-verify', $name . 'Verify');
+        handleAddRouter($name);
         break;
 
     case 'include-vendor':
