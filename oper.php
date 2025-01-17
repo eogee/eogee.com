@@ -165,6 +165,46 @@ function handleRollback()
     $mysqli->close();
 }
 
+// 处理资源文件复制
+function handleInclude($source, $target){
+    // 检查源文件夹是否存在
+    if (!is_dir($source)) {
+        echo "Source folder '$source' not found !\n";
+        return false;
+    }
+
+    // 创建目标文件夹（如果它不存在）
+    if (!is_dir($target)) {
+        if (!mkdir($target, 0777, true)) {
+            echo "Unable to create target folder '$target' !\n";
+            return false;
+        }
+    }
+
+    // 打开源文件夹
+    $files = scandir($source);
+    foreach ($files as $file) {
+        // 跳过 "." 和 ".."
+        if ($file != "." && $file != "..") {
+            $sourcePath = $source . '/' . $file;
+            $targetPath = $target . '/' . $file;
+
+            // 如果是文件夹，则递归复制
+            if (is_dir($sourcePath)) {
+                handleInclude($sourcePath, $targetPath);
+            } else {
+                // 如果是文件，则复制文件
+                if (!copy($sourcePath, $targetPath)) {
+                    echo "Unable to copy file '$sourcePath' to '$targetPath'。\n";
+                    return false;
+                }
+            }
+        }
+    }
+    echo " '$source' is copied to '$target' successfully ! \n";
+    return true;
+}
+
 // 主逻辑
 $type = $argv[1] ?? null;
 $name = $argv[2] ?? null;
@@ -198,6 +238,32 @@ switch (strtolower($type)) {
         handleFileCreation('add-request', $name . 'Request');
         handleFileCreation('add-response', $name . 'Response');
         handleFileCreation('add-verify', $name . 'Verify');
+        break;
+
+    case 'include-vendor':
+        if ($name === null) {
+            echo "Name is required for type '$type'.\n";
+            exit(1);
+        }
+        $sourceFolder = __DIR__ . '/'.CONFIG_OPER['file']['composer_dir_name']. $name;
+        $targetFolder = __DIR__ . '/'.CONFIG_OPER['file']['dist_dir_name']. $name;
+        handleInclude($sourceFolder, $targetFolder);
+        break;
+
+    case 'include-module':
+        if ($name === null) {
+            echo "Name is required for type '$type'.\n";
+            exit(1);
+        }
+        $sourceFolder = __DIR__ . '/'.CONFIG_OPER['file']['module_dir_name']. $name;
+        $targetFolder = __DIR__ . '/'.CONFIG_OPER['file']['dist_dir_name']. $name;
+        handleInclude($sourceFolder, $targetFolder);
+        break;
+        
+    case 'include-all':
+        $sourceFolder = __DIR__ . '/'.CONFIG_OPER['file']['module_dir_name'];
+        $targetFolder = __DIR__ . '/'.CONFIG_OPER['file']['dist_dir_name'];
+        handleInclude($sourceFolder, $targetFolder);
         break;
 
     case 'migrate':
