@@ -14,18 +14,6 @@ function filenameToClassName($filename)
     return str_replace('_', '', ucwords($filename, '_')); // 转换为驼峰命名
 }
 
-// 工具函数：创建文件
-function createFile($filename, $content)
-{
-    if (file_put_contents($filename, $content) !== false) {
-        echo "File '$filename' created successfully!\n";
-        return true;
-    } else {
-        echo "Failed to create file '$filename'.\n";
-        return false;
-    }
-}
-
 // 工具函数：连接数据库
 function connectDatabase()
 {
@@ -86,7 +74,8 @@ function handleFileCreation($type, $name)
     $filename = $templates[$type]['path'] . $name . '.php';
     $content = str_replace('{name}', $name, $templates[$type]['content']);
 
-    return createFile($filename, $content);
+    $file = new File;
+    return $file->createFile($filename, $content);
 }
 
 // 处理新增路由组内容
@@ -99,7 +88,7 @@ function handleAddRouter($name)
         'list', 'listApi', 'tableHeadDataApi', 'show', 'showApi', 'insert', 'edit', 'updateApi', 'fileUploadApi', 'deleteSoft', 'deleteSoftBatch', 'recycle', 'recycleApi', 'restore', 'restoreBatch', 'delete', 'deleteBatch'
     ]); 
 
-
+    
 EOT;
     $searchContent = 'if($routerCacheEnabled){';
 

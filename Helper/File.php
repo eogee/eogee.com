@@ -5,6 +5,24 @@ namespace Helper;
 class File
 {
     /**
+     * Summary of createFile
+     * 创建文件
+     * @param mixed $filename
+     * @param mixed $content
+     * @return bool
+     */
+    public function createFile($filename, $content)
+    {
+        if (file_put_contents($filename, $content) !== false) {
+            echo "File '$filename' created successfully!\n";
+            return true;
+        } else {
+            echo "Failed to create file '$filename'.\n";
+            return false;
+        }
+    }
+    
+    /**
      * 后置写入文件内容
      * @param string $filename 文件名
      * @param string $searchContent 查找的内容     * 
