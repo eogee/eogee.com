@@ -2,7 +2,7 @@
 
 require_once 'vendor/autoload.php';
 
-use Easy\File\InsertContentToFile;
+use Helper\File;
 
 define('CONFIG_OPER',require_once __DIR__ . '/Config/config.php');
 
@@ -103,7 +103,7 @@ function handleAddRouter($name)
 EOT;
     $searchContent = 'if($routerCacheEnabled){';
 
-    $file = new InsertContentToFile;
+    $file = new File;
     $file->insertContentBefore($filename, $searchContent, $newContent);
 
 }

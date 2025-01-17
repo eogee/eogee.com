@@ -1,8 +1,8 @@
 <?php
 
-namespace Easy\File;
+namespace Helper;
 
-class InsertContentToFile
+class File
 {
     /**
      * 后置写入文件内容
@@ -11,7 +11,7 @@ class InsertContentToFile
      * @param string $newContent 新插入的内容
      * @return bool
      */
-    function insertContentAfter($filename, $searchContent, $newContent) {
+    public function insertContentAfter($filename, $searchContent, $newContent) {
         // 读取文件内容
         $fileContent = $this->readFileContent($filename);
         // 查找插入点（$searchContent 的结束位置）
