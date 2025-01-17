@@ -259,7 +259,7 @@ switch (strtolower($type)) {
         $targetFolder = __DIR__ . '/'.CONFIG_OPER['file']['dist_dir_name']. $name;
         handleInclude($sourceFolder, $targetFolder);
         break;
-        
+
     case 'include-all':
         $sourceFolder = __DIR__ . '/'.CONFIG_OPER['file']['module_dir_name'];
         $targetFolder = __DIR__ . '/'.CONFIG_OPER['file']['dist_dir_name'];
@@ -296,44 +296,23 @@ switch (strtolower($type)) {
             return <<<EOT
 <?php
 
-class $className
+use Easy\Database\CreateTable;
+
+class $className extends CreateTable
 {
     protected \$tableName = '$tableName';
 
-    private \$mysqli;
-
-    public function __construct(\$mysqli)
+    protected function setSql()
     {
-        \$this->mysqli = \$mysqli;
-    }
-
-    public function up()
-    {
-        \$sql = "CREATE TABLE IF NOT EXISTS \$this->tableName (
+        return "CREATE TABLE IF NOT EXISTS \$this->tableName (
             id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'ID',
 
-            
+            // You can add your columns here...
 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
         ) ENGINE= $engine DEFAULT CHARSET=$charset;
         ";
-        \$this->executeQuery(\$sql);
-    }
-
-    public function down()
-    {
-        \$sql = "DROP TABLE IF EXISTS \$this->tableName;";
-        \$this->executeQuery(\$sql);
-    }
-
-    private function executeQuery(\$sql)
-    {
-        if (\$this->mysqli->query(\$sql) === TRUE) {
-            echo "Query executed successfully.\\n";
-        } else {
-            echo "Error executing query: " . \$this->mysqli->error . "\\n";
-        }
     }
 }
 EOT;
