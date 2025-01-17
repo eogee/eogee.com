@@ -91,6 +91,11 @@ function handleMigration()
 
     $engine = CONFIG_OPER['database']['engine'] ?? 'InnoDB';
     $charset = CONFIG_OPER['database']['charset'] ?? 'utf8';
+    $databaseName = CONFIG_OPER['database']['name'] ?? 'utf8';
+
+    // 创建数据库
+    $sql = "CREATE DATABASE IF NOT EXISTS $databaseName DEFAULT CHARACTER SET $charset";
+    $mysqli->query($sql);
 
     // 创建migrations表
     $sql = "CREATE TABLE IF NOT EXISTS migrations (
