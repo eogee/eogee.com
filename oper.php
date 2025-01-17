@@ -97,6 +97,17 @@ EOT;
 
 }
 
+function handleClearCache($name)
+{
+    $fileName = __DIR__ . '/'.CONFIG_OPER['cache']['cache_path']. '/' . $name . '.cache';
+    if (file_exists($fileName)) {
+        $file = new File;
+        $file->clearFileContent($fileName);
+    }else{
+        echo "Cache file '$fileName' not found !\n";
+    }
+}
+
 // 处理数据迁移
 function handleMigration()
 {
@@ -264,6 +275,14 @@ switch (strtolower($type)) {
         handleFileCreation('add-response', $name . 'Response');
         handleFileCreation('add-verify', $name . 'Verify');
         handleAddRouter($name);
+        break;
+    
+    case 'clear-cache':
+        if ($name === null) {
+            echo "Name is required for type '$type'.\n";
+            exit(1);
+        }
+        handleClearCache($name);
         break;
 
     case 'include-vendor':

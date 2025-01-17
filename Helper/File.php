@@ -21,6 +21,22 @@ class File
             return false;
         }
     }
+
+    /**
+     * Summary of clearFileContent
+     * 清空文件内容
+     * @param mixed $filename
+     * @return bool
+     */
+    public function clearFileContent($filename) {
+        if (file_put_contents($filename, '') !== false) {
+            echo "File '$filename' cleared successfully!\n";
+            return true;
+        } else {
+            echo "Failed to clear file '$filename'.\n";
+            return false;
+        }
+    } 
     
     /**
      * 后置写入文件内容
