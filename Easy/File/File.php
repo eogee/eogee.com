@@ -15,6 +15,9 @@ class File
     protected $db; // 数据库实例
     protected $picPath; // 图片上传路径
     protected $filePath; // 文件上传路径
+    protected $userPicPath; // 用户图片上传路径
+    protected $userFilePath; // 用户文件上传路径
+
 
     public function __construct(Database $db,array $config)
     {
@@ -24,7 +27,10 @@ class File
         // 设置上传路径
         $this->picPath = $config['file']['pic_upload_path'];
         $this->filePath = $config['file']['file_upload_path'];
+        $this->userPicPath = $config['file']['user_pic_upload_path'];
+        $this->userFilePath = $config['file']['user_file_upload_path'];
     }
+    
     /**
      * Summary of fileUploadApi
      * 文件上传api接口
@@ -58,6 +64,12 @@ class File
         // 验证上传的文件
         if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
             $uploadDir = rtrim($dir, '/') . '/'; // 确保路径格式正确
+
+            // 如有上传目录不存在，创建目录
+            if (!file_exists($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+
             $tmpName = $_FILES['file']['tmp_name']; // 获取文件的临时路径
             $name = basename($_FILES['file']['name']); // 防止路径注入，确保文件名安全
 
@@ -93,6 +105,40 @@ class File
             'code' => $code,
             'msg' => $msg
         ];
+    }
+
+    /**
+     * Summary of userFileUploadApi
+     * 用户文件上传api接口
+     * @param string $fileFieldName 文件字段名（默认 'editormd-image-file'）
+     * @return array 返回上传结果
+     */
+    public function userFileUploadApi($fileFieldName = 'editormd-image-file')
+    {
+        $response = [
+            'success' => 0,
+            'message' => '文件上传失败'
+        ];
+        if (isset($_FILES[$fileFieldName])) {
+            $file = $_FILES[$fileFieldName];
+            $uploadDir = rtrim($this->userPicPath, '/') . '/'; // 确保路径格式正确
+
+            // 如有上传目录不存在，创建目录
+            if (!file_exists($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+
+            $tmpName = $file['tmp_name']; // 获取文件的临时路径
+            $name = basename($file['name']); // 防止路径注入，确保文件名安全
+
+            // 移动上传的文件到目标目录
+            if (move_uploaded_file($tmpName, $uploadDir . $name)) {
+                $response['success'] = 1;
+                $response['message'] = '文件上传成功！';
+                $response['url'] = '/' . $uploadDir . $name;
+            }
+        }
+        return $response;
     }
 
     /**

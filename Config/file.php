@@ -11,6 +11,12 @@ return [
     //文件上传路径
     'file_upload_path' => 'file/',
 
+    //图片上传路径
+    'user_pic_upload_path' => 'upload/pic/',
+
+    //文件上传路径
+    'user_file_upload_path' => 'upload/file/',
+
     //允许上传的文件类型
     'allowed_types' => 'gif|jpg|png|jpeg|pdf|doc|docx|xls|xlsx|ppt|pptx|txt',
     

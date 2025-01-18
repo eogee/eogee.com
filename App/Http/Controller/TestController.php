@@ -14,4 +14,10 @@ class TestController extends Controller
     {
         View::view('/test');
     }
+
+    public function fileUploadApi()
+    {
+        $responce = $this->file->userFileUploadApi();
+        return $this->response->json($responce);
+    }
 }
