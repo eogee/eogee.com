@@ -38,27 +38,92 @@ function handleFileCreation($type, $name)
     $templates = [
         'add-controller' => [
             'path' => 'App/Http/Controller/',
-            'content' => "<?php\n\nnamespace App\Http\Controller;\n\nclass {name} extends Controller\n{\n\n}\n"
+            'content' => <<<EOT
+<?php
+
+namespace App\Http\Controller;
+
+class {name} extends Controller
+{
+    
+}
+EOT
         ],
         'add-model' => [
             'path' => 'App/Model/',
-            'content' => "<?php\n\nnamespace App\Model;\n\nclass {name} extends Model\n{\n\n}\n"
+            'content' => <<<EOT
+<?php
+
+namespace App\Model;
+
+class {name} extends Model
+{
+    
+}
+EOT
         ],
         'add-request' => [
             'path' => 'App/Http/Request/',
-            'content' => "<?php\n\nnamespace App\Http\Request;\n\nclass {name} extends Request\n{\n\n}\n"
+            'content' => <<<EOT
+<?php
+
+namespace App\Http\Request;
+
+class {name} extends Request
+{
+    
+}
+EOT
         ],
         'add-response' => [
             'path' => 'App/Http/Response/',
-            'content' => "<?php\n\nnamespace App\Http\Response;\n\nclass {name} extends Response\n{\n\n}\n"
+            'content' => <<<EOT
+<?php
+
+namespace App\Http\Response;
+
+class {name} extends Response
+{
+    
+}
+EOT
         ],
         'add-verify' => [
             'path' => 'App/Verify/',
-            'content' => "<?php\n\nnamespace App\Verify;\n\nclass {name} extends Verify\n{\n    public function __construct()\n    {\n        // 设置验证规则\n".'        $this->setRules'."([\n\n        ]);\n    }\n}\n"
+            'content' => <<<EOT
+<?php
+
+namespace App\Verify;
+
+class {name}Verify extends Verify
+{
+    public function __construct()
+    {
+        // 设置验证规则
+        \$this->setRules([
+            //...
+        ]);
+    }
+}
+EOT
         ],
         'add-middleware' => [
             'path' => 'App/Http/Middleware/',
-            'content' => "<?php\n\nnamespace App\Http\Middleware;\n\nclass {name}\n{\n\n}\n"
+            'content' => <<<EOT
+<?php
+
+namespace App\Http\Middleware;
+
+class {name}
+{
+    public function handle(\$request, \$next)
+    {   
+        // 处理请求
+        // ...
+        return \$next(\$request);
+    }
+}
+EOT
         ],
         'add-frontend' => [
             'list' => [
@@ -421,12 +486,10 @@ switch (strtolower($type)) {
             exit(1);
         }
         handleFileCreation('add-controller', $name . 'Controller');
-        handleFileCreation('add-model', $name);
         handleFileCreation('add-request', $name . 'Request');
-        handleFileCreation('add-response', $name . 'Response');
         handleFileCreation('add-verify', $name . 'Verify');
         handleAddRouter($name);
-        handleFileCreation('add-fronend', $name);
+        handleFileCreation('add-frontend', $name);
         break;
     
     case 'clear-cache':
