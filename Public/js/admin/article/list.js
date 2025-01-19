@@ -3,10 +3,15 @@ tableHeadData();// 表格及字段数据
 
 /* 表头字段 */
 var hides = [
-    /* You can add the hide column name here */
+    'content',
+    'authorId',
+    'authNickName',
+    'categoryId',
+    'created_at',
+    'updated_at'
 ];
 var sorts = [
-    /* You can add the sort column name here */
+    'sort'
 ];
 
 /* 表格及字段数据 */

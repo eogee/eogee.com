@@ -187,7 +187,7 @@
     </tr>
     <tr id = "sort">
         <td></td>
-        <td><input type="text" name="sort" class="layui-input"  lay-verify="number">
+        <td><input type="text" name="sort" class="layui-input" lay-verify="number">
         </td>
     </tr>
     <script src="/js/admin/carousel/update.js"></script>

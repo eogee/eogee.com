@@ -20,7 +20,7 @@ class CreateArticleTable extends CreateTable
             authorNickname VARCHAR(255) NOT NULL COMMENT '作者昵称',
             categoryId INT(11) NOT NULL COMMENT '分类ID',
             categoryName VARCHAR(255) NOT NULL COMMENT '分类名称',
-            sort INT(11) NOT NULL DEFAULT 0 COMMENT '排序',
+            sort INT(11) NULL DEFAULT 0 COMMENT '排序',
 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
