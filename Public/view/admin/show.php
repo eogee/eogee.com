@@ -3,6 +3,7 @@
 <head>
     <title>详情显示</title>
     <link rel="stylesheet" href="/layui/css/layui.css" rel="stylesheet">    
+    <link rel="stylesheet" href="/css/eogee-admin.css" rel="stylesheet"> 
     <script src="/layui/layui.js"></script>
     <script src="/js/admin/eogee-admin-layui.js"></script>
 </head>
