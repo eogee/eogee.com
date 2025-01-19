@@ -129,6 +129,8 @@ class User extends Model
             return "两次输入密码不一致，请重新输入！"; // 返回错误信息
         }
 
+        unset($_POST['passwordRepeat']); // 移除 passwordRepeat 字段，如果存在
+
         // 检查用户名是否已存在
         $username = $_POST['username'];
         $usernameExist = $this->db->select(Url::getTable(), "WHERE username = '" . $this->db->conn->real_escape_string($username) . "'");

@@ -8,6 +8,12 @@
             <input id = "usernameInput" type = "text" name="username" class="layui-input" lay-verify="required|username">
         </td>
     </tr>
+    <tr id = "email">
+        <td></td>
+        <td>
+            <input type = "text" name="email" class="layui-input">
+        </td>
+    </tr>
     <tr id = "identity">
         <td></td>
         <td>

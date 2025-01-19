@@ -761,7 +761,7 @@ function pushField(){
         var nullable = tableData.nullable[key];
         if(key != 'deleted_at'  && key!= 'created_at' && key != 'updated_at' && key != 'enterId' && key != 'enter'){
             if(nullable == 'NO'){
-                if(key == 'id'){                
+                if(key == 'id'){
                     document.getElementById(key).children[0].innerHTML = value;
                 }else{
                     document.getElementById(key).children[0].innerHTML = '*'+value;

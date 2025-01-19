@@ -59,11 +59,116 @@ function handleFileCreation($type, $name)
         'add-middleware' => [
             'path' => 'App/Http/Middleware/',
             'content' => "<?php\n\nnamespace App\Http\Middleware;\n\nclass {name}\n{\n\n}\n"
+        ],
+        'add-frontend' => [
+            'list' => [
+                'path' => 'Public/view/admin/',
+                'content' => <<<EOT
+<?php
+    use Easy\View\View;
+    View::view('/admin/head');
+?> 
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <h1 id = "tableComment"></h1>
+            <div class="layui-tab layui-tab-brief">
+                <ul class="layui-tab-title">
+                    <li id = "list"><h2>数据列表</h2></li>
+                    <li id = "recycle"><h2>回收站</a></li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <!-- 搜索栏 -->
+                        <form class="layui-form layui-row layui-col-space15" id = "search" method="get"></form>
+                        <!-- 表工具栏 -->
+                        <script type="text/html" id="toolbar"></script>
+                        <!-- 行工具栏 -->
+                        <script type="text/html" id="rowToolbar"></script>
+                        <!-- 移动端 行工具栏 -->
+                        <script type="text/html" id="rowToolbarMobile"></script>                         
+                        <table id="table" class="layui-table layui-hide" lay-filter="table"></table>
+                        <!-- 移动端 列显示内容 -->
+                        <script type="text/html" id="mobileCol"></script>
+                    </div>
+                    <br><br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src = "/js/admin/{name}/list.js"></script>
+<?php
+    View::view('/admin/foot');
+?>
+EOT
+            ],
+            'update' => [
+                'path' => 'Public/view/admin/',
+                'content' => <<<EOT
+<?php
+    use Easy\View\View;
+    View::view('/admin/updateHead');
+?>
+    <tr id = " ">
+    <!-- You should add the item id in "" and the name should be the same as the table columns name --> 
+        <td></td>
+        <td>
+                <!-- You can add the form item here -->
+        </td>
+    </tr>
+    <script src = "/js/admin/{name}/update.js"></script>
+<?php
+    View::view('/admin/updateFoot');
+?>
+EOT
+            ],
+            'list.js' => [
+                'path' => 'Public/js/admin/',
+                'content' =><<<EOT
+tableHeadSet(); // 表头设置
+tableHeadData();// 表格及字段数据
+
+/* 表头字段 */
+var hides = [
+    /* You can add the hide column name here */
+];
+var sorts = [
+    /* You can add the sort column name here */
+];
+
+/* 表格及字段数据 */
+var cols = generateColumns(tableFiledComment, hides, sorts, handleColwidth);
+
+/* 表格渲染 */
+renderRtn(true);
+renderTable();
+searchRow(); 
+renderPage();
+insertRow(); 
+batch();
+rowToolbar(); 
+EOT
+            ],
+            'update.js' => [
+                'path' => 'Public/js/admin/',
+                'content' =><<<EOT
+ajax('/'+modelName+'/updateApi/'+tableId,false,function(response){
+    tableData = JSON.parse(response);
+});
+
+pushField();
+
+if(pageName == 'edit'){
+    pushData(
+        /* You can add the form item here which isn't need to be auto updated */
+    );
+}
+
+// upload('YouFileId','/{name}/fileUploadApi/'+tableId); // 上传图片，如涉及可解除注释
+EOT
+            ]
         ]
     ];
-
-    // 首字母大写
-    $name = ucfirst($name);
 
     $type = strtolower($type);
     if (!isset($templates[$type])) {
@@ -71,11 +176,51 @@ function handleFileCreation($type, $name)
         return false;
     }
 
-    $filename = $templates[$type]['path'] . $name . '.php';
-    $content = str_replace('{name}', $name, $templates[$type]['content']);
+    if ($type === 'add-frontend') {
+        // 处理前端文件创建
+        foreach ($templates[$type] as $subtype => $template) {
+            if($subtype === 'list.js' || $subtype === 'update.js'){
+                $filename = $template['path'] . $name . '/' . $subtype;
+            }else{
+                $filename = $template['path'] . $name . '/' . $subtype . '.php';
+            }
+            $content = str_replace('{name}', $name, $template['content']);
 
-    $file = new File;
-    return $file->createFile($filename, $content);
+            // 确保路径存在，如果不存在则创建它
+            $directory = dirname($filename);
+            if (!is_dir($directory)) {
+                if (!mkdir($directory, 0777, true)) {
+                    echo "Unable to create directory '$directory'.\n";
+                    return false;
+                }
+            }
+
+            $file = new File;
+            if (!$file->createFile($filename, $content)) {
+                return false;
+            }
+        }
+    } else {
+        // 处理其他类型的文件创建
+        $name = ucfirst($name);
+
+        $filename = $templates[$type]['path'] . $name . '.php';
+        $content = str_replace('{name}', $name, $templates[$type]['content']);
+
+        // 确保路径存在，如果不存在则创建它
+        $directory = dirname($filename);
+        if (!is_dir($directory)) {
+            if (!mkdir($directory, 0777, true)) {
+                echo "Unable to create directory '$directory'.\n";
+                return false;
+            }
+        }
+
+        $file = new File;
+        return $file->createFile($filename, $content);
+    }
+
+    return true;
 }
 
 // 处理新增路由组内容
@@ -263,7 +408,13 @@ switch (strtolower($type)) {
         }
         handleAddRouter($name);
         break;
-
+    case 'add-frontend':
+        if ($name === null) {
+            echo "Name is required for type '$type'.\n";
+            exit(1);
+        }
+        handleFileCreation($type, $name);
+        break;
     case 'add-all':
         if ($name === null) {
             echo "Name is required for type '$type'.\n";
@@ -275,6 +426,7 @@ switch (strtolower($type)) {
         handleFileCreation('add-response', $name . 'Response');
         handleFileCreation('add-verify', $name . 'Verify');
         handleAddRouter($name);
+        handleFileCreation('add-fronend', $name);
         break;
     
     case 'clear-cache':

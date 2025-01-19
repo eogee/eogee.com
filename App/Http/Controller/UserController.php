@@ -85,14 +85,16 @@ class UserController extends Controller
     }
     public function insert()
     {
-        $this->verify->adminLimit();
-        View::view('/admin/'.Url::getTable().'/update');
+        $this->verify->adminLimit(); // 权限限制
+
         if(isset($_POST) and !empty($_POST)){
             if($this->user->insert() > 0){
                 $this->response->json(['code' => 0,'msg' => '新增成功']);
             }else{
                 $this->response->json(['code' => 1,'msg' => '新增失败']);
             }
+        }else{
+            View::view('/admin/'.Url::getTable().'/update');
         }
     }
     public function edit()

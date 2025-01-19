@@ -134,6 +134,11 @@ if($routerCacheEnabled and $cashe->get('routes')){
         'list', 'listApi', 'tableHeadDataApi', 'show', 'showApi', 'insert', 'edit', 'updateApi', 'fileUploadApi', 'deleteSoft', 'deleteSoftBatch', 'recycle', 'recycleApi', 'restore', 'restoreBatch', 'delete', 'deleteBatch'
     ]); 
 
+    
+    $routes = defineRoutes($routes, 'article', [
+        'list', 'listApi', 'tableHeadDataApi', 'show', 'showApi', 'insert', 'edit', 'updateApi', 'fileUploadApi', 'deleteSoft', 'deleteSoftBatch', 'recycle', 'recycleApi', 'restore', 'restoreBatch', 'delete', 'deleteBatch'
+    ]); 
+
     if($routerCacheEnabled){
         $cashe->set('routes', $routes, $defaultCacheTime);
     } // 如开启路由缓存 则缓存路由
