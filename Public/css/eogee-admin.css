@@ -54,9 +54,14 @@ body,
 }
 
 .layui-form-checkbox[lay-skin="switch"] .layui-switch,
-.layui-form-radio[lay-skin="switch"] .layui-switch {
-    background-color: #394046; /* 开关背景颜色 */
-    border-color: #555; /* 开关边框颜色 */
+.layui-form-radio[lay-skin="switch"] .layui-switch,
+.layui-laypage a,
+.layui-laypage button,
+.layui-laypage input,
+.layui-laypage select,
+.layui-laypage span {
+    background-color: #394046;
+    border-color: #555;
 }
 
 .layui-form-checkbox[lay-skin="switch"]:checked .layui-switch,
@@ -92,14 +97,10 @@ body,
 .layui-laypage button, .layui-laypage input {
     background-color: #394046;
 }
+
 .layui-laypage .layui-laypage-spr,
 .layui-laypage a[data-page]{
     color: #000;
-}
-
-.layui-laypage a, .layui-laypage button, .layui-laypage input, .layui-laypage select, .layui-laypage span{
-    background-color: #394046;
-    border-color: #555;
 }
 
 .layui-laypage a, .layui-laypage span{
