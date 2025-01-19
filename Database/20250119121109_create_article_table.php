@@ -24,7 +24,7 @@ class CreateArticleTable extends CreateTable
 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-            deleted_at TIMESTAMP NULL DEFAULT NULL COMMENT '删除时间',
+            deleted_at DATETIME NULL DEFAULT NULL COMMENT '删除时间',
 
             FOREIGN KEY (categoryId) REFERENCES category(id) ON DELETE CASCADE ON UPDATE CASCADE
         ) ENGINE= InnoDB DEFAULT CHARSET=utf8 COMMENT='文章';
