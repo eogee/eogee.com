@@ -1,0 +1,146 @@
+/* 暗夜主题 */
+body,
+.layui-table,
+.layui-form-label,
+.layui-form-checkbox[lay-skin="primary"] i,
+.layui-form-radio[lay-skin="primary"] i,
+.layui-form-select .layui-input
+{
+    background-color: #394046;
+    color: #000;
+}
+
+.layui-badge-rim, .layui-border, .layui-colla-content, .layui-colla-item, .layui-collapse, .layui-elem-field, .layui-form-pane .layui-form-item[pane], .layui-form-pane .layui-form-label, .layui-input, .layui-input-split, .layui-panel, .layui-quote-nm, .layui-select, .layui-tab-bar, .layui-tab-card, .layui-tab-title, .layui-tab-title .layui-this:after, .layui-textarea{
+    border-color:#555;
+}
+
+.layui-form-select  dl dd:hover,.layui-table-checked.layui-table-click, .layui-table-checked.layui-table-hover, .layui-table-checked, .layui-table-click, .layui-table-hover tbody tr:hover, .layui-table-mend tbody tr:hover, .layui-table-patch tbody tr:hover, .layui-table-tool tbody tr:hover, .layui-table-total tbody tr:hover, .layui-table-view tbody tr:hover{
+    background-color: #23292e;
+}
+
+
+
+.layui-input,
+.layui-select,
+.layui-textarea {
+    background-color: #394046; /* 暗色输入框背景 */
+    color: #000;
+    border-color: #555; /* 暗色边框 */
+}
+.layui-input:hover,
+.layui-select:hover,
+.layui-textarea:hover,
+.layui-form-checkbox[lay-skin="primary"]:hover i,
+.layui-form-radio[lay-skin="primary"]:hover i
+{
+    border-color: #000 !important; /* 悬停时边框颜色 */
+}
+
+.layui-form-checkbox[lay-skin="primary"]:checked i,
+.layui-form-radio[lay-skin="primary"]:checked i {
+    background-color: #009688; /* 选中时背景颜色 */
+    color: #000; /* 选中时文字颜色 */
+}
+
+.layui-form-select .layui-anim-upbit {
+    border-color: #555; /* 下拉选择框边框颜色 */
+    background-color: #394046; /* 下拉列表项背景颜色 */
+    color: #000; /* 下拉列表项文字颜色 */
+}
+
+.layui-form-select dl dd.layui-this{
+    background-color: #23292e;
+    color: #16b777;
+}
+
+.layui-form-checkbox[lay-skin="switch"] .layui-switch,
+.layui-form-radio[lay-skin="switch"] .layui-switch,
+.layui-laypage a,
+.layui-laypage button,
+.layui-laypage input,
+.layui-laypage select,
+.layui-laypage span {
+    background-color: #394046;
+    border-color: #555;
+}
+
+.layui-form-checkbox[lay-skin="switch"]:checked .layui-switch,
+.layui-form-radio[lay-skin="switch"]:checked .layui-switch {
+    background-color: #009688; /* 开关选中时背景颜色 */
+}
+
+.layui-form-checkbox[lay-skin="switch"]:hover .layui-switch,
+.layui-form-radio[lay-skin="switch"]:hover .layui-switch {
+    border-color: #000; /* 开关悬停时边框颜色 */
+}
+
+.layui-form-checkbox[lay-skin="switch"]:checked .layui-switch .layui-switch-on,
+.layui-form-radio[lay-skin="switch"]:checked .layui-switch .layui-switch-on {
+    background-color: #007e6d; /* 开关选中时文字背景颜色 */
+}
+
+.layui-form-checkbox[lay-skin="switch"] .layui-switch .layui-switch-on,
+.layui-form-radio[lay-skin="switch"] .layui-switch .layui-switch-on {
+    background-color: #555; /* 开关文字背景颜色 */
+}
+
+.layui-table td, .layui-table th, .layui-table-col-set, .layui-table-fixed-r, .layui-table-grid-down, .layui-table-header, .layui-table-mend, .layui-table-page, .layui-table-tips-main, .layui-table-tool, .layui-table-total, .layui-table-view, .layui-table[lay-skin=line], .layui-table[lay-skin=row]{
+    border-color: #555;
+}
+
+.layui-table-view:after
+{
+    background-color: #555;
+    border-color: #555;
+}
+
+.layui-laypage button, .layui-laypage input {
+    background-color: #394046;
+}
+
+.layui-laypage .layui-laypage-spr,
+.layui-laypage a[data-page]{
+    color: #000;
+}
+
+.layui-laypage a, .layui-laypage span{
+    color: #000;
+}
+
+.layui-table-tool .layui-inline[lay-event]{
+    border-color: #555;    
+}
+
+.layui-table-tool-panel{
+    background-color: #394046;
+    border-color: #555;
+}
+
+li:hover{
+    background-color: #23292e !important;
+}
+
+.layui-form-checkbox[lay-skin=primary]>div{
+    color:#000;
+}
+
+.layui-icon{
+    color: #929292;
+}
+
+.layui-footer{
+    background-color: #23292e !important;
+    color: #fff !important;
+}
+
+.layui-btn-primary{
+    color: #000;
+    border-color: #555;
+}
+.layui-btn-primary:hover{
+    color: #e2e2e2;
+}
+
+.layui-form-checkbox[lay-skin=primary]>i{
+    border: 1px solid #555;
+}
