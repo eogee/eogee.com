@@ -17,7 +17,7 @@ class CreateArticleTable extends CreateTable
             content TEXT NOT NULL COMMENT '内容',
             authorId INT(11) NOT NULL COMMENT '作者ID',
             authorUsername VARCHAR(255) NOT NULL COMMENT '作者用户名',
-            authorNickname VARCHAR(255) NOT NULL COMMENT '作者昵称',
+            authorNickname VARCHAR(255) NULL COMMENT '作者昵称',
             categoryId INT(11) NOT NULL COMMENT '分类ID',
             categoryName VARCHAR(255) NOT NULL COMMENT '分类名称',
             sort INT(11) NULL DEFAULT 0 COMMENT '排序',

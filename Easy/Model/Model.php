@@ -419,10 +419,15 @@ class Model{
 
         // 处理更新结果
         if (is_string($result)) {
-            return $result; // 如果返回的是字符串，则为错误信息
+            return false; // 如果返回的是字符串，则为错误信息
         }
 
-        return true; // 返回成功信息
+        if ($result > 0) {
+            return true; // 返回成功信息
+        }
+
+        return false; // 返回失败信息
+        
     }
     /**
      * Summary of updateApi
