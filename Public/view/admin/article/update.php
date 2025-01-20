@@ -23,20 +23,20 @@
     <div id = "content">
         <textarea name = "content" lay-verify="required" style="display:none;"></textarea>
     </div>
-    <tr id = "authorId">
+    <tr id = "authorId" class="layui-hide">
         <td></td>
         <td>
             <input type = "text" name = "authorId" class="layui-input" lay-verify="required">
         </td>        
     </tr>
-    <tr id = "authorUsername">
+    <tr id = "authorUsername" class="layui-hide">
         <td></td>
         <td>
             <input type = "text" name = "authorUsername" class="layui-input" lay-verify="required">
         </td>
         
     </tr>
-    <tr id = "authorNickname">
+    <tr id = "authorNickname" class="layui-hide">
         <td></td>
         <td>
             <input type = "text" name = "authorNickname" class="layui-input" lay-verify="required">
@@ -45,20 +45,23 @@
     <tr id = "categoryId">
         <td></td>
         <td>
-            <input type = "text" name = "categoryId" class="layui-input" lay-verify="required">
-        </td>        
+            <select id = "categoryIdSelect" name="categoryId">
+                <option value=""></option>
+            </select>
+        </td>
+    </tr>
     </tr>
     <tr id = "categoryName">
         <td></td>
         <td>
-            <input type = "text" name = "categoryName" class="layui-input" lay-verify="required">
+            <input id = "categoryNameInput" type = "text" name = "categoryName" class="layui-input" lay-verify="required">
         </td>        
     </tr>
     <tr id = "sort">
         <td></td>
         <td>
             <input type = "text" name = "sort" class="layui-input"  lay-verify="number">
-        </td>        
+        </td>
     </tr>
     <script src = "/js/admin/article/update.js"></script>
     <!-- jquery -->
@@ -73,7 +76,7 @@
             // 其他配置项
             imageUpload: true,
             imageUploadURL: "/article/fileUploadApi", // 上传图片的URL
-        });
+        });        
     </script>
 <?php
     View::view('/admin/updateFoot');
