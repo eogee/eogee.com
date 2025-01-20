@@ -7,9 +7,9 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/layui/css/layui.css" rel="stylesheet">
-    <?= CONFIG['app']['dark_theme'] ?"<link rel='stylesheet' href='/css/eogee-admin-dark.css' rel='stylesheet'>" : null?>
-    <link rel="stylesheet" href="/css/eogee-admin.css" rel="stylesheet">
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <?= CONFIG['app']['dark_theme'] ?"<link rel='stylesheet' href='/css/eogee-admin-dark.css'>" : null?>
+    <link rel="stylesheet" href="/css/eogee-admin.css">
     <link rel="icon" href="/pic/logomini-2.ico" type="image/x-icon">
     <script src="/layui/layui.js"></script>
     <script src="/js/admin/eogee-admin-layui.js"></script>

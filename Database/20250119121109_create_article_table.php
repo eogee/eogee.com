@@ -27,7 +27,7 @@ class CreateArticleTable extends CreateTable
             deleted_at DATETIME NULL DEFAULT NULL COMMENT '删除时间',
 
             FOREIGN KEY (categoryId) REFERENCES category(id) ON DELETE CASCADE ON UPDATE CASCADE
-        ) ENGINE= InnoDB DEFAULT CHARSET=utf8 COMMENT='文章';
+        ) ENGINE= InnoDB DEFAULT CHARSET=utf8 COMMENT='文章管理';
         ";
     }
 }

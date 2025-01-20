@@ -5,7 +5,7 @@ tableHeadData();// 表格及字段数据
 var hides = [
     'content',
     'authorId',
-    'authNickName',
+    'authorNickname',
     'categoryId',
     'created_at',
     'updated_at',

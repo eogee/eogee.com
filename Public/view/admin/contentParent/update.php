@@ -2,8 +2,8 @@
 <html>
 <head>
     <title>更新数据</title>
-    <link rel="stylesheet" href="/layui/css/layui.css" rel="stylesheet">
-    <?= CONFIG['app']['dark_theme'] ?"<link rel='stylesheet' href='/css/eogee-admin-dark.css' rel='stylesheet'>" : null?>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <?= CONFIG['app']['dark_theme'] ?"<link rel='stylesheet' href='/css/eogee-admin-dark.css'>" : null?>
     <script src="/layui/layui.js"></script>
     <script src="/js/admin/eogee-admin-layui.js"></script>
 </head>

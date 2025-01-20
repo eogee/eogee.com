@@ -6,7 +6,7 @@
     <title>EOGEE</title>
     <link rel="stylesheet" href="/layui/css/layui.css">
     <link rel="stylesheet" href="/css/auth.css">    
-    <?= CONFIG['app']['dark_theme'] ?"<link rel='stylesheet' href='/css/eogee-admin-dark.css' rel='stylesheet'>" : null?>
+    <?= CONFIG['app']['dark_theme'] ?"<link rel='stylesheet' href='/css/eogee-admin-dark.css'>" : null?>
     <script src="/layui/layui.js"></script>
 </head>
 

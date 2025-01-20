@@ -23,7 +23,7 @@
     <tr id = "content">
         <td></td>
         <td>
-            <textarea name = "content" id = "content" class="layui-textarea" lay-verify="required"></textarea>
+            <textarea name = "content" id = "content" lay-verify="required" style="display:none;"></textarea>
         </td>
     </tr>
     <tr id = "authorId">
@@ -64,6 +64,21 @@
         </td>        
     </tr>
     <script src = "/js/admin/article/update.js"></script>
+    <!-- jquery -->
+    <script src = "/dist/jquery/dist/jquery.min.js"></script>
+    <!-- editor.md js -->
+    <script src = "/dist/editor.md/editormd.min.js"></script>
+    <script>
+        /* 初始化编辑器 */
+        var editor = editormd("content", {
+            width: "100%",
+            height: "600px",
+            path: "/dist/editor.md/lib/", // editormd的lib目录路径
+            // 其他配置项
+            imageUpload: true,
+            imageUploadURL: "/article/fileUploadApi", // 上传图片的URL
+        });
+    </script>
 <?php
     View::view('/admin/updateFoot');
 ?>

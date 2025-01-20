@@ -25,5 +25,5 @@ return [
     'test_env_ip'=>'111.227.244.105',//测试环境IP地址
 
     //暗夜主题
-    'dark_theme' => true,//是否开启
+    'dark_theme' => false,//是否开启
 ];

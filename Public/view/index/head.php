@@ -17,9 +17,9 @@ $indexData = $data;
     <meta name="msvalidate.01" content="07DCCB9A7D723A9B1C0E4493FFA72770" /><!-- bing验证 -->
     <meta name="sogou_site_verification" content="BOJbo4nVyh" /><!-- 搜狗验证 -->
     <meta name="360-site-verification" content="a0cb143ca79bdcbd3239111ddc5160cc" /><!-- 360验证 -->
-    <link rel="stylesheet" href="/layui/css/layui.css" rel="stylesheet">    
-    <?= CONFIG['app']['dark_theme'] ?"<link rel='stylesheet' href='/css/eogee-admin-dark.css' rel='stylesheet'>" : null?>
-    <link rel="stylesheet" href="/css/eogee-text-layui.css" rel="stylesheet">
+    <link rel="stylesheet" href="/layui/css/layui.css">    
+    <?= CONFIG['app']['dark_theme'] ?"<link rel='stylesheet' href='/css/eogee-admin-dark.css'>" : null?>
+    <link rel="stylesheet" href="/css/eogee-text-layui.css">
     <!-- 网站标题 图标 -->
     <link rel="icon" href="<?= $indexData['titleIconImage'] ?>" type="image/x-icon">
     <script src="/layui/layui.js"></script>
