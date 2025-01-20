@@ -20,12 +20,9 @@
             <input type = "text" name = "description" class="layui-input" lay-verify="required">
         </td>
     </tr>
-    <tr id = "content">
-        <td></td>
-        <td>
-            <textarea name = "content" id = "content" lay-verify="required" style="display:none;"></textarea>
-        </td>
-    </tr>
+    <div id = "content">
+        <textarea name = "content" lay-verify="required" style="display:none;"></textarea>
+    </div>
     <tr id = "authorId">
         <td></td>
         <td>
@@ -71,7 +68,6 @@
     <script>
         /* 初始化编辑器 */
         var editor = editormd("content", {
-            width: "100%",
             height: "600px",
             path: "/dist/editor.md/lib/", // editormd的lib目录路径
             // 其他配置项

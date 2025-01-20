@@ -6,8 +6,9 @@ pushField();
 
 if(pageName == 'edit'){
     pushData(
-        /* You can add the form item here which isn't need to be auto updated */
+        'content'
     );
+    document.getElementById('content').children[0].value = tableData.data.content;
 }
 
 // upload('YouFileId','/article/fileUploadApi/'+tableId); // 上传图片，如涉及可解除注释
