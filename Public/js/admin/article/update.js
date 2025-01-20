@@ -9,12 +9,12 @@ populateSelectOptions('categoryIdSelect', tableData.options);
 
 /* 渲染编辑数值 */
 if(pageName == 'edit'){
-    pushData(
-        ['content'
+    pushData([
+        'content'
         ,'authorId'
         ,'authorNickname'
-        ,'authorUsername']
-    );
+        ,'authorUsername'
+    ]);
     document.getElementById('content').children[0].value = tableData.data.content;
 }
 
@@ -22,3 +22,4 @@ if(pageName == 'edit'){
 document.getElementById('authorId').children[1].children[0].value = tableData.authorId;
 document.getElementById('authorNickname').children[1].children[0].value = tableData.authorNickname;
 document.getElementById('authorUsername').children[1].children[0].value = tableData.authorUsername;
+

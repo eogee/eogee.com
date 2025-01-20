@@ -212,6 +212,10 @@ class User extends Model
         $dataToUpdate = [
             'username' => $username,
             'password' => $password,
+            'nickname' => $_POST['nickname'],
+            'email' => $_POST['email'],
+            'identity' => $_POST['identity'],
+            'adminRoleId' => $_POST['adminRoleId']
         ];
 
         // 执行更新

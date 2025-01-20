@@ -33,8 +33,7 @@
         <td></td>
         <td>
             <input type = "text" name = "authorUsername" class="layui-input" lay-verify="required">
-        </td>
-        
+        </td>        
     </tr>
     <tr id = "authorNickname" class="layui-hide">
         <td></td>
@@ -50,7 +49,6 @@
             </select>
         </td>
     </tr>
-    </tr>
     <tr id = "categoryName">
         <td></td>
         <td>
@@ -60,7 +58,7 @@
     <tr id = "sort">
         <td></td>
         <td>
-            <input type = "text" name = "sort" class="layui-input"  lay-verify="number">
+            <input id = "sortInput" type = "text" name = "sort" class="layui-input"  lay-verify="number">
         </td>
     </tr>
     <script src = "/js/admin/article/update.js"></script>
