@@ -136,7 +136,7 @@ if($routerCacheEnabled and $cashe->get('routes')){
 
     /* 后台 文章管理 */
     $routes = defineRoutes($routes, 'article', [
-        'list', 'listApi', 'tableHeadDataApi', 'show', 'showApi', 'insert', 'edit', 'updateApi', 'fileUploadApi', 'deleteSoft', 'deleteSoftBatch', 'recycle', 'recycleApi', 'restore', 'restoreBatch', 'delete', 'deleteBatch'
+        'list', 'listApi', 'tableHeadDataApi', 'show', 'showApi', 'insert', 'edit', 'updateApi', 'fileUploadApi', 'deleteSoft', 'deleteSoftBatch', 'recycle', 'recycleApi', 'restore', 'restoreBatch', 'delete', 'deleteBatch', 'detail'
     ]); 
 
     if($routerCacheEnabled){

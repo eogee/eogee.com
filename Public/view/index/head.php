@@ -19,7 +19,9 @@ $indexData = $data;
     <meta name="360-site-verification" content="a0cb143ca79bdcbd3239111ddc5160cc" /><!-- 360验证 -->
     <link rel="stylesheet" href="/layui/css/layui.css">    
     <?= CONFIG['app']['dark_theme'] ?"<link rel='stylesheet' href='/css/eogee-admin-dark.css'>" : null?>
-    <link rel="stylesheet" href="/css/eogee-text-layui.css">
+    <link rel="stylesheet" href="/css/eogee-text-layui.css">    
+    <link rel="stylesheet" href="/dist/editor.md/css/editormd.min.css" /><!-- 引入编辑器的css文件 -->
+    <link rel="stylesheet" href="/dist/editor.md/css/editormd.preview.css" />
     <!-- 网站标题 图标 -->
     <link rel="icon" href="<?= $indexData['titleIconImage'] ?>" type="image/x-icon">
     <script src="/layui/layui.js"></script>
