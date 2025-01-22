@@ -5,7 +5,7 @@
     View::view('/index/head', $indexData);
 ?> 
 <div class="eog-container">
-    <div class="layui-container eog-text">
+    <div class="layui-container">
         <div id="preview"></div>
     </div>
 </div>

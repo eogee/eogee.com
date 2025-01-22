@@ -30,6 +30,7 @@ class ArticleController extends Controller
     }
     public function detailApi()
     {
-        echo $this->article->detailApi();
+        $data = $this->article->detailApi();
+        $this->response->text($data);
     }
 }
