@@ -402,13 +402,16 @@ function insertRow(parentId){
                                 btn: '提交',
                                 btnAlign: 'l',
                                 yes: function(index, layero) {
-                                    var body = layui.layer.getChildFrame('body', index); //获取子窗体 body内容
-                                    var inputArr = body.contents().find("#form")[0];
-                                    var inputArrLength = inputArr.length;
-                                    var value = inputArr[0].name + "=" + inputArr[0].value;
-                                    for (var i = 1; i < inputArrLength; i++) {
-                                        value += "&" + inputArr[i].name + "=" + inputArr[i].value;
-                                    }
+                                    var body = layui.layer.getChildFrame('body', index); // 获取子窗体 body内容
+                                    var inputArr = body.contents().find("#form").find("input, select, textarea"); // 获取表单中的所有输入元素
+                                    var value = '';
+                                    inputArr.each(function(i, elem) {
+                                        if (i === 0) {
+                                            value += encodeURIComponent(elem.name) + "=" + encodeURIComponent(elem.value);
+                                        } else {
+                                            value += "&" + encodeURIComponent(elem.name) + "=" + encodeURIComponent(elem.value);
+                                        }
+                                    });
                                     var iframeWin = window[layero.find('iframe')[0]['name']];
                                     var vform = iframeWin.layui.form;
                                     vform.submit('form', function() {
@@ -416,14 +419,17 @@ function insertRow(parentId){
                                             response = JSON.parse(response);
                                             if (response.code === 0) {
                                                 layer.close(insert);
-                                                layer.msg(response.msg,{icon: 1, time: 1000});
-                                                table.reload('table', {});
+                                                layer.msg(response.msg, {icon: 1, time: 1000});
+                                                table.reload('table', {
+                                                    where: { parentId: parentId }
+                                                });
                                             } else {
-                                                layer.msg(response.msg,{icon: 2, time: 1000});
+                                                layer.msg(response.msg, {icon: 2, time: 1000});
                                             }
                                         });
                                     });
                                 }
+                                
                             });
                         });
                     break;
@@ -443,13 +449,16 @@ function insertRow(parentId){
                                 btn: '提交',
                                 btnAlign: 'l',
                                 yes: function(index, layero) {
-                                    var body = layui.layer.getChildFrame('body', index); //获取子窗体 body内容
-                                    var inputArr = body.contents().find("#form")[0];
-                                    var inputArrLength = inputArr.length;
-                                    var value = inputArr[0].name + "=" + inputArr[0].value;
-                                    for (var i = 1; i < inputArrLength; i++) {
-                                        value += "&" + inputArr[i].name + "=" + inputArr[i].value;
-                                    }
+                                    var body = layui.layer.getChildFrame('body', index); // 获取子窗体 body内容
+                                    var inputArr = body.contents().find("#form").find("input, select, textarea"); // 获取表单中的所有输入元素
+                                    var value = '';
+                                    inputArr.each(function(i, elem) {
+                                        if (i === 0) {
+                                            value += encodeURIComponent(elem.name) + "=" + encodeURIComponent(elem.value);
+                                        } else {
+                                            value += "&" + encodeURIComponent(elem.name) + "=" + encodeURIComponent(elem.value);
+                                        }
+                                    });
                                     var iframeWin = window[layero.find('iframe')[0]['name']];
                                     var vform = iframeWin.layui.form;
                                     vform.submit('form', function() {
@@ -457,16 +466,17 @@ function insertRow(parentId){
                                             response = JSON.parse(response);
                                             if (response.code === 0) {
                                                 layer.close(insert);
-                                                layer.msg(response.msg,{icon: 1, time: 1000});
+                                                layer.msg(response.msg, {icon: 1, time: 1000});
                                                 table.reload('table', {
                                                     where: { parentId: parentId }
                                                 });
                                             } else {
-                                                layer.msg(response.msg,{icon: 2, time: 1000});
+                                                layer.msg(response.msg, {icon: 2, time: 1000});
                                             }
                                         });
                                     });
                                 }
+                                
                             });
                         });                                
                     break;
@@ -621,12 +631,15 @@ function rowToolbar(){
                         btnAlign: 'l',
                         yes: function(index, layero) {
                             var body = layui.layer.getChildFrame('body', index);
-                            var inputArr = body.contents().find("#form")[0];
-                            var inputArrLength = inputArr.length;
-                            var value = inputArr[0].name + "=" + inputArr[0].value;
-                            for (var i = 1; i < inputArrLength; i++) {
-                                value += "&" + inputArr[i].name + "=" + inputArr[i].value;
-                            }
+                            var inputArr = body.contents().find("#form").find("input, select, textarea"); // 获取表单中的所有输入元素
+                            var value = '';
+                            inputArr.each(function(i, elem) {
+                                if (i === 0) {
+                                    value += encodeURIComponent(elem.name) + "=" + encodeURIComponent(elem.value);
+                                } else {
+                                    value += "&" + encodeURIComponent(elem.name) + "=" + encodeURIComponent(elem.value);
+                                }
+                            });
                             var iframeWin = window[layero.find('iframe')[0]['name']];
                             var vform = iframeWin.layui.form;
                             vform.submit('form', function() {
@@ -635,13 +648,14 @@ function rowToolbar(){
                                     if (response.code === 0) {
                                         layer.close(edit);
                                         table.reload('table', {});
-                                        layer.msg(response.msg,{icon: 1, time: 1000});
+                                        layer.msg(response.msg, {icon: 1, time: 1000});
                                     } else {
-                                        layer.msg(response.msg,{icon: 2, time: 1000});
+                                        layer.msg(response.msg, {icon: 2, time: 1000});
                                     }
                                 });
                             });
                         }
+                        
                     });
                 });
             }
@@ -701,29 +715,33 @@ function editTable(){
                 btn: '提交',
                 btnAlign: 'l',
                 yes: function(index, layero) {
-                    var body = layui.layer.getChildFrame('body', index); //获取子窗体 body内容
-                    var inputArr = body.contents().find("#form")[0];
-                    var inputArrLength = inputArr.length;
-                    var value = inputArr[0].name + "=" + inputArr[0].value;
-                    for (var i = 1; i < inputArrLength; i++) {
-                        value += "&" + inputArr[i].name + "=" + inputArr[i].value;
-                    }
+                    var body = layui.layer.getChildFrame('body', index); // 获取子窗体 body内容
+                    var inputArr = body.contents().find("#form").find("input, select, textarea"); // 获取表单中的所有输入元素
+                    var value = '';
+                    inputArr.each(function(i, elem) {
+                        if (i === 0) {
+                            value += encodeURIComponent(elem.name) + "=" + encodeURIComponent(elem.value);
+                        } else {
+                            value += "&" + encodeURIComponent(elem.name) + "=" + encodeURIComponent(elem.value);
+                        }
+                    });
                     var iframeWin = window[layero.find('iframe')[0]['name']];
                     var vform = iframeWin.layui.form;
                     vform.submit('form', function() {
-                        ajaxPost('/' + modelName + '/edit', value, true, function(response) {                            
+                        ajaxPost('/' + modelName + '/edit', value, true, function(response) {
                             response = JSON.parse(response);
                             if (response.code === 0) {
                                 layer.close(edit);
-                                layer.msg(response.msg,{icon: 1, time: 1000},()=>{
+                                layer.msg(response.msg, {icon: 1, time: 1000}, function(){
                                     window.location.reload();
                                 });
                             } else {
-                                layer.msg(response.msg,{icon: 2, time: 1000});
+                                layer.msg(response.msg, {icon: 2, time: 1000});
                             }
                         });
                     });
                 }
+                
             });
         });
     });
