@@ -26,4 +26,12 @@ class Article extends Model
             'authorId' => $this->session->getUserId() ?? null // 确保返回有效的用户 ID
         ];
     }
+    public function detailApi()
+    {
+        // 获取相关数据
+        $data = $this->show()['data']['content']; // 获取数据
+    
+        // 构建响应数组
+        return  !empty($data) ? $data : null; // 确保数据存在
+    }
 }

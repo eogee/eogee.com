@@ -1,5 +1,6 @@
 <?php
-    $indexData = $data;
+    $indexData = $data['indexData'];
+    $data = $data['data']['data'];
     use Easy\View\View;
     View::view('/index/head', $indexData);
 ?> 
@@ -21,10 +22,16 @@
     <!-- editor.md js -->
     <script src = "/dist/editor.md/editormd.min.js"></script>
 <script>
-    /* 预览 */
-    var editor = editormd.markdownToHTML("preview", {
-        markdown: "```php echo 123;```", // Markdown内容
-    });
+    /* 通过ajax获取文章内容 */
+    fetch('/article/detailApi/' + <?= $data['id'];?>)
+    .then(response => response.text())
+    .then(data => {
+        /* 渲染预览 */
+        var editor = editormd.markdownToHTML("preview", {
+            markdown: data, // Markdown内容
+        });
+    })
+    .catch(error => console.error('Error:', error));
 </script>
 <?php
     View::view('/index/foot',$indexData);

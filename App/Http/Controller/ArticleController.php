@@ -20,12 +20,16 @@ class ArticleController extends Controller
     }
     public function detail()
     {
-        $data = $this->headData();//获取前台头部数据
+        $indexData = $this->headData();//获取前台头部数据
+        $data = $this->model->show();
+        $data = [
+            'indexData' => $indexData
+            ,'data' => $data
+        ];
         View::view('/index/article/detail',$data);
     }
     public function detailApi()
     {
-        /* $data = $this->article->detailApi();
-        $this->response->json($data); */
+        echo $this->article->detailApi();
     }
 }
