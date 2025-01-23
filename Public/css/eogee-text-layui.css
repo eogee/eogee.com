@@ -477,6 +477,13 @@ h5 {
     background-color: #fff !important
 }
 
+.eog-mdContent {
+    position: relative;
+    margin: 0 220px 0 240px;
+    box-sizing: border-box;
+    padding: 20px;
+}
+
 @media screen and (min-width:991.98px) {
     .eog-text ul {
         min-height: 400px;

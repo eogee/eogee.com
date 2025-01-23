@@ -2,6 +2,8 @@
     $indexData = $data['indexData'];
     $data = $data['data']['data'];
     use Easy\View\View;
+    use Helper\Url;
+
     View::view('/index/head', $indexData);
 ?> 
 <div class="eog-container">
@@ -11,16 +13,16 @@
                 <li class="layui-menu-item-group" lay-options="{type: 'group', isAllowSpread: true}">
                     <div class="layui-menu-body-title">前言</div>
                     <ul>
-                        <li class="layui-menu-item-checked2">
+                        <li <?php $id = Url::getId(); echo  $id == 1 ? "class='layui-menu-item-checked2'" : ""; ?>>
                             <div class="layui-menu-body-title">
-                                <a href="/docs/2/">
+                                <a href="/article/detail/1">
                                     <span>01 什么是WEB编程</span> 
                                 </a>
                             </div>
                         </li>
-                        <li>
+                        <li <?php $id = Url::getId(); echo  $id == 2 ? "class='layui-menu-item-checked2'" : ""; ?>>
                             <div class="layui-menu-body-title">
-                                <a href="/docs/2/base.html">
+                                <a href="/article/detail/2">
                                     <span>02 代码编辑器与浏览器</span>
                                 </a>
                             </div>
@@ -30,9 +32,9 @@
                 <li class="layui-menu-item-group" lay-options="{type: 'group', isAllowSpread: true}">
                     <div class="layui-menu-body-title">WEB前端基础</div>
                     <ul>
-                        <li>
+                        <li <?php $id = Url::getId(); echo  $id == 3 ? "class='layui-menu-item-checked2'" : ""; ?>>
                             <div class="layui-menu-body-title">
-                                <a href="/docs/2/layout/">
+                                <a href="/article/detail/3">
                                     <span>03 HTML 核心知识</span>
                                 </a>
                             </div>
@@ -41,7 +43,9 @@
                 </li>
             </ul>
         </div>
-        <div id="preview"></div>
+        <div class="eog-mdContent">            
+            <div id="preview"></div>
+        </div>
     </div>
 </div>
 <!-- jquery -->
