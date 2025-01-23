@@ -60,13 +60,12 @@ class Auth
         // 验证密码
         if ($this->password->verify($user[0]["password"])) {
             $this->createUserSession($username);
+            // 登录验证成功，删除session中的图形验证码
+            $this->session->delete('captcha');
+            return true;
         } else {
             return '输入的用户名或密码不正确！';
-        }
-
-        // 登录验证成功，删除session中的图形验证码
-        $this->session->delete('captcha');
-        return true;
+        }        
     }
 
     /**

@@ -67,10 +67,10 @@ class IndexController extends Controller
                 Window::alert('请填写完整且符合格式的登录信息！', 'back');
                 die();
             }else{
-                if($res = $this->auth->login() == true){
+                if($this->auth->login() === true){
                     $this->response->json(['code' => 0,'msg' => '登录成功！', 'url' => '/index']);
                 }else{
-                    $this->response->json(['code' => 1,'msg' => $res]);
+                    $this->response->json(['code' => 1,'msg' => $this->auth->login()]);
                 }
             }
         }else{
