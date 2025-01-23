@@ -35,6 +35,7 @@
 
             </div>
         </div>
+        <!-- 活动 -->
         <div class="layui-container eog-text">
             <div class="layui-row layui-col-space15"><?php
                 for ($i = 0; $i < count($content[0]['childData']); $i++) { ?>
@@ -67,6 +68,7 @@
                     </div>
                 </div><?php } ?>
             </div>
+            <!-- 产品 -->
             <div class="layui-row eog-image-background" style="background-image:url('<?= $content[1]['backgroundImage'] ?>')">
                 <div class="card-title">
                     <h3><?= $content[1]['title'] ?></h3>
@@ -111,11 +113,7 @@
                             <h4 class="layui-font-<?= $content[1]['childData'][$i]['contentColor'] ?> eog-text-shadow-<?= $content[1]['childData'][$i]['contentShadowColor'] ?>">
                                 <?= $content[1]['childData'][$i]['content'] ?>
 
-                            </h4>
-                            <p class="layui-font-<?= $content[1]['childData'][$i]['detailColor'] ?> eog-text-shadow-<?= $content[1]['childData'][$i]['detailShadowColor'] ?>">
-                                <?= $content[1]['childData'][$i]['detail'] ?>
-
-                            </p><?php
+                            </h4><?php
                                 if ($content[1]['childData'][$i]['btn1'] != null) { 
                                     if ($content[1]['childData'][$i]['btn1blank'] == 1) { ?>
 
@@ -134,6 +132,7 @@
                     </div>
                 </div>
             </div>
+            <!-- 服务 -->
             <div class="layui-row eog-image-background" style="background-image:url('<?= $content[2]['backgroundImage'] ?>')">
                 <div class="card-title">
                     <h3><?= $content[2]['title'] ?></h3>
@@ -178,29 +177,27 @@
                             <h4 class="layui-font-<?= $content[2]['childData'][$i]['contentColor'] ?> eog-text-shadow-<?= $content[2]['childData'][$i]['contentShadowColor'] ?>">
                                 <?= $content[2]['childData'][$i]['content'] ?>
 
-                            </h4>
-                            <p class="layui-font-<?= $content[2]['childData'][$i]['detailColor'] ?> eog-text-shadow-<?= $content[2]['childData'][$i]['detailShadowColor'] ?>">
-                                <?= $content[2]['childData'][$i]['detail'] ?>
-
-                            </p><?php
+                            </h4><?php
                                 if ($content[2]['childData'][$i]['btn1'] != null) { 
                                     if ($content[2]['childData'][$i]['btn1blank'] == 1) { ?>
                             
                             <button onclick="window.open('<?= $content[2]['childData'][$i]['btn1url'] ?>','_blank')" class="layui-btn layui-btn-sm"><?= $content[2]['childData'][$i]['btn1'] ?></button><?php }else{ ?>
-                            
+
                             <button onclick="window.location.href='<?= $content[2]['childData'][$i]['btn1url'] ?>'" class="layui-btn layui-btn-sm"><?= $content[2]['childData'][$i]['btn1'] ?></button><?php } } 
                                 if ($content[2]['childData'][$i]['btn2'] != null) { 
                                     if ($content[2]['childData'][$i]['btn2blank'] == 1) { ?>
-                            
+
                             <button onclick="window.open('<?= $content[2]['childData'][$i]['btn2url'] ?>','_blank')" class="layui-btn layui-btn-primary layui-border-green layui-btn-sm"><?= $content[2]['childData'][$i]['btn2'] ?></button><?php }else{ ?>
-                            
+
                             <button onclick="window.location.href='<?= $content[2]['childData'][$i]['btn2url'] ?>'" class="layui-btn layui-btn-primary layui-border-green layui-btn-sm"><?= $content[2]['childData'][$i]['btn2'] ?></button><?php } } ?>
+
 
                         </div><?php } ?>
 
                     </div>
                 </div>
             </div>
+            <!-- 课程 -->
             <div class="layui-row eog-image-background" style="background-image:url('<?= $content[3]['backgroundImage'] ?>')">
                 <div class="card-title">
                     <h3><?= $content[3]['title'] ?></h3>
@@ -245,23 +242,19 @@
                             <h4 class="layui-font-<?= $content[3]['childData'][$i]['contentColor'] ?> eog-text-shadow-<?= $content[3]['childData'][$i]['contentShadowColor'] ?>">
                                 <?= $content[3]['childData'][$i]['content'] ?>
 
-                            </h4>
-                            <p class="layui-font-<?= $content[3]['childData'][$i]['detailColor'] ?> eog-text-shadow-<?= $content[3]['childData'][$i]['detailShadowColor'] ?>">
-                                <?= $content[3]['childData'][$i]['detail'] ?>
-
-                            </p><?php
+                            </h4><?php
                                 if ($content[3]['childData'][$i]['btn1'] != null) { 
                                     if ($content[3]['childData'][$i]['btn1blank'] == 1) { ?>
 
                             <button onclick="window.open('<?= $content[3]['childData'][$i]['btn1url'] ?>','_blank')" class="layui-btn layui-btn-sm"><?= $content[3]['childData'][$i]['btn1'] ?></button><?php }else{ ?>
 
-                            <button><a href="javascript:;" onclick="window.location.href='<?= $content[3]['childData'][$i]['btn1url'] ?>'"><?= $content[3]['childData'][$i]['btn1'] ?></a></button><?php } } 
+                            <button onclick="window.location.href='<?= $content[3]['childData'][$i]['btn1url'] ?>'" class="layui-btn layui-btn-sm"><?= $content[3]['childData'][$i]['btn1'] ?></button><?php } } 
                                 if ($content[3]['childData'][$i]['btn2'] != null) { 
                                     if ($content[3]['childData'][$i]['btn2blank'] == 1) { ?>
 
                             <button onclick="window.open('<?= $content[3]['childData'][$i]['btn2url'] ?>','_blank')" class="layui-btn layui-btn-primary layui-border-green layui-btn-sm"><?= $content[3]['childData'][$i]['btn2'] ?></button><?php }else{ ?>
 
-                            <button><a href="javascript:;" onclick="window.location.href='<?= $content[3]['childData'][$i]['btn2url'] ?>'"><?= $content[3]['childData'][$i]['btn2'] ?></a></button><?php } } ?>
+                            <button onclick="window.location.href='<?= $content[3]['childData'][$i]['btn2url'] ?>'" class="layui-btn layui-btn-primary layui-border-green layui-btn-sm"><?= $content[3]['childData'][$i]['btn2'] ?></button><?php } } ?>
 
                         </div><?php } ?>
 
@@ -270,6 +263,7 @@
             </div>
         </div>
     </div>
+    <!-- 最新动态 -->
     <div class="layui-container eog-text">
         <div class="layui-row layui-col-space15">
             <div class="card-title" style="padding-bottom: 0px;">
