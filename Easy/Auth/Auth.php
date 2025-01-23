@@ -39,7 +39,7 @@ class Auth
     /**
      * Summary of login
      * 登录验证
-     * @return bool
+     * @return bool|string
      */
     public function login()
     {    
@@ -48,23 +48,20 @@ class Auth
     
         // 验证图形验证码
         if (!$this->captcha->checkCaptcha($captcha)) {
-            Window::alert('验证码不正确！', 'back');
-            die();
+            return '验证码不正确！';
         }
     
         // 查询用户是否存在
         $user = $this->getUserByUsername($username);    
         if (empty($user)) {
-            Window::alert('输入的用户名或密码不正确！', 'back');
-            die();
+            return '输入的用户名或密码不正确！';
         }
 
         // 验证密码
         if ($this->password->verify($user[0]["password"])) {
             $this->createUserSession($username);
         } else {
-            Window::alert('输入的用户名或密码不正确！', 'back');
-            die();
+            return '输入的用户名或密码不正确！';
         }
 
         // 登录验证成功，删除session中的图形验证码
