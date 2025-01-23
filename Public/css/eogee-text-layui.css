@@ -479,9 +479,12 @@ h5 {
 
 .eog-mdContent {
     position: relative;
-    margin: 0 220px 0 240px;
+    margin: 0 180px 0 240px;
     box-sizing: border-box;
     padding: 20px;
+}
+.eog-mdContent li {
+    margin-bottom: 5px;
 }
 
 @media screen and (min-width:991.98px) {
@@ -583,6 +586,45 @@ h5 {
         line-height: 32px;
         color: #ccc
     }
+    
+    .eog-menu-bar {
+        display: block !important;
+        position: fixed;
+        z-index: 999;
+        top: 50%;
+        left: 0;
+        width: 48px;
+        height: 48px;
+        line-height: 48px   ;
+        margin-top: -26px;
+        border-radius: 3px;
+        text-align: center;
+        color: #fff;
+        cursor: pointer;
+        box-shadow: 1px 1px 16px rgba(0, 0, 0, .16);
+        opacity: 0.5;
+    }
+
+    .eog-menu-bar .layui-icon {
+        font-size: 25px
+    }
+
+    .eog-menu-show .eog-menu {
+        display: block;
+        left: 0
+    }
+
+    .eog-shade-show .eog-shade {
+        content: '';
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, .7);
+        z-index: 1001
+    }
+
 }
 
 /* 移动端设置 */
@@ -714,5 +756,12 @@ h5 {
 
     .eog-footer-fixed .eog-footer a {
         display: unset
+    }
+
+    .eog-mdContent {
+        position: relative;
+        margin: 0;
+        box-sizing: border-box;
+        padding: 0;
     }
 }

@@ -46,6 +46,9 @@
         <div class="eog-mdContent">            
             <div id="preview"></div>
         </div>
+        <div class="eog-menu-bar layui-bg-green layui-hide">
+            <i class="layui-icon layui-icon-spread-left"></i>
+        </div>
     </div>
 </div>
 <!-- jquery -->
@@ -71,6 +74,8 @@
         });
     })
     .catch(error => console.error('Error:', error));
+
+       
 </script>
 <?php
     View::view('/index/foot',$indexData);
