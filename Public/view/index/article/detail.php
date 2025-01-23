@@ -2,11 +2,50 @@
     $indexData = $data['indexData'];
     $data = $data['data']['data'];
     use Easy\View\View;
+    use Helper\Url;
+
     View::view('/index/head', $indexData);
 ?> 
 <div class="eog-container">
     <div class="layui-container">
-        <div id="preview"></div>
+        <div class="layui-panel eog-side-nav">
+            <ul class="layui-menu layui-menu-lg">
+                <li class="layui-menu-item-group" lay-options="{type: 'group', isAllowSpread: true}">
+                    <div class="layui-menu-body-title">前言</div>
+                    <ul>
+                        <li <?php $id = Url::getId(); echo  $id == 1 ? "class='layui-menu-item-checked2'" : ""; ?>>
+                            <div class="layui-menu-body-title">
+                                <a href="/article/detail/1">
+                                    <span>01 什么是WEB编程</span> 
+                                </a>
+                            </div>
+                        </li>
+                        <li <?php $id = Url::getId(); echo  $id == 2 ? "class='layui-menu-item-checked2'" : ""; ?>>
+                            <div class="layui-menu-body-title">
+                                <a href="/article/detail/2">
+                                    <span>02 代码编辑器与浏览器</span>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li class="layui-menu-item-group" lay-options="{type: 'group', isAllowSpread: true}">
+                    <div class="layui-menu-body-title">WEB前端基础</div>
+                    <ul>
+                        <li <?php $id = Url::getId(); echo  $id == 3 ? "class='layui-menu-item-checked2'" : ""; ?>>
+                            <div class="layui-menu-body-title">
+                                <a href="/article/detail/3">
+                                    <span>03 HTML 核心知识</span>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="eog-mdContent">            
+            <div id="preview"></div>
+        </div>
     </div>
 </div>
 <!-- jquery -->

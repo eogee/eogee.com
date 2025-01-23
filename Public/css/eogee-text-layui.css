@@ -224,7 +224,7 @@ h5 {
 
 /* 底部样式 */
 .eog-footer {
-    background-color: #f8f8f8;
+    background-color: #fff;
     padding: 20px 15px;
     line-height: 30px;
     text-align: center;
@@ -475,6 +475,13 @@ h5 {
 
 .eog-background-white {
     background-color: #fff !important
+}
+
+.eog-mdContent {
+    position: relative;
+    margin: 0 220px 0 240px;
+    box-sizing: border-box;
+    padding: 20px;
 }
 
 @media screen and (min-width:991.98px) {
