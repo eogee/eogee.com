@@ -12,7 +12,8 @@ class TestController extends Controller
     
     public function index()
     {
-        View::view('/test');
+        $mail = new Mail(CONFIG);
+        $mail->send('<EMAIL>', 'Test Email', 'eogee@qq.com', 'eogee');
     }
 
     public function fileUploadApi()
