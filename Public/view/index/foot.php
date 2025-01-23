@@ -45,9 +45,17 @@ $indexData = $data;
     <script>
         // 移动端菜单栏
         mobileNav();
+
+        // 移动端导航树
         mobileNavTree();
+
+        // 移动端显示简称
         mobileAbbreName();
-        // 渲染固定条
+
+        // 侧边栏
+        monbileSideNav();
+
+        // 右下角固定条
         bars();
     </script>
 </body>
