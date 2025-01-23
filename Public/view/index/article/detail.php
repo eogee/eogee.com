@@ -6,6 +6,41 @@
 ?> 
 <div class="eog-container">
     <div class="layui-container">
+        <div class="layui-panel eog-side-nav">
+            <ul class="layui-menu layui-menu-lg">
+                <li class="layui-menu-item-group" lay-options="{type: 'group', isAllowSpread: true}">
+                    <div class="layui-menu-body-title">前言</div>
+                    <ul>
+                        <li class="layui-menu-item-checked2">
+                            <div class="layui-menu-body-title">
+                                <a href="/docs/2/">
+                                    <span>01 什么是WEB编程</span> 
+                                </a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="layui-menu-body-title">
+                                <a href="/docs/2/base.html">
+                                    <span>02 代码编辑器与浏览器</span>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li class="layui-menu-item-group" lay-options="{type: 'group', isAllowSpread: true}">
+                    <div class="layui-menu-body-title">WEB前端基础</div>
+                    <ul>
+                        <li>
+                            <div class="layui-menu-body-title">
+                                <a href="/docs/2/layout/">
+                                    <span>03 HTML 核心知识</span>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
         <div id="preview"></div>
     </div>
 </div>
