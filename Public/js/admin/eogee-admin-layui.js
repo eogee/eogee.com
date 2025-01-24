@@ -43,11 +43,23 @@ function nav(){
             break;
         case 'category':
             document.getElementById('contentParentNav').classList.add('layui-nav-itemed');
-            document.getElementById('category').classList.add('layui-this');
+            document.getElementById('categoryNav').classList.add('layui-this');
             break;
         case 'article':
             document.getElementById('contentParentNav').classList.add('layui-nav-itemed');
-            document.getElementById('article').classList.add('layui-this');
+            document.getElementById('articleNav').classList.add('layui-this');
+            break;
+        case 'user':
+            document.getElementById('userParentNav').classList.add('layui-nav-itemed');
+            document.getElementById('userNav').classList.add('layui-this');
+            break;
+        case 'role':
+            document.getElementById('userParentNav').classList.add('layui-nav-itemed');
+            document.getElementById('roleNav').classList.add('layui-this');
+            break;
+        case 'permissionParent':
+            document.getElementById('userParentNav').classList.add('layui-nav-itemed');
+            document.getElementById('permissionParentNav').classList.add('layui-this');
             break;
     }
 }
