@@ -90,7 +90,7 @@
                             <ul>
                                 <li>
                                     <div class="layui-menu-body-title">
-                                        <a href="https://space.bilibili.com/315734619">
+                                        <a href="https://space.bilibili.com/315734619" target="_blank">
                                             <span>B站</span> 
                                         </a>
                                     </div>
