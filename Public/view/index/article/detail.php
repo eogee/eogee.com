@@ -42,6 +42,8 @@
                             </div>
                         </li>
                     </ul>
+                </li>
+                <li class="layui-menu-item-group" lay-options="{type: 'group', isAllowSpread: true}">
                     <div class="layui-menu-body-title">前言</div>
                     <ul>
                         <li <?php $id = Url::getId(); echo  $id == 1 ? "class='layui-menu-item-checked2'" : ""; ?>>
