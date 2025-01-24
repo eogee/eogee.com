@@ -41,6 +41,14 @@ function nav(){
             document.getElementById('contentParentNav').classList.add('layui-nav-itemed');
             document.getElementById('newsChildNav').classList.add('layui-this');
             break;
+        case 'category':
+            document.getElementById('contentParentNav').classList.add('layui-nav-itemed');
+            document.getElementById('category').classList.add('layui-this');
+            break;
+        case 'article':
+            document.getElementById('contentParentNav').classList.add('layui-nav-itemed');
+            document.getElementById('article').classList.add('layui-this');
+            break;
     }
 }
 /**

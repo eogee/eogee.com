@@ -50,8 +50,8 @@
                             <dd id = "contentParentChildNav"><a href="/contentParent/list">主体内容</a></dd>
                             <dd id = "singlePageChildNav"><a href="/singlePage/list">单页内容</a></dd>
                             <dd id = "newsChildNav"><a href="/news/list">最新动态</a></dd>
-                            <dd><a href="/category/list">文章分类</a></dd>
-                            <dd><a href="/article/list">文章管理</a></dd>
+                            <dd id = "category"><a href="/category/list">文章分类</a></dd>
+                            <dd id = "article"><a href="/article/list">文章管理</a></dd>
                         </dl>
                     </li>
                     <li class="layui-nav-item">
