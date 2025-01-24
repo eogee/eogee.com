@@ -73,7 +73,7 @@
             path: "/dist/editor.md/lib/", // editormd的lib目录路径
             // 其他配置项
             imageUpload: true,
-            imageUploadURL: "/article/fileUploadApi", // 上传图片的URL
+            imageUploadURL: "/article/userFileUploadApi", // 上传图片的URL
         });
     </script>
 <?php

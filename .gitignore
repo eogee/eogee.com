@@ -10,3 +10,5 @@ sitemap.xml
 vendor/
 node_modules/
 Public/dist
+Public/upload
+Public/pic

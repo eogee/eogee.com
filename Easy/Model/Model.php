@@ -375,6 +375,9 @@ class Model{
         // 移除不需要的字段
         if (isset($_POST['file'])) {
             unset($_POST['file']); // 移除 file 字段，如果存在
+        }        
+        if (isset($_POST['editormd-image-file'])){
+            unset($_POST['editormd-image-file']); // 移除 editormd-image-file 字段，如果存在
         }
 
         // 验证 POST 数据是否有效
@@ -400,6 +403,9 @@ class Model{
         // 移除不需要的字段
         if (isset($_POST['file'])) {
             unset($_POST['file']); // 移除 file 字段，如果存在
+        }
+        if (isset($_POST['editormd-image-file'])){
+            unset($_POST['editormd-image-file']); // 移除 editormd-image-file 字段，如果存在
         }
 
         // 验证 ID 是否存在

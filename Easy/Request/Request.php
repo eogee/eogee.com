@@ -71,7 +71,7 @@ class Request
      * @param array $excludedFields 要过滤的字段
      * @return array
      */
-    public function allExc(array $excludedFields = ['file'])
+    public function allExc(array $excludedFields = ['file','editormd-image-file'])
     {
         $input = $this->all();
 

@@ -106,6 +106,7 @@ class Controller{
             'recordCode' => $basicInfo['recordCode'] ?? '',
         ];
     }
+
     /**
      * Summary of accessLog
      * 访问日志
@@ -123,6 +124,7 @@ class Controller{
         $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
         $this->log->info("ip：{$ip}，host：{$host}，url：{$url}，username：{$username}，userId：{$userId}，method：{$method}，userAgent：{$userAgent}，referer：{$referer}");
     }
+
     /**
      * Summary of detail
      * 前台-详情页-渲染页面
@@ -138,6 +140,7 @@ class Controller{
         ];
         View::view('/index/detail',$data);
     }
+
     /**
      * Summary of detailChild
      * 前台-详情页-渲染页面-子级
@@ -153,6 +156,7 @@ class Controller{
         ];
         View::view('/index/detailChild',$data);
     }
+
     /**
      * Summary of tableHeadDataApi
      * 后台-获取表头数据-api接口
@@ -168,6 +172,7 @@ class Controller{
         ];
         $this->response->json($data);
     }
+
     /**
      * Summary of index
      * 前台-模块首页-渲染页面
@@ -183,6 +188,7 @@ class Controller{
         ];
         View::view('/index/'.$this->table,$data);
     }
+
     /**
      * Summary of list
      * 后台-列表页-渲染页面
@@ -193,6 +199,7 @@ class Controller{
         $this->verify->adminLimit();
         View::view('/admin/'.$this->table.'/list');
     }
+
     /**
      * Summary of recycle
      * 后台-回收站-渲染页面
@@ -203,6 +210,7 @@ class Controller{
         $this->verify->adminLimit();
         View::view('/admin/'.$this->table.'/list');      
     }
+
     /**
      * Summary of listApi
      * 后台-列表api接口
@@ -213,6 +221,7 @@ class Controller{
         $data = $this->model->listApi();
         $this->response->json($data);
     }
+
     /**
      * Summary of recycleApi
      * 后台-回收站api接口
@@ -223,6 +232,7 @@ class Controller{
         $data = $this->model->recycleApi();
         $this->response->json($data);
     }
+
     /**
      * Summary of show
      * 后台-查看详情-渲染页面
@@ -233,6 +243,7 @@ class Controller{
         $this->verify->adminLimit();
         View::view('/admin/show');
     }
+
     /**
      * Summary of showApi
      * 后台-查看详情-api接口
@@ -243,6 +254,7 @@ class Controller{
         $data = $this->model->showApi();
         $this->response->json($data);
     }
+
     /**
      * Summary of insert
      * 后台-新增-渲染页面-新增数据
@@ -261,6 +273,7 @@ class Controller{
             View::view('/admin/'.$this->table.'/update');
         }
     }
+
     /**
      * Summary of edit
      * 后台-编辑-渲染页面-编辑数据
@@ -280,6 +293,7 @@ class Controller{
             }
         }
     }
+
     /**
      * Summary of fileUploadApi
      * 文件上传-api接口
@@ -291,6 +305,18 @@ class Controller{
         $data = $this->file->fileUploadApi();
         $this->response->json($data);
     }
+
+    /**
+     * Summary of userFileUploadApi
+     * 用户文件上传-api接口
+     * @return void
+     */
+    public function userFileUploadApi()
+    {
+        $responce = $this->file->userFileUploadApi();
+        return $this->response->json($responce);
+    }
+
     /**
      * Summary of updateApi
      * 更新数据-api接口-获取数据及字段信息
@@ -301,6 +327,7 @@ class Controller{
         $data = $this->model->updateApi();
         $this->response->json($data);
     }
+
     /**
      * Summary of delete
      * 删除
@@ -314,6 +341,7 @@ class Controller{
             $this->response->json(['code' => 1,'msg' => '删除失败']);
         }
     }
+
     /**
      * Summary of deleteBatch
      * 批量删除
@@ -327,6 +355,7 @@ class Controller{
             $this->response->json(['code' => 1,'msg' => '批量删除失败']);
         }
     }
+
     /**
      * Summary of deleteSoft
      * 软删除
@@ -340,6 +369,7 @@ class Controller{
             $this->response->json(['code' => 1,'msg' => '软删除失败']);
         }
     }
+
     /**
      * Summary of deleteSoftBatch
      * 批量软删除
@@ -353,6 +383,7 @@ class Controller{
             $this->response->json(['code' => 1,'msg' => '批量软删除失败']);
         }
     }
+
     /**
      * Summary of restore
      * 还原
@@ -366,6 +397,7 @@ class Controller{
             $this->response->json(['code' => 1,'msg' => '数据还原失败']);
         }
     }
+    
     /**
      * Summary of restoreBatch
      * 批量还原

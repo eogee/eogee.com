@@ -12,13 +12,8 @@ class TestController extends Controller
     
     public function index()
     {
-        $mail = new Mail(CONFIG);
-        $mail->send('<EMAIL>', 'Test Email', 'eogee@qq.com', 'eogee');
-    }
-
-    public function fileUploadApi()
-    {
-        $responce = $this->file->userFileUploadApi();
-        return $this->response->json($responce);
+        /* $mail = new Mail(CONFIG);
+        $mail->send('<EMAIL>', 'Test Email', 'eogee@qq.com', 'eogee'); */
+        echo 'This is a test controller';
     }
 }
