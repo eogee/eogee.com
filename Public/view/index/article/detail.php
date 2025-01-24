@@ -72,14 +72,14 @@
                                 <li>
                                     <div class="layui-menu-body-title">
                                         <a href="https://gitee.com/eogee/webTutorial" target="_blank">
-                                            <span>gitee开源平台</span>
+                                            <span>Gitee</span>
                                         </a>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="layui-menu-body-title">
                                         <a href="https://github.com/eogee/webTutorial" target="_blank">
-                                            <span>github开源平台</span>
+                                            <span>Github开源平台</span>
                                         </a>
                                     </div>
                                 </li>
@@ -92,6 +92,13 @@
                                     <div class="layui-menu-body-title">
                                         <a href="https://space.bilibili.com/315734619" target="_blank">
                                             <span>B站</span> 
+                                        </a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="layui-menu-body-title">
+                                        <a href="https://www.douyin.com/user/MS4wLjABAAAAdH5__CXhFJtSrDQKNuI_vh4mI4-LdyQ_LPKB4d9gR3gISMC_Ak0ApCjFYy_oxhfC" target="_blank">
+                                            <span>抖音</span> 
                                         </a>
                                     </div>
                                 </li>
