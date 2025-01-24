@@ -11,6 +11,37 @@
         <div class="layui-panel eog-side-nav">
             <ul class="layui-menu layui-menu-lg">
                 <li class="layui-menu-item-group" lay-options="{type: 'group', isAllowSpread: true}">
+                    <div class="layui-menu-body-title">讲义及源码获取渠道</div>
+                    <ul>
+                        <li <?php $id = Url::getId(); echo  $id == 1 ? "class='layui-menu-item-checked2'" : ""; ?>>
+                            <div class="layui-menu-body-title">
+                                <a href="/article/detail/1">
+                                    <span>本站：www.eogee.com</span> 
+                                </a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="layui-menu-body-title"> 
+                                <a>
+                                    <span>QQ群：589912610</span>
+                                </a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="layui-menu-body-title">
+                                <a href="https://gitee.com/eogee/webTutorial" target="_blank">
+                                    <span>gitee开源平台</span>
+                                </a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="layui-menu-body-title">
+                                <a href="https://github.com/eogee/webTutorial" target="_blank">
+                                    <span>github开源平台</span>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
                     <div class="layui-menu-body-title">前言</div>
                     <ul>
                         <li <?php $id = Url::getId(); echo  $id == 1 ? "class='layui-menu-item-checked2'" : ""; ?>>
