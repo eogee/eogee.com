@@ -92,6 +92,10 @@ h5 {
     padding-bottom: 16px
 }
 
+.eog-side-nav .layui-menu-lg li{
+    line-height: 20px;
+}
+
 .eog-side-nav .layui-menu-body-title .layui-font-gray {
     padding-left: 6px
 }
@@ -516,7 +520,7 @@ h5 {
         z-index: 1003;
         overflow-y: auto;
         overflow-x: hidden
-    }
+    }    
 
     .eog-side-nav-bar {
         display: block !important;
