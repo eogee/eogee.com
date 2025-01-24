@@ -66,26 +66,31 @@ function monbileSideNav(){
     /* 弹出侧边栏 */
     var sideNav = document.querySelector('.eog-side-nav');
     var menuBar = document.querySelector('.eog-menu-bar');
-    menuBar.addEventListener('click', function() {
-        // 获取计算后的样式
-        var style = window.getComputedStyle(sideNav);
-        // 获取 left 属性值
-        var leftValue = style.left;
-        if (leftValue == '-240px') {            
-            document.body.classList.add('eog-shade-show');
-            sideNav.style.left = '0px';
-        }else{
+    if(sideNav !== null && menuBar !== null){
+        menuBar.addEventListener('click', function() {
+            // 获取计算后的样式
+            var style = window.getComputedStyle(sideNav);
+            // 获取 left 属性值
+            var leftValue = style.left;
+            if (leftValue == '-240px') {            
+                document.body.classList.add('eog-shade-show');
+                sideNav.style.left = '0px';
+            }else{
+                sideNav.style.left = '-240px';
+                document.body.classList.remove('eog-shade-show');
+            }
+        }); 
+    
+        /* 侧边栏收起 */
+        var shade = document.getElementById("shade");
+        shade.addEventListener("click", function() {        
             sideNav.style.left = '-240px';
             document.body.classList.remove('eog-shade-show');
-        }
-    }); 
-
-    /* 侧边栏收起 */
-    var shade = document.getElementById("shade");
-    shade.addEventListener("click", function() {        
-        sideNav.style.left = '-240px';
-        document.body.classList.remove('eog-shade-show');
-    });
+        });
+    }else{
+        return;
+    }
+    
 }
 
 // 首页自定义 选项卡
