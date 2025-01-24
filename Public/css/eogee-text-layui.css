@@ -32,6 +32,12 @@ h5 {
     color: #2f363c;
 }
 
+/* 假设导航栏高度为 60px */
+.reference-link {
+    scroll-margin-top: 80px;
+}
+
+
 h1,
 h2,
 h3,
@@ -92,8 +98,10 @@ h5 {
     padding-bottom: 16px
 }
 
-.eog-side-nav .layui-menu-lg li{
+.eog-side-nav .layui-menu-lg li
+,.eog-side .layui-menu-lg li{
     line-height: 20px;
+    margin: 0;
 }
 
 .eog-side-nav .layui-menu-body-title .layui-font-gray {
@@ -102,6 +110,43 @@ h5 {
 
 .eog-side-nav .layui-menu-body-title .layui-badge-dot {
     left: 6px
+}
+
+.eog-side {
+    position: absolute;
+    right: -200px;
+    top: 0px;
+    bottom: 0;
+    width: 200px;
+}
+
+.eog-side-fixed {
+    position: fixed;
+    z-index: 776;
+    width: 200px;
+}
+
+.eog-side-show .eog-side {
+    right: 0
+}
+
+.eog-side-show .eog-side:before {
+    content: '鐩綍';
+    position: absolute;
+    top: 0;
+    padding: 0 16px;
+    height: 32px;
+    line-height: 32px;
+    color: #ccc
+}
+
+.eog-side .layui-menu .layui-menu-item-checked,.eog-side .layui-menu .layui-menu-item-checked2 {
+    background-color: #fff !important;
+    color: #16b777;
+}
+
+.eog-side .layui-menu .layui-menu-item-checked:after{
+    border-right: 0;
 }
 
 /* 头部导航栏 */
