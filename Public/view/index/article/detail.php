@@ -79,7 +79,7 @@
                                 <li>
                                     <div class="layui-menu-body-title">
                                         <a href="https://github.com/eogee/webTutorial" target="_blank">
-                                            <span>Github开源平台</span>
+                                            <span>Github</span>
                                         </a>
                                     </div>
                                 </li>
