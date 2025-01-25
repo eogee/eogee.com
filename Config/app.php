@@ -22,7 +22,7 @@ return [
     'developer_mode'=>getenv('DEVALOPMENT_MODE'),//开发者模式，开启后将显示错误信息
     
     //测试环境IP地址
-    'test_env_ip'=>'106.8.1.193 ',//测试环境IP地址
+    'test_env_ip'=>'106.8.1.193',//测试环境IP地址
 
     //暗夜主题
     'dark_theme' => false,//是否开启

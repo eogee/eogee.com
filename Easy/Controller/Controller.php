@@ -115,7 +115,8 @@ class Controller{
     public function accessLog()
     {
         $ip = $this->request->ip();
-        if ($ip != CONFIG['app']['test_env_ip']){
+
+        if ($ip != CONFIG['app']['test_env_ip'] and $ip != '::1'){
             $host = $this->request->host();
             $url = $this->request->url();
             $username = $this->session->get('username') ?? '';
