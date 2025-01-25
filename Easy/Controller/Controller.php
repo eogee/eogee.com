@@ -115,7 +115,7 @@ class Controller{
     public function accessLog()
     {
         $ip = $this->request->ip();
-        if ($ip !== CONFIG['app']['test_env_ip'] or $ip !== '::1'){
+        if ($ip !== CONFIG['app']['test_env_ip']){
             $host = $this->request->host();
             $url = $this->request->url();
             $username = $this->session->get('username') ?? '';
@@ -124,7 +124,7 @@ class Controller{
             $userAgent = $this->request->userAgent();
             $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
             $this->log->info("ip：{$ip}，host：{$host}，url：{$url}，username：{$username}，userId：{$userId}，method：{$method}，userAgent：{$userAgent}，referer：{$referer}");
-        }        
+        }
     }
 
     /**
