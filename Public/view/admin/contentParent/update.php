@@ -188,11 +188,6 @@
                     <td><input type="text" name="lastChildTitleAbbre" class="layui-input" lay-verify="required">
                     </td>
                 </tr>
-                <tr id = "lastChildTitleUrl">
-                    <td></td>
-                    <td><input type="text" name="lastChildTitleUrl" class="layui-input" lay-verify="required">
-                    </td>
-                </tr>
                 <tr id = "sort">
                     <td></td>
                     <td><input type="text" name="sort" class="layui-input"  lay-verify="number">
