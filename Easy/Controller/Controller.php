@@ -115,14 +115,16 @@ class Controller{
     public function accessLog()
     {
         $ip = $this->request->ip();
-        $host = $this->request->host();
-        $url = $this->request->url();
-        $username = $this->session->get('username') ?? '';
-        $userId = $this->session->getUserId() ?? '';
-        $method = $this->request->method();
-        $userAgent = $this->request->userAgent();
-        $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-        $this->log->info("ip：{$ip}，host：{$host}，url：{$url}，username：{$username}，userId：{$userId}，method：{$method}，userAgent：{$userAgent}，referer：{$referer}");
+        if ($ip !== CONFIG['app']['test_env_ip'] or $ip !== '::1'){
+            $host = $this->request->host();
+            $url = $this->request->url();
+            $username = $this->session->get('username') ?? '';
+            $userId = $this->session->getUserId() ?? '';
+            $method = $this->request->method();
+            $userAgent = $this->request->userAgent();
+            $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+            $this->log->info("ip：{$ip}，host：{$host}，url：{$url}，username：{$username}，userId：{$userId}，method：{$method}，userAgent：{$userAgent}，referer：{$referer}");
+        }        
     }
 
     /**
