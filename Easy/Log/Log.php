@@ -253,14 +253,14 @@ class Log
     }
 
     /**
-     * 当前分页下查看某一条日志内容
+     * 查看某一条日志内容
      * @param int $id 日志ID
      * @return array
      */
     public function logShow($id)
     {
-        $pageData = $this->logByPage();
-        $logData = $this->findLogById($pageData['data'], $id);
+        $allData = $this->logToArray();
+        $logData = $this->findLogById($allData, $id);
         return $logData[0];
     }
     /**
@@ -269,7 +269,7 @@ class Log
      * @param int $id 日志ID
      * @return array
      */
-    function findLogById($logs, $id) {
+    protected function findLogById($logs, $id) {
         $result = [];
         foreach ($logs as $log) {
             if (isset($log['id']) && $log['id'] == $id) {
