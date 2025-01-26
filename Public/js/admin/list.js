@@ -5,7 +5,7 @@ tableHeadSet();// 表头设置
 tableHeadData();// 表格及字段数据
 
 /* 表格字段定义 */
-var hides = ['userId','username'];
+var hides = ['userId'];
 var sorts = ['username'];
 var cols = generateColumns(tableFiledComment, hides, sorts, handleColwidth);
 
