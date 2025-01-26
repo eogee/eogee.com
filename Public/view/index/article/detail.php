@@ -39,6 +39,13 @@
                                 </a>
                             </div>
                         </li>
+                        <li <?php $id = Url::getId(); echo  $id == 4 ? "class='layui-menu-item-checked2'" : ""; ?>>
+                            <div class="layui-menu-body-title">
+                                <a href="/article/detail/4">
+                                    <span>04 CSS 核心知识</span>
+                                </a>
+                            </div>
+                        </li>
                     </ul>
                 </li>
             </ul>
