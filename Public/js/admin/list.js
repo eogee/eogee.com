@@ -6,7 +6,7 @@ tableHeadData();// 表格及字段数据
 
 /* 表格字段定义 */
 var hides = ['userId'];
-var sorts = [];
+var sorts = ['username'];
 var cols = generateColumns(tableFiledComment, hides, sorts, handleColwidth);
 
 /* 表头按钮组定义 */
