@@ -358,10 +358,10 @@ class Database
      * @param string $col 列名
      * @param string $where WHERE 子句
      * @param string $sortCol 排序列名
-     * @param string $desc 排序方式
+     * @param string $descOrAsc 排序方式
      * @return mixed 查询结果集
      */
-    public function selectCol($table, $col,$where = null,$sortCol = "id",$desc = "DESC")
+    public function selectCol($table, $col,$where = null,$sortCol = "id",$descOrAsc = "DESC")
     {
         // 验证表名和列名是否有效
         if (empty($table) || empty($col) || empty($sortCol)) {
@@ -373,9 +373,9 @@ class Database
         $col = $this->conn->real_escape_string($col);
         $where = $this->conn->real_escape_string($where);
         $sortCol = $this->conn->real_escape_string($sortCol);
-        $desc = $this->conn->real_escape_string($desc);
+        $descOrAsc = $this->conn->real_escape_string($descOrAsc);
 
-        $sql = "SELECT $col from $table $where ORDER BY $sortCol $desc";
+        $sql = "SELECT $col from $table $where ORDER BY $sortCol $descOrAsc";
         return $this->query($sql);
     }
     /**

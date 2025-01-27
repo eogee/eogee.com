@@ -49,11 +49,11 @@
             </select>
         </td>
     </tr>
-    <tr id = "categoryName">
+    <tr id = "categoryName" class="layui-hide">
         <td></td>
         <td>
-            <input id = "categoryNameInput" type = "text" name = "categoryName" class="layui-input" lay-verify="required">
-        </td>        
+            <input id = "categoryNameInput" type = "text" name = "categoryName" class="layui-input">
+        </td>
     </tr>
     <tr id = "sort">
         <td></td>

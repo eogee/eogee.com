@@ -1,6 +1,8 @@
 <?php
     $indexData = $data['indexData'];
+    $list = $data['list'];
     $data = $data['data']['data'];
+    
     use Easy\View\View;
     use Helper\Url;
 
@@ -10,44 +12,36 @@
     <div class="layui-container">
         <div class="layui-panel eog-side-nav">
             <ul class="layui-menu layui-menu-lg">
+                <?php
+
+                // 按类别对文章进行分组
+                $categoryGroups = array();
+                foreach ($list as $item) {
+                    $categoryId = $item['categoryName'];
+                    if (!isset($categoryGroups[$categoryId])) {
+                        $categoryGroups[$categoryId] = array();
+                    }
+                    $categoryGroups[$categoryId][] = $item;
+                }
+
+                // 输出菜单
+                foreach ($categoryGroups as $categoryName => $articles) :
+                ?>
                 <li class="layui-menu-item-group" lay-options="{type: 'group', isAllowSpread: true}">
-                    <div class="layui-menu-body-title">前言</div>
+                    <div class="layui-menu-body-title"><?= htmlspecialchars($categoryName) ?></div>
                     <ul>
-                        <li <?php $id = Url::getId(); echo  $id == 1 ? "class='layui-menu-item-checked2'" : ""; ?>>
+                        <?php foreach ($articles as $article) : ?>
+                        <li <?= Url::getId() == $article['id'] ? "class='layui-menu-item-checked2'" : "" ?>>
                             <div class="layui-menu-body-title">
-                                <a href="/article/detail/1">
-                                    <span>01 什么是WEB编程</span> 
+                                <a href="/article/detail/<?= htmlspecialchars($article['id']) ?>">
+                                    <span><?= htmlspecialchars($article['title']) ?></span>
                                 </a>
                             </div>
                         </li>
-                        <li <?php $id = Url::getId(); echo  $id == 2 ? "class='layui-menu-item-checked2'" : ""; ?>>
-                            <div class="layui-menu-body-title">
-                                <a href="/article/detail/2">
-                                    <span>02 代码编辑器与浏览器</span>
-                                </a>
-                            </div>
-                        </li>
+                        <?php endforeach; ?>
                     </ul>
                 </li>
-                <li class="layui-menu-item-group" lay-options="{type: 'group', isAllowSpread: true}">
-                    <div class="layui-menu-body-title">WEB前端基础</div>
-                    <ul>
-                        <li <?php $id = Url::getId(); echo  $id == 3 ? "class='layui-menu-item-checked2'" : ""; ?>>
-                            <div class="layui-menu-body-title">
-                                <a href="/article/detail/3">
-                                    <span>03 HTML 核心知识</span>
-                                </a>
-                            </div>
-                        </li>
-                        <li <?php $id = Url::getId(); echo  $id == 4 ? "class='layui-menu-item-checked2'" : ""; ?>>
-                            <div class="layui-menu-body-title">
-                                <a href="/article/detail/4">
-                                    <span>04 CSS 核心知识</span>
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
+                <?php endforeach; ?>                
             </ul>
         </div>
         <div class="eog-mdContent">            
@@ -55,9 +49,9 @@
             <div class = "eog-side">
                 <div class="eog-side-fixed">                    
                     <ul class="layui-menu layui-menu-lg">
-                        <li class="layui-menu-item-group" lay-options="{type: 'group', isAllowSpread: true}">
-                            <div class="layui-menu-body-title">本文目录</div>
-                            <ul id = "toc"></ul>
+                        <li class="layui-menu-item-group layui-menu-item-up" lay-options="{type: 'group', isAllowSpread: true}">
+                            <div class="layui-menu-body-title">本文目录>></div>
+                            <ul class = "toc-menu" id = "toc"></ul>
                         </li>
                         <li class="layui-menu-item-group" lay-options="{type: 'group', isAllowSpread: true}">
                             <div class="layui-menu-body-title">讲义及源码获取</div>
@@ -112,7 +106,7 @@
                             </ul>
                         </li>
                     </ul>
-                </div>               
+                </div>
             </div>
         </div>
         <div class="eog-menu-bar layui-bg-green layui-hide">

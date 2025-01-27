@@ -117,7 +117,13 @@ h5 {
     right: -200px;
     top: 0px;
     bottom: 0;
-    width: 200px;
+    width: 200px;    
+    overflow-x: hidden; /* 隐藏水平滚动条 */
+    overflow-y: auto; /* 显示垂直滚动条 */
+}
+
+.eog-side:hover {
+    overflow-x: hidden
 }
 
 .eog-side-fixed {
@@ -147,6 +153,13 @@ h5 {
 
 .eog-side .layui-menu .layui-menu-item-checked:after{
     border-right: 0;
+}
+
+.eog-side .toc-menu li {
+    font-size: 12px;
+    line-height: 14px;
+    padding-top: 2px;
+    padding-bottom: 2px;
 }
 
 /* 头部导航栏 */
