@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>代码预览工具</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+        }
+
+        .editor-pane {
+            width: 50%;
+            background: #f5f5f5;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor-header {
+            margin-bottom: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .editor-container {
+            margin-bottom: 10px;
+            flex: 1;
+        }
+
+        .editor-container:last-child {
+            margin-bottom: 0;
+        }
+
+        .editor-title {
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #666;
+        }
+
+        textarea {
+            width: 100%;
+            height: calc(100% - 20px);
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: none;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #16baaa;
+            box-shadow: 0 0 5px #16baaa;
+        }
+
+        .preview-pane {
+            width: 50%;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        button {
+            padding: 8px 16px;
+            background: #16baaa;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #13a89c;
+        }
+
+        #preview-frame {
+            flex: 1;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 左侧编辑区域 -->
+        <div class="editor-pane">
+            <div class="editor-header">
+                <button onclick="runCode()">执行</button>
+                <button onclick="clearAll()">清空</button>
+                <button onclick="undoCode()">回退</button>
+            </div>
+            <div class="editor-container">
+                <div class="editor-title">CSS</div>
+                <textarea id="css-input" placeholder="输入CSS代码..."></textarea>
+            </div>
+            <div class="editor-container">
+                <div class="editor-title">HTML</div>
+                <textarea id="html-input" placeholder="输入HTML代码..."></textarea>
+            </div>
+            <div class="editor-container">
+                <div class="editor-title">JavaScript</div>
+                <textarea id="js-input" placeholder="输入JavaScript代码..."></textarea>
+            </div>
+        </div>
+
+        <!-- 右侧预览区域 -->
+        <div class="preview-pane">
+            <iframe id="preview-frame"></iframe>
+        </div>
+    </div>
+
+    <script>
+        // 历史记录相关
+        let history = [];
+        let currentIndex = -1;
+
+        function runCode() {
+            const css = document.getElementById('css-input').value;
+            const html = document.getElementById('html-input').value;
+            const js = document.getElementById('js-input').value;
+
+            // 保存到历史记录
+            history.push({ css, html, js });
+            currentIndex = history.length - 1;
+
+            updatePreview();
+        }
+
+        function updatePreview() {
+            const { css, html, js } = history[currentIndex];
+            const iframe = document.getElementById('preview-frame');
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+            iframeDoc.open();
+            iframeDoc.write(`
+                <!DOCTYPE html>
+                <html>
+                    <head>
+                        <style>${css}</style>
+                    </head>
+                    <body>
+                        ${html}
+                        <script>${js}<\/script>
+                    </body>
+                </html>
+            `);
+            iframeDoc.close();
+        }
+
+        function undoCode() {
+            if (currentIndex >= 0) {
+                currentIndex--;
+                if (currentIndex >= 0) {
+                    const record = history[currentIndex];
+                    document.getElementById('css-input').value = record.css;
+                    document.getElementById('html-input').value = record.html;
+                    document.getElementById('js-input').value = record.js;
+                    updatePreview();
+                } else {
+                    clearAll();
+                }
+            }
+        }
+
+        function clearAll() {
+            document.getElementById('css-input').value = '';
+            document.getElementById('html-input').value = '';
+            document.getElementById('js-input').value = '';
+            history = [];
+            currentIndex = -1;
+            updatePreview(); // 重置预览区域
+        }
+
+        // 初始化示例代码
+        document.getElementById('css-input').value = `body {\n  padding: 20px;\n}\n\nh1 {\n  color: #16baaa;\n}`;
+        document.getElementById('html-input').value = `<h1>代码预览工具</h1>\n<div class="test">点击测试</div>`;
+        document.getElementById('js-input').value = `document.querySelector('.test').addEventListener('click', () => {\n  alert('交互生效！');\n});`;
+    </script>
+</body>
+</html>
