@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
-    <title>代码预览工具</title>
+    <title>CodePreview - 代码预览工具</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CodePreview 是一个在线代码预览工具，支持实时预览HTML, CSS, JavaScript代码。适合前端开发人员测试和调试代码。">
+    <meta name="keywords" content="代码预览, HTML预览, CSS预览, JavaScript预览, 前端开发, 实时预览, CodePreview">
+    <link rel="icon" href="/pic/logomini-2.ico" type="image/x-icon">
     <style>
         * {
             margin: 0;
@@ -33,7 +37,8 @@
         .editor-header {
             margin-bottom: 10px;
             display: flex;
-            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .editor-container {
@@ -96,16 +101,50 @@
             border-radius: 4px;
             background: white;
         }
+
+        .button {
+            padding: 8px 16px;
+            background: #16baaa;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background: #13a89c;
+        }
+
+        .support-info {
+            margin-top: 10px;
+            text-align: center;
+            color: #666;
+        }
+
+        .support-text {
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+        }
     </style>
 </head>
-<body>
+
+<body onload="runCode()">
     <div class="container">
         <!-- 左侧编辑区域 -->
         <div class="editor-pane">
             <div class="editor-header">
-                <button onclick="runCode()">执行</button>
-                <button onclick="clearAll()">清空</button>
-                <button onclick="undoCode()">回退</button>
+                <div>
+                    <button onclick="runCode()">执行</button>
+                    <button onclick="clearAll()">清空</button>
+                    <button onclick="undoCode()">回退</button>
+                    <a href="https://eogee.com/support/" target="_blank" class="button">bug反馈</a>
+                </div>
+                <div class="support-text">
+                    CodePreview 由 <a href="https://eogee.com" target="_blank" style = "color: #16baaa; text-decoration: none;">eogee.com</a> 提供技术支持
+                </div>
             </div>
             <div class="editor-container">
                 <div class="editor-title">CSS</div>
@@ -123,7 +162,8 @@
 
         <!-- 右侧预览区域 -->
         <div class="preview-pane">
-            <iframe id="preview-frame"></iframe>
+            <iframe id="preview-frame">
+            </iframe>
         </div>
     </div>
 
@@ -151,17 +191,17 @@
 
             iframeDoc.open();
             iframeDoc.write(`
-                <!DOCTYPE html>
-                <html>
-                    <head>
-                        <style>${css}</style>
-                    </head>
-                    <body>
-                        ${html}
-                        <script>${js}<\/script>
-                    </body>
-                </html>
-            `);
+<!DOCTYPE html>
+<html>
+<head>
+<style>${css}</style>
+</head>
+<body>
+${html}
+<script>${js}<\/script>
+</body>
+</html>
+`);
             iframeDoc.close();
         }
 
@@ -190,9 +230,13 @@
         }
 
         // 初始化示例代码
-        document.getElementById('css-input').value = `body {\n  padding: 20px;\n}\n\nh1 {\n  color: #16baaa;\n}`;
-        document.getElementById('html-input').value = `<h1>代码预览工具</h1>\n<div class="test">点击测试</div>`;
-        document.getElementById('js-input').value = `document.querySelector('.test').addEventListener('click', () => {\n  alert('交互生效！');\n});`;
+        document.getElementById('css-input').value = `body {\n padding: 20px;\n}\n\nh1 {\n color: #16baaa;\n}`;
+        document.getElementById('html-input').value = `<h1>欢迎使用CodePreview代码预览工具</h1>\n<p>CodePreview是一个在线代码预览工具，支持实时预览HTML, CSS, JavaScript代码。适合前端开发人员测试和调试代码。</p>\n<p>←你可以在左侧编辑区域输入代码，点击上方【执行】按钮，预览区域会实时显示效果。</p>\n</p>↓↓你也可以点击下方按钮测试弹窗效果。</p>\n<div class="test">\n<button style="padding: 8px 16px;background: #16baaa;color: white;border: none;border-radius: 4px;cursor: pointer;transition: background 0.3s">点击测试弹窗</button>\n</div>`;
+        document.getElementById('js-input').value = `document.querySelector('.test').addEventListener('click', () => {\n alert('这是一个alert弹窗，点击"确定"关闭。');\n});`;
+
+        // 初始化生成预览
+        window.onload = runCode;
     </script>
 </body>
+
 </html>
