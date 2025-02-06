@@ -54,12 +54,12 @@
                             <ul class = "toc-menu" id = "toc"></ul>
                         </li>
                         <li class="layui-menu-item-group" lay-options="{type: 'group', isAllowSpread: true}">
-                            <div class="layui-menu-body-title">讲义及源码获取</div>
+                            <div class="layui-menu-body-title">文档及源码获取</div>
                             <ul>
                                 <li>
                                     <div class="layui-menu-body-title">
                                         <a href="/article/detail/1">
-                                            <span>本站：EOGEE.COM</span> 
+                                            <span style = "font-weight: bold;">本站：EOGEE.COM</span> 
                                         </a>
                                     </div>
                                 </li>
@@ -67,20 +67,6 @@
                                     <div class="layui-menu-body-title"> 
                                         <a>
                                             <span>QQ群：589912610</span>
-                                        </a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="layui-menu-body-title">
-                                        <a href="https://gitee.com/eogee/webTutorial" target="_blank">
-                                            <span>Gitee</span>
-                                        </a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="layui-menu-body-title">
-                                        <a href="https://github.com/eogee/webTutorial" target="_blank">
-                                            <span>Github</span>
                                         </a>
                                     </div>
                                 </li>

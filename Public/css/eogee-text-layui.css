@@ -482,6 +482,8 @@ h5 {
 
 .eog-text .layui-nav-tree {
     width: 100%;
+    /* 透明度 */
+    opacity: 0.8;
 }
 
 .eog-text .layui-nav-item>a {

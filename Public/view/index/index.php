@@ -69,7 +69,9 @@
                 </div><?php } ?>
             </div>
             <!-- 产品 -->
-            <div class="layui-row eog-image-background" style="background-image:url('<?= $content[1]['backgroundImage'] ?>')">
+            <?php
+            if ($content != null && count($content) > 1 && count($content[1]['childData']) > 0) { ?>
+                            <div class="layui-row eog-image-background" style="background-image:url('<?= $content[1]['backgroundImage'] ?>')">
                 <div class="card-title">
                     <h3><?= $content[1]['title'] ?></h3>
                     <h4><?= $content[1]['keynote'] ?></h4>
@@ -132,7 +134,11 @@
                     </div>
                 </div>
             </div>
+            <?php }
+            ?>
             <!-- 服务 -->
+            <?php
+            if ($content[2]['childData'] != null && count($content[2]['childData']) > 0) { ?>
             <div class="layui-row eog-image-background" style="background-image:url('<?= $content[2]['backgroundImage'] ?>')">
                 <div class="card-title">
                     <h3><?= $content[2]['title'] ?></h3>
@@ -196,8 +202,11 @@
 
                     </div>
                 </div>
-            </div>
+            </div>           
+    <?php } ?>
             <!-- 课程 -->
+            <?php
+            if ($content[3]['childData'] != null && count($content[3]['childData']) > 0) { ?>
             <div class="layui-row eog-image-background" style="background-image:url('<?= $content[3]['backgroundImage'] ?>')">
                 <div class="card-title">
                     <h3><?= $content[3]['title'] ?></h3>
@@ -261,6 +270,7 @@
                     </div>
                 </div>
             </div>
+            <?php } ?>
         </div>
     </div>
     <!-- 最新动态 -->
