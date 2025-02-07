@@ -66,7 +66,7 @@
                                 <li>
                                     <div class="layui-menu-body-title"> 
                                         <a>
-                                            <span>QQ群：589912610</span>
+                                            <span>QQ群：1032868416</span>
                                         </a>
                                     </div>
                                 </li>
