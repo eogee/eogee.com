@@ -67,7 +67,7 @@
                                     <div class="layui-menu-body-title"> 
                                         <a>
                                             <span>1群589912610(已满)</span><br>
-                                            <span>2群3886370035</span>
+                                            <span>2群1032868416</span>
                                         </a>
                                     </div>
                                 </li>
