@@ -66,8 +66,8 @@
                                 <li>
                                     <div class="layui-menu-body-title"> 
                                         <a>
-                                            <span>QQ 1群：589912610(已满)</span><br>
-                                            <span>QQ 2群：加管理员：Q3886370035</span>
+                                            <span>1群589912610(已满)</span><br>
+                                            <span>2群3886370035</span>
                                         </a>
                                     </div>
                                 </li>
