@@ -2,10 +2,9 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>网站链接抓取工具 v2.0</title>
+    <title>网站链接抓取工具 v3.0</title>
     <style>
-        /* 优化后的样式 */
-        body { 
+        body {
             font-family: 'Segoe UI', Arial, sans-serif;
             max-width: 1000px;
             margin: 20px auto;
@@ -85,9 +84,8 @@
             <h3>📌 使用须知：</h3>
             <ul>
                 <li>输入完整域名（如：example.com 或 https://example.com）</li>
-                <li>抓取深度限制为同一域名下的页面</li>
+                <li>支持自动识别www前缀和二级域名</li>
                 <li>首次使用建议尝试不同协议（http/https）</li>
-                <li>遇到问题可尝试刷新页面重试</li>
             </ul>
         </div>
         
@@ -98,19 +96,15 @@
     </div>
 
     <script>
-        // 状态管理
         let visitedUrls = new Set();
         let targetHost = '';
         let abortController = new AbortController();
         
-        // 代理服务器配置（需定期维护）
         const PROXY_SERVERS = [
             'https://api.allorigins.win/get?url=',
             'https://corsproxy.io/?',
             'https://proxy.cors.sh/'
         ];
-        
-        // CORS代理API密钥（需要定期更新）
         const CORS_PROXY_KEY = 'tempkey_123456';
 
         document.getElementById('startButton').addEventListener('click', startCrawling);
@@ -124,24 +118,20 @@
                 button: document.getElementById('startButton')
             };
 
-            // 重置界面状态
             resetUIState(elements);
-            showLoading(elements.loading, '正在初始化爬虫引擎...');
+            showLoading(elements.loading, '🚀 正在初始化爬虫引擎...');
 
             try {
-                // 处理输入URL
                 const startUrl = processInput(elements.input.value.trim());
                 if (!startUrl) return;
 
-                // 初始化抓取队列
                 const queue = [startUrl];
                 visitedUrls.clear();
                 visitedUrls.add(startUrl);
 
-                // 开始遍历抓取
                 while (queue.length > 0 && !abortController.signal.aborted) {
                     const currentUrl = queue.shift();
-                    updateLoading(elements.loading, `正在解析：${currentUrl}`);
+                    updateLoading(elements.loading, `🔍 正在解析：${currentUrl}`);
 
                     try {
                         const links = await crawlWithRetry(currentUrl);
@@ -149,6 +139,7 @@
                             if (!visitedUrls.has(link)) {
                                 visitedUrls.add(link);
                                 queue.push(link);
+                                console.log('[新链接加入队列]', link);
                             }
                         });
                     } catch (error) {
@@ -156,7 +147,6 @@
                     }
                 }
 
-                // 生成并下载结果
                 if (!abortController.signal.aborted) {
                     generateXmlAndDownload();
                     showResult(elements.result, `✅ 抓取完成！共发现 ${visitedUrls.size} 个有效链接`, 'success');
@@ -175,18 +165,21 @@
             }
 
             try {
-                // 自动补全协议并标准化处理
                 let url = rawInput.toLowerCase();
                 if (!url.startsWith('http')) url = `https://${url}`;
                 
                 const urlObj = new URL(url);
-                // 标准化主机名（处理www前缀）
-                targetHost = urlObj.hostname.replace(/^www\./, '');
+                targetHost = normalizeHost(urlObj.hostname);
+                console.log('[域名标准化]', urlObj.hostname, '→', targetHost);
                 return urlObj.href;
             } catch (e) {
-                showResult(document.getElementById('result'), '⚠️ 无效的URL格式，请使用 example.com 格式', 'error');
+                showResult(document.getElementById('result'), '⚠️ 无效的URL格式', 'error');
                 return null;
             }
+        }
+
+        function normalizeHost(host) {
+            return host.replace(/^(www\.)?/i, '').toLowerCase();
         }
 
         async function crawlWithRetry(url, retries = 3) {
@@ -195,48 +188,54 @@
                     return await crawlWebsite(url);
                 } catch (error) {
                     if (i === retries - 1) throw error;
-                    await new Promise(r => setTimeout(r, 2000 * (i + 1))); // 指数退避
+                    await new Promise(r => setTimeout(r, 2000 * (i + 1)));
                     console.log(`[重试] ${url} (${i + 1}/${retries})`);
                 }
             }
         }
 
         async function crawlWebsite(url) {
-            // 随机选择代理服务器
             const proxy = PROXY_SERVERS[Math.floor(Math.random() * PROXY_SERVERS.length)];
-            const encodedUrl = encodeURIComponent(url);
-            let proxyUrl = '';
-
-            // 构建代理URL
-            if (proxy.includes('corsproxy.io')) {
-                proxyUrl = `${proxy}${encodeURI(url)}`;
+            console.log('[使用代理]', proxy);
+            
+            let proxyUrl;
+            if (proxy.includes('allorigins.win')) {
+                proxyUrl = proxy + encodeURI(url);
+            } else if (proxy.includes('corsproxy.io')) {
+                proxyUrl = proxy + url;
             } else {
-                proxyUrl = `${proxy}${encodedUrl}`;
+                proxyUrl = proxy + encodeURIComponent(url);
             }
 
-            // 配置请求头
             const headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                'Accept-Language': 'en-US,en;q=0.5',
+                'Accept-Language': 'en-US,en;q=0.5'
             };
 
-            // 添加代理专用头
             if (proxy.includes('proxy.cors.sh')) {
                 headers['x-cors-api-key'] = CORS_PROXY_KEY;
             }
 
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 8000);
+
             try {
                 const response = await fetch(proxyUrl, {
-                    signal: abortController.signal,
+                    signal: controller.signal,
                     headers: headers,
                     mode: 'cors',
                     credentials: 'omit'
                 });
+                clearTimeout(timeoutId);
 
                 if (!response.ok) throw new Error(`HTTP错误 ${response.status}`);
 
-                // 处理不同代理响应格式
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('text/html')) {
+                    throw new Error('非HTML内容');
+                }
+
                 let content;
                 if (proxy.includes('allorigins.win')) {
                     const data = await response.json();
@@ -245,18 +244,28 @@
                     content = await response.text();
                 }
 
-                // 解析HTML内容
+                if (!content || content.length < 100) {
+                    throw new Error('响应内容无效');
+                }
+
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(content, 'text/html');
+                
+                if (doc.querySelector('parsererror')) {
+                    throw new Error('HTML解析失败');
+                }
+
                 return extractLinks(doc, url);
             } catch (error) {
-                console.error(`[代理错误] ${proxy}`, error);
+                console.error('[请求失败]', error);
                 throw error;
+            } finally {
+                clearTimeout(timeoutId);
             }
         }
 
         function extractLinks(doc, baseUrl) {
-            const links = Array.from(doc.querySelectorAll('a[href]'));
+            const links = Array.from(doc.querySelectorAll('a[href], link[href], area[href]'));
             const validLinks = [];
 
             links.forEach(link => {
@@ -265,29 +274,34 @@
                     if (!href || href.startsWith('javascript:')) return;
 
                     const urlObj = new URL(href, baseUrl);
-                    urlObj.hash = ''; // 移除锚点
-                    const cleanUrl = urlObj.href.replace(/\/+$/, ''); // 标准化URL
+                    urlObj.hash = '';
+                    const cleanUrl = urlObj.href.replace(/\/+$/, '');
+                    const linkHost = normalizeHost(urlObj.hostname);
 
-                    if (isValidLink(urlObj, cleanUrl)) {
+                    console.log('[链接检查]', {
+                        original: href,
+                        resolved: cleanUrl,
+                        targetHost: targetHost,
+                        linkHost: linkHost
+                    });
+
+                    if (linkHost === targetHost &&
+                        ['http:', 'https:'].includes(urlObj.protocol) &&
+                        !visitedUrls.has(cleanUrl) &&
+                        !cleanUrl.match(/\.(pdf|docx?|xlsx?|zip|rar)$/i) &&
+                        !cleanUrl.includes('logout')) {
                         validLinks.push(cleanUrl);
+                        console.log('[有效链接]', cleanUrl);
                     }
                 } catch (e) {
                     console.warn('[无效链接]', link.href);
                 }
             });
 
-            return [...new Set(validLinks)]; // 去重
+            return [...new Set(validLinks)];
         }
 
-        function isValidLink(urlObj, cleanUrl) {
-            return urlObj.hostname === targetHost &&
-                   ['http:', 'https:'].includes(urlObj.protocol) &&
-                   !visitedUrls.has(cleanUrl) &&
-                   !cleanUrl.match(/\.(pdf|docx?|xlsx?|zip|rar)$/i) && // 排除常见文件类型
-                   !cleanUrl.includes('logout');
-        }
-
-        // 以下是辅助函数
+        // 辅助函数保持不变
         function resetUIState(elements) {
             elements.input.disabled = true;
             elements.button.disabled = true;
