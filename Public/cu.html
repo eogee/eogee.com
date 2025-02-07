@@ -2,79 +2,147 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>网站链接抓取工具</title>
+    <title>网站链接抓取工具 v2.0</title>
     <style>
-        /* 保持原有样式不变 */
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .container { background: #f5f5f5; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        input[type="text"] { width: 300px; padding: 8px; font-size: 16px; }
-        button { padding: 8px 20px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #45a049; }
-        #result { margin-top: 20px; padding: 10px; background: white; border-radius: 4px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
-        #loading { display: none; margin-top: 10px; text-align: center; color: #666; }
-        .notice { margin: 15px 0; padding: 10px; background: #fff3d4; border-left: 4px solid #ffb300; }
-        .error { color: #dc3545; padding: 10px; background: #ffe6e6; border-radius: 4px; }
+        /* 优化后的样式 */
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 20px;
+            background: #f0f2f5;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        input[type="text"] {
+            width: 400px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #e3e3e3;
+            border-radius: 6px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 25px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+        button:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+        }
+        #result {
+            margin-top: 25px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        #loading {
+            display: none;
+            margin: 15px 0;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 6px;
+            color: #495057;
+        }
+        .notice {
+            margin: 20px 0;
+            padding: 15px;
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            border-radius: 4px;
+        }
+        .error {
+            padding: 15px;
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 6px;
+            color: #721c24;
+            margin: 15px 0;
+        }
+        .success {
+            padding: 15px;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 6px;
+            color: #155724;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>网站链接抓取工具</h1>
+        <h1>🔗 智能网站链接抓取工具</h1>
         <div class="notice">
-            <h3>使用说明：</h3>
+            <h3>📌 使用须知：</h3>
             <ul>
-                <li>输入完整域名（如：example.com）</li>
+                <li>输入完整域名（如：example.com 或 https://example.com）</li>
                 <li>抓取深度限制为同一域名下的页面</li>
-                <li>遇到问题可尝试更换协议（http/https）</li>
+                <li>首次使用建议尝试不同协议（http/https）</li>
+                <li>遇到问题可尝试刷新页面重试</li>
             </ul>
         </div>
         
-        <input type="text" id="urlInput" placeholder="请输入网站域名（如：example.com）">
+        <input type="text" id="urlInput" placeholder="请输入目标网站域名">
         <button id="startButton">开始抓取</button>
-        <div id="loading">正在初始化抓取...</div>
+        <div id="loading"></div>
         <div id="result"></div>
     </div>
 
     <script>
+        // 状态管理
         let visitedUrls = new Set();
         let targetHost = '';
         let abortController = new AbortController();
+        
+        // 代理服务器配置（需定期维护）
         const PROXY_SERVERS = [
             'https://api.allorigins.win/get?url=',
-            'https://cors-anywhere.herokuapp.com/',
-            'https://thingproxy.freeboard.io/fetch/'
+            'https://corsproxy.io/?',
+            'https://proxy.cors.sh/'
         ];
+        
+        // CORS代理API密钥（需要定期更新）
+        const CORS_PROXY_KEY = 'tempkey_123456';
 
         document.getElementById('startButton').addEventListener('click', startCrawling);
 
         async function startCrawling() {
             abortController = new AbortController();
-            const urlInput = document.getElementById('urlInput');
-            const resultDiv = document.getElementById('result');
-            const loading = document.getElementById('loading');
-            const button = document.getElementById('startButton');
+            const elements = {
+                input: document.getElementById('urlInput'),
+                result: document.getElementById('result'),
+                loading: document.getElementById('loading'),
+                button: document.getElementById('startButton')
+            };
 
-            // 重置状态
-            resetUI();
-            urlInput.disabled = true;
-            button.disabled = true;
-            button.textContent = '停止抓取';
-            button.style.backgroundColor = '#dc3545';
-            loading.style.display = 'block';
-
-            // 处理输入URL
-            let inputUrl = processInput(urlInput.value.trim());
-            if (!inputUrl) return;
-
-            // 初始化抓取队列
-            const queue = [inputUrl];
-            visitedUrls.clear();
-            visitedUrls.add(inputUrl);
+            // 重置界面状态
+            resetUIState(elements);
+            showLoading(elements.loading, '正在初始化爬虫引擎...');
 
             try {
+                // 处理输入URL
+                const startUrl = processInput(elements.input.value.trim());
+                if (!startUrl) return;
+
+                // 初始化抓取队列
+                const queue = [startUrl];
+                visitedUrls.clear();
+                visitedUrls.add(startUrl);
+
+                // 开始遍历抓取
                 while (queue.length > 0 && !abortController.signal.aborted) {
                     const currentUrl = queue.shift();
-                    updateLoading(`正在抓取：${currentUrl}`);
-                    
+                    updateLoading(elements.loading, `正在解析：${currentUrl}`);
+
                     try {
                         const links = await crawlWithRetry(currentUrl);
                         links.forEach(link => {
@@ -84,43 +152,39 @@
                             }
                         });
                     } catch (error) {
-                        console.warn(`抓取失败 ${currentUrl}:`, error);
+                        console.warn(`[抓取失败] ${currentUrl}:`, error);
                     }
                 }
 
+                // 生成并下载结果
                 if (!abortController.signal.aborted) {
                     generateXmlAndDownload();
-                    showSuccess(`抓取完成！共找到 ${visitedUrls.size} 个链接`);
+                    showResult(elements.result, `✅ 抓取完成！共发现 ${visitedUrls.size} 个有效链接`, 'success');
                 }
             } catch (error) {
-                showError(`抓取失败: ${error.message}`);
+                showResult(elements.result, `❌ 错误：${error.message}`, 'error');
             } finally {
-                resetUI();
-            }
-
-            function resetUI() {
-                urlInput.disabled = false;
-                button.disabled = false;
-                button.textContent = '开始抓取';
-                button.style.backgroundColor = '#4CAF50';
-                loading.style.display = 'none';
+                restoreUIState(elements);
             }
         }
 
         function processInput(rawInput) {
             if (!rawInput) {
-                showError('请输入有效的网站地址');
+                showResult(document.getElementById('result'), '⚠️ 请输入有效的网站地址', 'error');
                 return null;
             }
 
             try {
+                // 自动补全协议并标准化处理
                 let url = rawInput.toLowerCase();
                 if (!url.startsWith('http')) url = `https://${url}`;
+                
                 const urlObj = new URL(url);
-                targetHost = urlObj.hostname;
+                // 标准化主机名（处理www前缀）
+                targetHost = urlObj.hostname.replace(/^www\./, '');
                 return urlObj.href;
             } catch (e) {
-                showError('无效的URL格式，请使用 example.com 格式');
+                showResult(document.getElementById('result'), '⚠️ 无效的URL格式，请使用 example.com 格式', 'error');
                 return null;
             }
         }
@@ -131,31 +195,64 @@
                     return await crawlWebsite(url);
                 } catch (error) {
                     if (i === retries - 1) throw error;
-                    await new Promise(r => setTimeout(r, 1000 * (i + 1)));
+                    await new Promise(r => setTimeout(r, 2000 * (i + 1))); // 指数退避
+                    console.log(`[重试] ${url} (${i + 1}/${retries})`);
                 }
             }
         }
 
         async function crawlWebsite(url) {
-            const proxyUrl = getProxyUrl(url);
-            const response = await fetch(proxyUrl, {
-                signal: abortController.signal,
-                headers: { 'User-Agent': 'Mozilla/5.0 (compatible; LinkBot/1.0)' }
-            });
-
-            if (!response.ok) throw new Error(`HTTP错误: ${response.status}`);
-            
-            const data = await response.json();
-            if (!data?.contents) throw new Error('无效的代理响应');
-
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(data.contents, 'text/html');
-            return extractLinks(doc, url);
-        }
-
-        function getProxyUrl(url) {
+            // 随机选择代理服务器
             const proxy = PROXY_SERVERS[Math.floor(Math.random() * PROXY_SERVERS.length)];
-            return proxy + encodeURIComponent(url);
+            const encodedUrl = encodeURIComponent(url);
+            let proxyUrl = '';
+
+            // 构建代理URL
+            if (proxy.includes('corsproxy.io')) {
+                proxyUrl = `${proxy}${encodeURI(url)}`;
+            } else {
+                proxyUrl = `${proxy}${encodedUrl}`;
+            }
+
+            // 配置请求头
+            const headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5',
+            };
+
+            // 添加代理专用头
+            if (proxy.includes('proxy.cors.sh')) {
+                headers['x-cors-api-key'] = CORS_PROXY_KEY;
+            }
+
+            try {
+                const response = await fetch(proxyUrl, {
+                    signal: abortController.signal,
+                    headers: headers,
+                    mode: 'cors',
+                    credentials: 'omit'
+                });
+
+                if (!response.ok) throw new Error(`HTTP错误 ${response.status}`);
+
+                // 处理不同代理响应格式
+                let content;
+                if (proxy.includes('allorigins.win')) {
+                    const data = await response.json();
+                    content = data.contents;
+                } else {
+                    content = await response.text();
+                }
+
+                // 解析HTML内容
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(content, 'text/html');
+                return extractLinks(doc, url);
+            } catch (error) {
+                console.error(`[代理错误] ${proxy}`, error);
+                throw error;
+            }
         }
 
         function extractLinks(doc, baseUrl) {
@@ -168,14 +265,14 @@
                     if (!href || href.startsWith('javascript:')) return;
 
                     const urlObj = new URL(href, baseUrl);
-                    urlObj.hash = '';
-                    const cleanUrl = urlObj.href.replace(/\/+$/, '');
+                    urlObj.hash = ''; // 移除锚点
+                    const cleanUrl = urlObj.href.replace(/\/+$/, ''); // 标准化URL
 
                     if (isValidLink(urlObj, cleanUrl)) {
                         validLinks.push(cleanUrl);
                     }
                 } catch (e) {
-                    console.warn('无效链接:', link.href);
+                    console.warn('[无效链接]', link.href);
                 }
             });
 
@@ -186,8 +283,54 @@
             return urlObj.hostname === targetHost &&
                    ['http:', 'https:'].includes(urlObj.protocol) &&
                    !visitedUrls.has(cleanUrl) &&
-                   !cleanUrl.endsWith('.pdf') &&
+                   !cleanUrl.match(/\.(pdf|docx?|xlsx?|zip|rar)$/i) && // 排除常见文件类型
                    !cleanUrl.includes('logout');
+        }
+
+        // 以下是辅助函数
+        function resetUIState(elements) {
+            elements.input.disabled = true;
+            elements.button.disabled = true;
+            elements.button.textContent = '停止抓取';
+            elements.button.style.backgroundColor = '#dc3545';
+        }
+
+        function restoreUIState(elements) {
+            elements.input.disabled = false;
+            elements.button.disabled = false;
+            elements.button.textContent = '开始抓取';
+            elements.button.style.backgroundColor = '#007bff';
+            elements.loading.style.display = 'none';
+        }
+
+        function showLoading(element, message) {
+            element.style.display = 'block';
+            element.textContent = message;
+        }
+
+        function updateLoading(element, message) {
+            element.textContent = message;
+        }
+
+        function showResult(element, message, type) {
+            element.innerHTML = `<div class="${type}">${message}</div>`;
+        }
+
+        function generateXmlAndDownload() {
+            try {
+                const xmlContent = generateXml();
+                const blob = new Blob([xmlContent], { type: 'application/xml' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `sitemap_${new Date().toISOString().split('T')[0]}.xml`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                showResult(document.getElementById('result'), `❌ XML生成失败: ${error.message}`, 'error');
+            }
         }
 
         function generateXml() {
@@ -205,46 +348,6 @@
             });
 
             return new XMLSerializer().serializeToString(doc);
-        }
-
-        function generateXmlAndDownload() {
-            try {
-                const xmlContent = generateXml();
-                const blob = new Blob([xmlContent], { type: 'application/xml' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `sitemap_${new Date().toISOString().split('T')[0]}.xml`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            } catch (error) {
-                showError('生成XML失败: ' + error.message);
-            }
-        }
-
-        function showSuccess(message) {
-            document.getElementById('result').innerHTML = `<p style="color:green">${message}</p>`;
-        }
-
-        function showError(message) {
-            document.getElementById('result').innerHTML = `
-                <div class="error">
-                    <p>${message}</p>
-                    <p>建议尝试：</p>
-                    <ul>
-                        <li>检查网络连接</li>
-                        <li>更换协议（http/https）</li>
-                        <li>输入完整域名（包含www前缀）</li>
-                        <li>稍后重试</li>
-                    </ul>
-                </div>
-            `;
-        }
-
-        function updateLoading(text) {
-            document.getElementById('loading').textContent = text;
         }
     </script>
 </body>
