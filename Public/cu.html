@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>网站链接抓取工具 v3.0</title>
+    <title>智能网站链接抓取工具 v3.1</title>
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -99,17 +99,35 @@
         let visitedUrls = new Set();
         let targetHost = '';
         let abortController = new AbortController();
+        let isCrawling = false;
         
+        // 代理服务器配置（需要自行申请API密钥）
         const PROXY_SERVERS = [
             'https://api.allorigins.win/get?url=',
             'https://corsproxy.io/?',
-            'https://proxy.cors.sh/'
+            // 'https://proxy.cors.sh/'  // 需要在此处添加有效API密钥
         ];
-        const CORS_PROXY_KEY = 'tempkey_123456';
+        const CORS_PROXY_KEY = 'YOUR_API_KEY_HERE'; // 替换为实际密钥
 
-        document.getElementById('startButton').addEventListener('click', startCrawling);
+        // 按钮点击事件
+        document.getElementById('startButton').addEventListener('click', function() {
+            const button = document.getElementById('startButton');
+            if (isCrawling) {
+                abortController.abort();
+                button.textContent = '开始抓取';
+                button.style.backgroundColor = '#007bff';
+                isCrawling = false;
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('urlInput').disabled = false;
+                showResult(document.getElementById('result'), '⏹ 抓取已中止', 'error');
+            } else {
+                startCrawling();
+            }
+        });
 
+        // 主抓取逻辑
         async function startCrawling() {
+            isCrawling = true;
             abortController = new AbortController();
             const elements = {
                 input: document.getElementById('urlInput'),
@@ -139,11 +157,10 @@
                             if (!visitedUrls.has(link)) {
                                 visitedUrls.add(link);
                                 queue.push(link);
-                                console.log('[新链接加入队列]', link);
                             }
                         });
                     } catch (error) {
-                        console.warn(`[抓取失败] ${currentUrl}:`, error);
+                        console.warn(`抓取失败 ${currentUrl}:`, error);
                     }
                 }
 
@@ -154,10 +171,12 @@
             } catch (error) {
                 showResult(elements.result, `❌ 错误：${error.message}`, 'error');
             } finally {
+                isCrawling = false;
                 restoreUIState(elements);
             }
         }
 
+        // 处理输入URL
         function processInput(rawInput) {
             if (!rawInput) {
                 showResult(document.getElementById('result'), '⚠️ 请输入有效的网站地址', 'error');
@@ -170,7 +189,6 @@
                 
                 const urlObj = new URL(url);
                 targetHost = normalizeHost(urlObj.hostname);
-                console.log('[域名标准化]', urlObj.hostname, '→', targetHost);
                 return urlObj.href;
             } catch (e) {
                 showResult(document.getElementById('result'), '⚠️ 无效的URL格式', 'error');
@@ -178,10 +196,12 @@
             }
         }
 
+        // 标准化域名
         function normalizeHost(host) {
             return host.replace(/^(www\.)?/i, '').toLowerCase();
         }
 
+        // 带重试机制的抓取
         async function crawlWithRetry(url, retries = 3) {
             for (let i = 0; i < retries; i++) {
                 try {
@@ -194,23 +214,15 @@
             }
         }
 
+        // 网站抓取核心方法
         async function crawlWebsite(url) {
             const proxy = PROXY_SERVERS[Math.floor(Math.random() * PROXY_SERVERS.length)];
-            console.log('[使用代理]', proxy);
-            
-            let proxyUrl;
-            if (proxy.includes('allorigins.win')) {
-                proxyUrl = proxy + encodeURI(url);
-            } else if (proxy.includes('corsproxy.io')) {
-                proxyUrl = proxy + url;
-            } else {
-                proxyUrl = proxy + encodeURIComponent(url);
-            }
+            const encodedUrl = encodeURIComponent(url);
+            const proxyUrl = proxy + encodedUrl;
 
             const headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                'Accept-Language': 'en-US,en;q=0.5'
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
             };
 
             if (proxy.includes('proxy.cors.sh')) {
@@ -224,28 +236,18 @@
                 const response = await fetch(proxyUrl, {
                     signal: controller.signal,
                     headers: headers,
-                    mode: 'cors',
-                    credentials: 'omit'
+                    mode: 'cors'
                 });
                 clearTimeout(timeoutId);
 
                 if (!response.ok) throw new Error(`HTTP错误 ${response.status}`);
-
-                const contentType = response.headers.get('content-type');
-                if (!contentType || !contentType.includes('text/html')) {
-                    throw new Error('非HTML内容');
-                }
-
+                
                 let content;
                 if (proxy.includes('allorigins.win')) {
                     const data = await response.json();
                     content = data.contents;
                 } else {
                     content = await response.text();
-                }
-
-                if (!content || content.length < 100) {
-                    throw new Error('响应内容无效');
                 }
 
                 const parser = new DOMParser();
@@ -257,13 +259,13 @@
 
                 return extractLinks(doc, url);
             } catch (error) {
-                console.error('[请求失败]', error);
                 throw error;
             } finally {
                 clearTimeout(timeoutId);
             }
         }
 
+        // 提取有效链接
         function extractLinks(doc, baseUrl) {
             const links = Array.from(doc.querySelectorAll('a[href], link[href], area[href]'));
             const validLinks = [];
@@ -278,20 +280,12 @@
                     const cleanUrl = urlObj.href.replace(/\/+$/, '');
                     const linkHost = normalizeHost(urlObj.hostname);
 
-                    console.log('[链接检查]', {
-                        original: href,
-                        resolved: cleanUrl,
-                        targetHost: targetHost,
-                        linkHost: linkHost
-                    });
-
                     if (linkHost === targetHost &&
                         ['http:', 'https:'].includes(urlObj.protocol) &&
                         !visitedUrls.has(cleanUrl) &&
                         !cleanUrl.match(/\.(pdf|docx?|xlsx?|zip|rar)$/i) &&
                         !cleanUrl.includes('logout')) {
                         validLinks.push(cleanUrl);
-                        console.log('[有效链接]', cleanUrl);
                     }
                 } catch (e) {
                     console.warn('[无效链接]', link.href);
@@ -301,12 +295,13 @@
             return [...new Set(validLinks)];
         }
 
-        // 辅助函数保持不变
+        // UI状态管理
         function resetUIState(elements) {
             elements.input.disabled = true;
-            elements.button.disabled = true;
+            elements.button.disabled = false;
             elements.button.textContent = '停止抓取';
             elements.button.style.backgroundColor = '#dc3545';
+            elements.loading.style.display = 'block';
         }
 
         function restoreUIState(elements) {
@@ -317,6 +312,7 @@
             elements.loading.style.display = 'none';
         }
 
+        // 辅助方法
         function showLoading(element, message) {
             element.style.display = 'block';
             element.textContent = message;
@@ -330,6 +326,7 @@
             element.innerHTML = `<div class="${type}">${message}</div>`;
         }
 
+        // 生成XML文件
         function generateXmlAndDownload() {
             try {
                 const xmlContent = generateXml();
