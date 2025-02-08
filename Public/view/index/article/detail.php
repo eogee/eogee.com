@@ -92,14 +92,14 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="layui-menu-item-group" lay-options="{type: 'group', isAllowSpread: true}">
+                        <!-- <li class="layui-menu-item-group" lay-options="{type: 'group', isAllowSpread: true}">
                             <div class="layui-menu-body-title">支持开源力量</div>
                             <ul>
                                 <li>
                                     <a href="https://www.qter.org/" target="_blank"><img src="/pic/qter.png" alt="QT开源社区"></a>
                                 </li>
                             </ul>                            
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </div>
