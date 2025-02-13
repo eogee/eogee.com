@@ -317,15 +317,21 @@
                 return;
             }
 
-            // 关键修改：Markdown 下载为 .md，HTML 下载为 .doc
             const extensions = { md: 'md', html: 'doc' };
             const mimeTypes = { 
                 md: 'text/markdown;charset=utf-8', 
                 html: 'application/msword' 
             };
 
+            // 生成北京时间文件名
+            const date = new Date();
+            const beijingTimeStr = date.toLocaleString('sv-SE', { timeZone: 'Asia/Shanghai' })
+                .replace(' ', 'T')
+                .replace(/:/g, '-')
+                .slice(0, 16);
+            
             const blob = new Blob([content], { type: mimeTypes[format] });
-            const filename = `table-${new Date().toISOString().slice(0,16).replace(/:/g, '-')}.${extensions[format]}`;
+            const filename = `table-${beijingTimeStr}.${extensions[format]}`;
 
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
@@ -337,7 +343,6 @@
             document.body.removeChild(link);
             URL.revokeObjectURL(link.href);
         }
-
         // 初始化中文
         changeLanguage('zh');
     </script>
