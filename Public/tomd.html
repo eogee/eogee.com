@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title data-i18n="title">数据表格转md/html/doc工具：toMd</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Data table to md/html/doc converter：toMd">
+    <meta name="keywords" content="table format conversion, table to markdown, table to html, table to doc">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 20px;
+            background: #f0f2f5;
+            position: relative;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .lang-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .lang-btn {
+            background: none;
+            border: 1px solid #16baaa;
+            color: #16baaa;
+            padding: 5px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 14px;
+            width:120px;
+        }
+        .lang-btn.active {
+            background: #16baaa;
+            color: white;
+        }
+        h1 {
+            color: #16baaa;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+            font-size: 2.2em;
+            letter-spacing: 0.5px;
+        }
+        textarea {
+            width: 97%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #e3e3e3;
+            border-radius: 6px;
+            margin: 10px 0;
+            min-height: 150px;
+            resize: vertical;
+            font-family: 'Courier New', monospace;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 12px 25px;
+            background: #16baaa;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 500;
+            font-size: 16px;
+            flex: 1;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        #output {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            border: 1px solid #e3e3e3;
+        }
+        .format-selector {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin: 15px 0;
+        }
+        select {
+            padding: 10px 15px;
+            border: 2px solid #e3e3e3;
+            border-radius: 6px;
+            font-size: 16px;
+            background: white;
+            flex: 0.3;
+        }
+        .notice {
+            margin: 20px 0;
+            padding: 15px;
+            background: #e3f2fd;
+            border-left: 4px solid #16baaa;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+        .support-text {
+            color: #666;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="lang-switcher">
+            <button class="lang-btn active" onclick="changeLanguage('zh')">简体中文</button>
+            <button class="lang-btn" onclick="changeLanguage('en')">English</button>
+        </div>
+
+        <h1 data-i18n="heading">ToMd-数据表格转md/html/doc工具</h1>
+        <div class="support-text">
+            <span data-i18n="poweredBy">技术支持：</span>
+            <a href="https://eogee.com" target="_blank" style="color: #16baaa; text-decoration: none;">eogee.com</a>
+        </div>
+        <div class="notice" data-i18n="instructions"></div>
+
+        <textarea id="excelInput" data-i18n-placeholder="example"></textarea>
+
+        <div class="format-selector">
+            <select id="outputFormat">
+                <option value="md" data-i18n="mdOption"></option>
+                <option value="html" data-i18n="htmlOption"></option>
+            </select>
+            <button onclick="convert()" data-i18n="convertBtn"></button>
+        </div>
+
+        <div class="button-group">
+            <button onclick="copyToClipboard()" data-i18n="copyBtn"></button>
+            <button onclick="downloadFile()" data-i18n="downloadBtn"></button>
+        </div>
+
+        <pre id="output"></pre>
+    </div>
+
+    <script>
+        const translations = {
+            zh: {
+                title: "数据表格转md/html/doc工具：toMd",
+                heading: "ToMd-数据表格转md/html/doc工具",
+                poweredBy: "技术支持：",
+                instructions: "🚀 使用说明：从Excel/WPS复制表格数据 → 粘贴到下方区域 → 选择格式 → 点击转换 → 复制或下载结果",
+                example: "请从Excel/WPS复制表格内容并粘贴到这里...\n示例：\n姓名    年龄    城市\n张三    28      北京\n李四    35      上海",
+                mdOption: "Markdown 表格",
+                htmlOption: "HTML 表格",
+                convertBtn: "开始转换",
+                copyBtn: "📋 复制结果",
+                downloadBtn: "💾 下载文件",
+                copySuccess: "✅ 已复制到剪贴板！",
+                copyError: "❌ 复制失败：",
+                downloadError: "请先生成内容！"
+            },
+            en: {
+                title: "Data Table Converter：toMd",
+                heading: "ToMd - Data Table Converter",
+                poweredBy: "Powered by",
+                instructions: "🚀 How to use: Copy table data from Excel/WPS → Paste below → Select format → Convert → Copy/Download result",
+                example: "Paste your table content here...\nExample:\nName    Age    City\nJohn    28     New York\nLisa    35     London",
+                mdOption: "Markdown Table",
+                htmlOption: "HTML Table",
+                convertBtn: "Convert",
+                copyBtn: "📋 Copy Result",
+                downloadBtn: "💾 Download File",
+                copySuccess: "✅ Copied to clipboard!",
+                copyError: "❌ Copy failed:",
+                downloadError: "Please generate content first!"
+            }
+        };
+
+        let currentLang = 'zh';
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.includes(lang === 'zh' ? '中文' : 'English'));
+            });
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                el.textContent = translations[lang][key];
+            });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                el.placeholder = translations[lang][el.getAttribute('data-i18n-placeholder')];
+            });
+
+            document.querySelectorAll('#outputFormat option').forEach(opt => {
+                opt.textContent = translations[lang][opt.getAttribute('data-i18n')];
+            });
+
+            document.title = translations[lang].title;
+        }
+
+        function convert() {
+            const excelData = document.getElementById('excelInput').value.trim();
+            const format = document.getElementById('outputFormat').value;
+            
+            if (!excelData) {
+                alert(currentLang === 'zh' ? "请先粘贴表格内容！" : "Please paste table content first!");
+                return;
+            }
+
+            const rows = excelData.split('\n').map(row => row.split('\t'));
+            
+            try {
+                const result = format === 'md' 
+                    ? generateMarkdown(rows) 
+                    : generateHTML(rows);
+                
+                document.getElementById('output').textContent = result;
+            } catch (error) {
+                alert((currentLang === 'zh' ? "转换失败：" : "Conversion failed: ") + error.message);
+            }
+        }
+
+        function generateMarkdown(rows) {
+            if (rows.length === 0) throw new Error(currentLang === 'zh' ? "空表格内容" : "Empty table content");
+            
+            const headers = rows[0].map(cell => cell.trim());
+            const separator = headers.map(() => '---').join(' | ');
+            
+            const mdRows = rows.map((row, index) => {
+                const cells = row.map(cell => {
+                    return cell.trim()
+                        .replace(/\|/g, '\\|')
+                        .replace(/\n/g, '<br>');
+                });
+                return `| ${cells.join(' | ')} |`;
+            });
+
+            mdRows.splice(1, 0, `| ${separator} |`);
+            return mdRows.join('\n');
+        }
+
+        function generateHTML(rows) {
+            if (rows.length === 0) throw new Error(currentLang === 'zh' ? "空表格内容" : "Empty table content");
+
+            const style = `<style>
+                table { border: 2px solid #000; border-collapse: collapse; width: 100%; margin: 20px 0; }
+                th, td { border: 1px solid #000; padding: 12px; text-align: left; }
+                th { background-color: #f8f9fa; font-weight: 600; }
+                tr:nth-child(even) { background-color: #f8f9fa; }
+            </style>`;
+
+            const buildRow = (cells, isHeader = false) => {
+                const tag = isHeader ? 'th' : 'td';
+                return cells.map(cell => 
+                    `<${tag}>${escapeHTML(cell)}</${tag}>`
+                ).join('');
+            };
+
+            const html = [
+                '<!DOCTYPE html>',
+                '<html>',
+                '<head>',
+                '<meta charset="UTF-8">',
+                '<title>' + (currentLang === 'zh' ? '生成的表格' : 'Generated Table') + '</title>',
+                style,
+                '</head>',
+                '<body>',
+                '<table>',
+                `<tr>${buildRow(rows[0], true)}</tr>`,
+                ...rows.slice(1).map(row => `<tr>${buildRow(row)}</tr>`),
+                '</table>',
+                '</body>',
+                '</html>'
+            ];
+
+            return html.join('\n');
+        }
+
+        function escapeHTML(str) {
+            return str.trim()
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function copyToClipboard() {
+            const output = document.getElementById('output');
+            navigator.clipboard.writeText(output.textContent)
+                .then(() => alert(translations[currentLang].copySuccess))
+                .catch(err => alert(translations[currentLang].copyError + err.message));
+        }
+
+        function downloadFile() {
+            const content = document.getElementById('output').textContent;
+            const format = document.getElementById('outputFormat').value;
+            
+            if (!content) {
+                alert(translations[currentLang].downloadError);
+                return;
+            }
+
+            const extensions = { md: 'md', html: 'html' };
+            const mimeTypes = { 
+                md: 'text/markdown;charset=utf-8', 
+                html: 'text/html;charset=utf-8' 
+            };
+
+            const blob = new Blob([content], { type: mimeTypes[format] });
+            const filename = `table-${new Date().toISOString().slice(0,16).replace(/:/g, '-')}.${extensions[format]}`;
+
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.style.display = 'none';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+        }
+
+        // 初始化中文
+        changeLanguage('zh');
+    </script>
+</body>
+</html>

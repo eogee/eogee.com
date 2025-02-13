@@ -11,6 +11,7 @@ use App\Verify\UserForgetVerify;
 use Helper\Window;
 use Easy\Database\Database;
 use Easy\Session\Session;
+use Helper\Url;
 
 /**
  * Summary of IndexController
@@ -120,5 +121,9 @@ class IndexController extends Controller
     {
         Session::destroy();
         $this->response->json(['code' => 0,'msg' => '退出成功！']);
+    }
+    public function tomd()
+    {
+        Window::redirect('/tomd.html');
     }
 }
