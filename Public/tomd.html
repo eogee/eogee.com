@@ -2,7 +2,8 @@
 <html lang="zh">
 <head>
     <title data-i18n="title">数据表格转md/html/doc工具：ToMd</title>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8">    
+    <link rel="icon" href="/pic/logomini-2.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Data table to md/html/doc converter：toMd; 一个数据表格转md/html/doc的工具ToMd。">
     <meta name="keywords" content="table format conversion, table to markdown, table to html, table to doc ,ToMd, 表格转md, 表格转html, 表格转doc">
@@ -48,6 +49,7 @@
             color: #16baaa;
             text-align: center;
             margin-bottom: 30px;
+            margin-top: 60px;
             font-weight: 600;
             font-size: 2.2em;
             letter-spacing: 0.5px;
@@ -315,10 +317,11 @@
                 return;
             }
 
-            const extensions = { md: 'md', html: 'html' };
+            // 关键修改：Markdown 下载为 .md，HTML 下载为 .doc
+            const extensions = { md: 'md', html: 'doc' };
             const mimeTypes = { 
                 md: 'text/markdown;charset=utf-8', 
-                html: 'text/html;charset=utf-8' 
+                html: 'application/msword' 
             };
 
             const blob = new Blob([content], { type: mimeTypes[format] });
