@@ -19,7 +19,7 @@
                     <h3 class="layui-font-<?= $carousel[$i]['keynoteColor'] ?> eog-text-shadow-<?= $carousel[$i]['keynoteShadowColor'] ?>"><?= $carousel[$i]['keynote'] ?></h3>
                     <h4 class="layui-font-<?= $carousel[$i]['contentColor'] ?> eog-text-shadow-<?= $carousel[$i]['contentShadowColor'] ?>"><?= $carousel[$i]['content'] ?></h4><?php 
                     if ($carousel[$i]['btn1'] != null) { 
-                        if ($carousel[$i]['btn2blank'] == 1) { ?>
+                        if ($carousel[$i]['btn1blank'] == 1) { ?>
 
                     <button onclick="window.open('<?= $carousel[$i]['btn1url'] ?>','_blank')" class="layui-btn layui-btn-sm"><?= $carousel[$i]['btn1'] ?></button><?php }else{ ?>
 
