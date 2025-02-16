@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -144,6 +145,7 @@
             <select id="outputFormat">
                 <option value="md" data-i18n="mdOption"></option>
                 <option value="html" data-i18n="htmlOption"></option>
+                <option value="sentences" data-i18n="sentencesOption"></option>
             </select>
             <button onclick="convert()" data-i18n="convertBtn"></button>
         </div>
@@ -166,6 +168,7 @@
                 example: "请从Excel/WPS复制表格内容并粘贴到这里...\n示例：\n姓名    年龄    城市\n张三    28      北京\n李四    35      上海",
                 mdOption: "Markdown 表格",
                 htmlOption: "HTML 表格",
+                sentencesOption: "句子格式",
                 convertBtn: "开始转换",
                 copyBtn: "📋 复制结果",
                 downloadBtn: "💾 下载文件",
@@ -181,6 +184,7 @@
                 example: "Paste your table content here...\nExample:\nName    Age    City\nJohn    28     New York\nLisa    35     London",
                 mdOption: "Markdown Table",
                 htmlOption: "HTML Table",
+                sentencesOption: "Sentence Format",
                 convertBtn: "Convert",
                 copyBtn: "📋 Copy Result",
                 downloadBtn: "💾 Download File",
@@ -226,10 +230,21 @@
             const rows = excelData.split('\n').map(row => row.split('\t'));
             
             try {
-                const result = format === 'md' 
-                    ? generateMarkdown(rows) 
-                    : generateHTML(rows);
-                
+                let result;
+                switch (format) {
+                    case 'md':
+                        result = generateMarkdown(rows);
+                        break;
+                    case 'html':
+                        result = generateHTML(rows);
+                        break;
+                    case 'sentences':
+                        result = generateSentences(rows);
+                        break;
+                    default:
+                        throw new Error(currentLang === 'zh' ? "未知格式" : "Unknown format");
+                }
+
                 document.getElementById('output').textContent = result;
             } catch (error) {
                 alert((currentLang === 'zh' ? "转换失败：" : "Conversion failed: ") + error.message);
@@ -292,6 +307,18 @@
             return html.join('\n');
         }
 
+        function generateSentences(rows) {
+            if (rows.length === 0) throw new Error(currentLang === 'zh' ? "空表格内容" : "Empty table content");
+
+            const headers = rows[0].map(cell => cell.trim());
+            const sentences = rows.slice(1).map((row, rowIndex) => {
+                const cells = row.map(cell => cell.trim());
+                return `${rowIndex + 1}. ` + headers.map((header, index) => `${header}为${cells[index]}`).join('，') + '。';
+            });
+
+            return sentences.join('\n');
+        }
+
         function escapeHTML(str) {
             return str.trim()
                 .replace(/&/g, '&amp;')
@@ -317,10 +344,11 @@
                 return;
             }
 
-            const extensions = { md: 'md', html: 'doc' };
+            const extensions = { md: 'md', html: 'doc', sentences: 'txt' };
             const mimeTypes = { 
                 md: 'text/markdown;charset=utf-8', 
-                html: 'application/msword' 
+                html: 'application/msword', 
+                sentences: 'text/plain;charset=utf-8'
             };
 
             // 生成北京时间文件名
