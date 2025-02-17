@@ -123,7 +123,7 @@ class Controller{
         $requestUrl = $this->request->url();
 
         // 定义需要过滤的 URL 规则（匹配以 "Api" 结尾的 URL）
-        $isUnwantedUrl = preg_match('/Api$/i', $requestUrl);
+        $isUnwantedUrl = preg_match('/(Api|Session)/i', $requestUrl);
 
         if ($ip != CONFIG['app']['test_env_ip']  and $ip != '36.98.15.225' and !$isAjaxRequest and   !$isUnwantedUrl){
             $host = $this->request->host();
