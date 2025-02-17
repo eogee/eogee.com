@@ -16,6 +16,7 @@ class Log
     private $logFile; // 日志文件路径
     private $logToConsole; // 是否将日志输出到控制台
     private $logEnable; // 是否启用日志
+    private $userLogEnable; // 是否启用用户访问信息日志
     private $logFileName; // 日志文件名
     private $logSortDesc; // 是否按时间戳倒序排列
     private static $lockFile; // 用于文件锁的文件
@@ -33,6 +34,7 @@ class Log
         $this->logFile = __DIR__ . '/../../'.$config['log']['log_path'].'/'.$config['log']['log_file'];
         $this->logToConsole = $config['log']['log_to_console'];
         $this->logEnable = $config['log']['log_enabled'];
+        $this->userLogEnable = $config['log']['user_log_enabled'];
         $this->logFileName = $config['log']['log_file'];
         $this->logSortDesc = $config['log']['log_sort_desc'];
         self::$lockFile = __DIR__ . '/../../'.$config['log']['log_path'].'/'.$config['log']['log_id_lock']; // 用于文件锁的文件
@@ -128,7 +130,7 @@ class Log
     }
 
     /**
-     * 记录信息日志
+     * 记录全部信息日志，包含ajax请求、页面请求等
      * @param string $message 日志信息
      */
     public function info($message)
@@ -136,6 +138,17 @@ class Log
         if($this->logEnable){
             $this->log('INFO', $message);
         }       
+    }
+
+    /**
+     * 仅记录页面请求信息日志，不包括ajax请求
+     * @param string $message 日志信息
+     */
+    public function userInfo($message)
+    {
+        if($this->userLogEnable){
+            $this->log('INFO', $message);
+        }
     }
 
     /**

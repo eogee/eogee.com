@@ -11,6 +11,9 @@ return [
     // 是否开启访问日志记录
     'log_enabled' => getenv('LOG_ENABLE'),
 
+    // 是否开启用户访问日志记录（仅静态页面）
+    'user_log_enabled' => getenv('USER_LOG_ENABLE'),
+
     // 文件名
     'log_file' => 'app.log',
 

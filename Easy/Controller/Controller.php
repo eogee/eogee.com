@@ -116,15 +116,24 @@ class Controller{
     {
         $ip = $this->request->ip();
 
-        if ($ip != CONFIG['app']['test_env_ip']  and $ip != '36.98.15.225' ){
+        // 检查是否是 AJAX 请求
+        $isAjaxRequest = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+
+        // 获取用户访问的URL
+        $requestUrl = $this->request->url();
+
+        // 定义需要过滤的 URL 规则（匹配以 "Api" 结尾的 URL）
+        $isUnwantedUrl = preg_match('/Api$/i', $requestUrl);
+
+        if ($ip != CONFIG['app']['test_env_ip']  and $ip != '36.98.15.225' and !$isAjaxRequest and   !$isUnwantedUrl){
             $host = $this->request->host();
-            $url = $this->request->url();
+            $url = $requestUrl;
             $username = $this->session->get('username') ?? '';
             $userId = $this->session->getUserId() ?? '';
             $method = $this->request->method();
             $userAgent = $this->request->userAgent();
             $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-            $this->log->info("ip：{$ip}，host：{$host}，url：{$url}，username：{$username}，userId：{$userId}，method：{$method}，userAgent：{$userAgent}，referer：{$referer}");
+            $this->log->userInfo("ip：{$ip}，host：{$host}，url：{$url}，username：{$username}，userId：{$userId}，method：{$method}，userAgent：{$userAgent}，referer：{$referer}");
         }
     }
 
