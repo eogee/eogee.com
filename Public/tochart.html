@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动态图表视频生成器：toChart</title>
+    <style>
+        /* 基础样式 */
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 25px;
+            border-radius: 12px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 20px;
+        }
+        .left-panel {
+            flex: 1;
+            min-width: 400px;
+        }
+        .right-panel {
+            flex: 1;
+            min-width: 500px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .input-group input {
+            width: 97%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        #addData {
+            background-color: #16baaa;
+            color: white;
+        }
+        #executeButton {
+            background-color: #16baaa;
+            color: white;
+        }
+        .data-list {
+            margin-top: 20px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        
+        /* 修改后的图表样式 */
+        .chart-container {
+            position: relative;
+            overflow: visible;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        #chart {
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .bars-container {
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding: 0 20px;
+            margin-bottom: 40px;
+        }
+        .bar-wrapper {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            width: 60px;
+            position: relative;
+        }
+        .bar {
+            background-color: #007bff;
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            height: 0%;
+            transition: height 0.5s ease;
+        }
+        .bar-value {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            font-weight: bold;
+            color: #333;
+            white-space: nowrap;
+            margin-bottom: 5px;
+            transition: bottom 0.5s ease;
+        }
+        .x-axis {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            border-top: 2px solid #666;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+        .x-axis-label {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            flex: 1;
+        }
+        .chart-title {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            margin-bottom: 35px;
+        }
+        .chart-title span:first-child {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-right: 10px;
+        }
+        .chart-title .unit {
+            font-size: 16px;
+            color: #666;
+        }
+        .config-group {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        .config-group label {
+            display: inline-block;
+            width: 120px;
+            font-weight: bold;
+        }
+        .color-picker input {
+            width: 50px;
+            height: 30px;
+            padding: 2px;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                margin: 20px;
+            }
+            .bar-value {
+                font-size: 10px;
+            }
+            .chart-title {
+                margin-bottom: 25px;
+            }
+            .chart-title span:first-child {
+                font-size: 20px;
+            }
+        }
+        
+        /* 调试信息 */
+        .debug-info {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            z-index: 10000;
+            font-family: monospace;
+        }
+        #previewContainer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            z-index: 9999;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        h1 {    
+            color: #16baaa;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 2.2em;
+            letter-spacing: 0.5px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/RecordRTC/5.6.2/RecordRTC.min.js"></script>
+</head>
+<body>
+    <div class="debug-info" id="debugInfo">数据准备中...</div>
+    
+    <div class="container">
+        <div class="left-panel">
+            <h1>ToChart-动态图表视频生成器</h1>
+            <div class="support-text">
+                <span data-i18n="poweredBy">技术支持：</span>
+                <a href="https://eogee.com" target="_blank" style="color: #16baaa; text-decoration: none;">eogee.com</a>
+            </div>
+            <div class="config-group">
+                <div class="input-group">
+                    <label for="chartName">图表标题：</label>
+                    <input type="text" id="chartName" placeholder="例如：XXX榜单">
+                </div>
+                <div class="input-group">
+                    <label for="unit">数据单位：</label>
+                    <input type="text" id="unit" placeholder="例如：亿元">
+                </div>
+                <div class="input-group color-picker">
+                    <label for="color">柱状颜色：</label>
+                    <input type="color" id="color" value="#16baaa">
+                </div>
+                <div class="input-group">
+                    <label for="duration">视频时长：</label>
+                    <input type="number" id="duration" placeholder="单位：秒" min="1" value="5">
+                </div>
+            </div>
+            <div class="input-group">
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="name" placeholder="数据名称" style="flex:2;">
+                    <input type="number" id="value" placeholder="数值" style="flex:1;">
+                    <button id="addData">➕ 添加</button>
+                    <button id="executeButton">🚀 生成视频</button>
+                </div>
+            </div>
+            <div class="data-list">
+                <h3>📋 数据列表</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>名称</th>
+                            <th>数值</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="chart-container">
+                <div class="chart-title">
+                    <span id="titleText">未命名图表</span>
+                    <span class="unit" id="unitText"></span>
+                </div>
+                <div id="chart"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        let debugCount = 0;
+        let data = [];
+        let recorder = null;
+        let isRecording = false;
+
+        const updateDebugInfo = (message) => {
+            document.getElementById('debugInfo').innerHTML = `
+                帧数: ${debugCount++}<br>
+                最后操作: ${message}<br>
+                数据量: ${data.length}项<br>
+                当前高度: ${document.querySelector('.bar')?.style.height || 'N/A'}
+            `;
+        };
+
+        document.getElementById('chartName').addEventListener('input', function() {
+            document.getElementById('titleText').textContent = this.value || '未命名图表';
+        });
+        document.getElementById('unit').addEventListener('input', function() {
+            document.getElementById('unitText').textContent = this.value ? `(${this.value})` : '';
+        });
+
+        document.getElementById('addData').addEventListener('click', () => {
+            const name = document.getElementById('name').value.trim();
+            const value = parseFloat(document.getElementById('value').value);
+            if (!name || isNaN(value)) return alert('请输入有效的名称和数值');
+            
+            data.push({ name, value });
+            updateTable();
+            document.getElementById('name').value = '';
+            document.getElementById('value').value = '';
+            updateDebugInfo('添加新数据');
+        });
+
+        window.updateItem = (index, field, value) => {
+            data[index][field] = field === 'value' ? parseFloat(value) : value;
+            updateDebugInfo(`更新数据: ${field}=${value}`);
+        };
+
+        window.deleteItem = (index) => {
+            data.splice(index, 1);
+            updateTable();
+            updateDebugInfo('删除数据项');
+        };
+
+        const updateTable = () => {
+            document.getElementById('dataTableBody').innerHTML = data.map((item, i) => `
+                <tr>
+                    <td><input value="${item.name}" onchange="updateItem(${i}, 'name', this.value)"></td>
+                    <td><input type="number" value="${item.value}" onchange="updateItem(${i}, 'value', this.value)"></td>
+                    <td><button onclick="deleteItem(${i})">🗑️</button></td>
+                </tr>
+            `).join('');
+        };
+
+        document.getElementById('executeButton').addEventListener('click', async () => {
+            if (isRecording) return;
+            if (data.length === 0) return alert('请至少添加一个数据项');
+            
+            const duration = parseFloat(document.getElementById('duration').value);
+            if (!duration || duration < 1) return alert('请输入有效的视频时长（≥1秒）');
+
+            try {
+                initChart();
+                await startRecording(duration);
+            } catch (error) {
+                alert(`生成失败：${error.message}`);
+                isRecording = false;
+            }
+        });
+
+        const initChart = () => {
+            const chart = document.getElementById('chart');
+            chart.innerHTML = '';
+            
+            const barsContainer = document.createElement('div');
+            barsContainer.className = 'bars-container';
+            
+            const maxValue = Math.max(...data.map(d => d.value));
+            const color = document.getElementById('color').value;
+
+            data.forEach(item => {
+                const barWrapper = document.createElement('div');
+                barWrapper.className = 'bar-wrapper';
+                
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.backgroundColor = color;
+                bar.style.height = '0%';
+
+                const valueLabel = document.createElement('div');
+                valueLabel.className = 'bar-value';
+                valueLabel.textContent = item.value;
+
+                bar.appendChild(valueLabel);
+                barWrapper.appendChild(bar);
+                barsContainer.appendChild(barWrapper);
+            });
+
+            const xAxis = document.createElement('div');
+            xAxis.className = 'x-axis';
+            data.forEach(item => {
+                const label = document.createElement('div');
+                label.className = 'x-axis-label';
+                label.textContent = item.name;
+                xAxis.appendChild(label);
+            });
+
+            chart.appendChild(barsContainer);
+            chart.appendChild(xAxis);
+            updateDebugInfo('图表初始化完成');
+        };
+
+        const startRecording = async (duration) => {
+            isRecording = true;
+            const statusDiv = createStatusDiv();
+            
+            try {
+                const { canvas, stream } = initCapture();
+                recorder = new RecordRTC(stream, {
+                    type: 'video',
+                    mimeType: 'video/webm;codecs=vp9',
+                    bitsPerSecond: 3000000,
+                    frameRate: 30,
+                    width: canvas.width,
+                    height: canvas.height
+                });
+
+                recorder.startRecording();
+                await animateProgress(duration, canvas, statusDiv);
+            } finally {
+                statusDiv.remove();
+                isRecording = false;
+            }
+        };
+
+        const createStatusDiv = () => {
+            const div = document.createElement('div');
+            div.style.cssText = `
+                position: fixed; top: 20px; right: 20px;
+                background: rgba(0,0,0,0.8); color: white;
+                padding: 15px; border-radius: 8px; z-index: 9999;
+            `;
+            div.innerHTML = '🔄 视频生成中...<div id="progressBar" style="height:3px;background:#007bff;margin-top:10px;"></div>';
+            document.body.appendChild(div);
+            return div;
+        };
+
+        const initCapture = () => {
+            const container = document.querySelector('.chart-container');
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = container.offsetWidth * dpr;
+            canvas.height = container.offsetHeight * dpr;
+            ctx.scale(dpr, dpr);
+
+            return { 
+                canvas,
+                stream: canvas.captureStream(30) 
+            };
+        };
+
+        const animateProgress = async (duration, canvas, statusDiv) => {
+            const startTime = performance.now();
+            const progressBar = statusDiv.querySelector('#progressBar');
+            
+            const animate = async (timestamp) => {
+                const elapsed = timestamp - startTime;
+                const progress = Math.min(elapsed / (duration * 1000), 1);
+                
+                progressBar.style.width = `${progress * 100}%`;
+                
+                const bars = document.querySelectorAll('.bar');
+                const maxValue = Math.max(...data.map(d => d.value));
+                bars.forEach((bar, i) => {
+                    const targetHeight = (data[i].value / maxValue) * 100;
+                    bar.style.height = `${targetHeight * progress}%`;
+                });
+
+                await html2canvas(document.querySelector('.chart-container'), {
+                    scale: 1,
+                    useCORS: true,
+                    logging: false,
+                    async: true,
+                    onclone: (clonedDoc) => {
+                        clonedDoc.querySelectorAll('.bar').forEach((bar, i) => {
+                            bar.style.height = `${(data[i].value / maxValue) * 100 * progress}%`;
+                        });
+                    }
+                }).then(img => {
+                    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+                    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                });
+
+                updateDebugInfo(`进度: ${(progress * 100).toFixed(1)}% 高度: ${bars[0]?.style.height || 'N/A'}`);
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    stopRecording();
+                }
+            };
+            
+            requestAnimationFrame(animate);
+        };
+
+        const stopRecording = () => {
+            recorder.stopRecording(async () => {
+                const blob = recorder.getBlob();
+                if (blob.size < 1024) {
+                    alert('生成失败，建议：\n1. 使用Chrome浏览器\n2. 缩短时长\n3. 减少数据量');
+                    return;
+                }
+
+                showVideoPreview(blob);
+                
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${document.getElementById('chartName').value || 'chart'}_${Date.now()}.webm`;
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        };
+
+        const showVideoPreview = (blob) => {
+            const container = document.createElement('div');
+            container.id = 'previewContainer';
+            
+            const video = document.createElement('video');
+            video.controls = true;
+            video.src = URL.createObjectURL(blob);
+            video.style.width = '100%';
+            
+            const tips = document.createElement('div');
+            tips.style.padding = '10px';
+            tips.innerHTML = `
+                <p>✅ 视频生成成功！</p>
+                <p>如需MP4格式：</p>
+                <ol>
+                    <li>访问 <a href="https://cloudconvert.com/webm-to-mp4" target="_blank">在线转换网站</a></li>
+                    <li>上传此视频文件</li>
+                    <li>下载转换后的MP4</li>
+                </ol>
+                <button type="button" onclick="this.parentElement.parentElement.remove()" style="margin-top:10px;">关闭预览</button>
+            `;
+
+            container.appendChild(video);
+            container.appendChild(tips);
+            document.body.appendChild(container);
+            video.play();
+        };
+    });
+    </script>
+</body>
+</html>
