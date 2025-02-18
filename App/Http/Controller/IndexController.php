@@ -126,4 +126,8 @@ class IndexController extends Controller
     {
         Window::redirect('/tomd.html');
     }
+    public function tochart()
+    {
+        Window::redirect('/tochart.html');
+    }
 }

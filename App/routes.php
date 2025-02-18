@@ -43,6 +43,7 @@ if($routerCacheEnabled and $cashe->get('routes')){
     $routes['/index/logout'] = [$defaltController,'logout'];
     $routes['/index/getUserSessionInfo'] = [$defaltController,'getUserSessionInfo'];
     $routes['/tomd'] = [$defaltController,'tomd'];
+    $routes['/tochart'] = [$defaltController,'tochart'];
 
     /* 前台 技术支持 */
     $routes['/support'] = ['SinglePageController','support'];
