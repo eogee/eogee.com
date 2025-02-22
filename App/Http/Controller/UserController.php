@@ -26,7 +26,7 @@ class UserController extends Controller
     }
     public function listApi()
     {
-        $data = $this->user->listApi('','username');
+        $data = $this->user->listApi('','username,email');
         $this->response->json($data);
     }
     public function recycleApi()
