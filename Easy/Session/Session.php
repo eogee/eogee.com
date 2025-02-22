@@ -102,6 +102,22 @@ class Session
             return null;
         }
     }
+
+    /**
+     * Summary of login
+     * 当前登录的用户角色
+     * @return mixed | null 返回当前登录的用户角色
+     */
+    public function getUserRole()
+    {
+        if(!empty(self::getUser()))
+        {
+            return $this->db->select($this->userTableName,"where ".$this->userCol." = '".self::getUser()."'")[0]['role'];
+        }else{
+            return null;
+        }
+    }
+
     /**
      * Summary of destroy
      * 销毁session

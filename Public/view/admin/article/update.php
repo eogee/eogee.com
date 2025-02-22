@@ -61,6 +61,12 @@
             <input id = "sortInput" type = "text" name = "sort" class="layui-input"  lay-verify="number">
         </td>
     </tr>
+    <tr id = "memberContent">
+        <td></td>
+        <td>
+            <input id = "memberContentInput" type = "text" name = "memberContent" class="layui-input"  lay-verify="number">
+        </td>
+    </tr>
     <script src = "/js/admin/article/update.js"></script>
     <!-- jquery -->
     <script src = "/dist/jquery/dist/jquery.min.js"></script>

@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use Easy\Session\Session;
 use Easy\Verify\Verify;
 use Helper\Url;
 
@@ -108,5 +109,70 @@ class Article extends Model
         
         return true; // 返回成功信息
         
+    }
+    public function show($table = null, $id = null)
+    {
+        // 如果未提供表名，则获取当前模型的表名
+        if (empty($table)) {
+            $table = $this->table;
+        }
+    
+        // 如果未提供 ID，则从 URL 获取
+        if (empty($id)) {
+            $id = $this->id;
+        }
+
+        $data = []; // 初始化数据数组
+
+        // 获取用户登录信息
+
+        if (empty($_SESSION['username']) or $this->session->getUserRole() == '用户') {
+            
+            // 查询数据-非会员内容
+            if (empty($id)) { // 如果没有 ID，则获取第一条数据
+
+                $result = $this->db->select($table, "where memberContent = 0", "LIMIT 1");
+                if (!empty($result)) {
+                    $data['data'] = $result[0]; // 存在则获取数据
+                } else {
+                    $data['data'] = [
+                        'id' => $id,
+                        'content' => '**专属会员内容：请点击右上角`登录`或`注册`后联系管理员QQ：3886370085 查看**'
+                    ];
+                }
+            } else {
+                $result = $this->db->select($table, "WHERE id = " . intval($id) . " and memberContent = 0");
+                
+                if (!empty($result)) {
+                    $data['data'] = $result[0]; // 存在则获取数据
+                } else {
+                    $data['data'] = [
+                        'id' => $id,
+                        'content' => '**专属会员内容：请点击右上角`登录`或`注册`后联系管理员QQ：3886370085 查看**'
+                    ];
+                }
+            }
+        }else{
+            if (empty($id)) { // 如果没有 ID，则获取第一条数据
+                $result = $this->db->select($table, "", "LIMIT 1");
+                if (!empty($result)) {
+                    $data['data'] = $result[0]; // 存在则获取数据
+                } else {
+                    $data['data'] = []; // 没有数据则设为空
+                }
+            } else {
+                $result = $this->db->select($table, "WHERE id = " . intval($id));
+                if (!empty($result)) {
+                    $data['data'] = $result[0]; // 存在则获取数据
+                } else {
+                    $data['data'] = []; // 没有数据则设为空
+                }
+            }
+        }
+    
+        // 获取字段注释
+        $data['field'] = $this->getTableFieldComment($table);
+    
+        return $data; // 返回数据
     }
 }

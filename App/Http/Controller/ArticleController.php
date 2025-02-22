@@ -23,7 +23,7 @@ class ArticleController extends Controller
     {
         $db = Database::getInstance(CONFIG);
         $indexData = $this->headData();//获取前台头部数据
-        $data = $this->model->show();
+        $data = $this->article->show();
         $list = $db->selectCol('article', "id, title,categoryName","","sort","ASC");
 
         $data = [
