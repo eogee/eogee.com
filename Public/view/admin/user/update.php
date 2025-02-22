@@ -26,7 +26,8 @@
             <select name="identity">
                 <option value=""></option>
                 <option value="管理员">管理员</option>
-                <option value="普通用户">普通用户</option>
+                <option value="专属会员">专属会员</option>
+                <option value="用户">普通用户</option>
             </select>
         </td>
     </tr>

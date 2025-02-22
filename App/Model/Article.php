@@ -126,7 +126,7 @@ class Article extends Model
 
         // 获取用户登录信息
 
-        if (empty($_SESSION['username']) or $this->session->getUserRole() == '用户') {
+        if (empty($_SESSION['username']) or $this->session->getUserIdentity() == '用户') {
             
             // 查询数据-非会员内容
             if (empty($id)) { // 如果没有 ID，则获取第一条数据

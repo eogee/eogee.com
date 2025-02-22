@@ -108,11 +108,11 @@ class Session
      * 当前登录的用户角色
      * @return mixed | null 返回当前登录的用户角色
      */
-    public function getUserRole()
+    public function getUserIdentity()
     {
         if(!empty(self::getUser()))
         {
-            return $this->db->select($this->userTableName,"where ".$this->userCol." = '".self::getUser()."'")[0]['role'];
+            return $this->db->select($this->userTableName,"where ".$this->userCol." = '".self::getUser()."'")[0]['identity'];
         }else{
             return null;
         }
