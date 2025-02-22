@@ -52,14 +52,14 @@ class Auth
         }
     
         // 查询用户是否存在
-        $user = $this->getUserByUsername($username);    
+        $user = $this->getUserByUsername($username);
         if (empty($user)) {
             return '输入的用户名或密码不正确！';
         }
 
         // 验证密码
         if ($this->password->verify($user[0]["password"])) {
-            $this->createUserSession($username);
+            $this->createUserSession($user[0]['username']);
             // 登录验证成功，删除session中的图形验证码
             $this->session->delete('captcha');
             return true;
@@ -76,7 +76,13 @@ class Auth
      */
     private function getUserByUsername($username)
     {
-        return $this->db->select($this->tableName, "WHERE username = '$username' AND deleted_at IS NULL");
+        // 判定用户输入的是否为邮箱
+        if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
+            $where = "WHERE email = '$username' AND deleted_at IS NULL";
+            return $this->db->select($this->tableName, $where);
+        }else{
+            return $this->db->select($this->tableName, "WHERE username = '$username' AND deleted_at IS NULL");
+        }        
     }
 
     /**

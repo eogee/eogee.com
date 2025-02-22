@@ -23,7 +23,7 @@
                             <div class="layui-input-prefix">
                                 <i class="layui-icon layui-icon-username"></i>
                             </div>
-                            <input type="text" name="username" placeholder="请输入用户名" class="layui-input" lay-verify="required|username">
+                            <input type="text" name="username" placeholder="请输入用户名或注册邮箱" class="layui-input" lay-verify="required|username">
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -84,11 +84,18 @@
             form.verify({
                 // 验证用户名，且为必填项
                 username: function(value, elem) {
-                    if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
+                    // 允许字母、数字、下划线、中文、空格、·、点（.）和@符号
+                    if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·@.]+$").test(value)) {
                         return '用户名不能有特殊字符';
                     }
                     if (/(^_)|(__)|(_+$)/.test(value)) {
                         return '用户名首尾不能出现下划线';
+                    }
+                    // 如果用户输入的是邮箱地址，进一步验证邮箱格式
+                    if (value.includes('@')) {
+                        if (!new RegExp("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$").test(value)) {
+                            return '邮箱格式不正确';
+                        }
                     }
                 },
                 // 验证密码，且为必填项
