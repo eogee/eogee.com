@@ -24,7 +24,13 @@ class ArticleController extends Controller
         $db = Database::getInstance(CONFIG);
         $indexData = $this->headData();//获取前台头部数据
         $data = $this->article->show();
-        $list = $db->selectCol('article', "id, title,categoryName","where memberContent = 0","sort","ASC");
+        $userIdentity = $this->session->getUserIdentity();
+        if($userIdentity == null || $userIdentity == '用户'){
+            $where = "where memberContent = 0";
+        }else{
+            $where = null;
+        }
+        $list = $db->selectCol('article', "id, title,categoryName",$where,"sort","ASC");
 
         $data = [
             'indexData' => $indexData
