@@ -52,7 +52,7 @@ if($routerCacheEnabled and $cashe->get('routes')){
     $routes['/contentParent/detail'] = ['ContentParentController','detail'];
     $routes['/content/detailChild'] = ['ContentController','detailChild'];
     $routes['/singlePage/detail'] = ['SinglePageController','detailChild'];
-    $routes['/smallStove/insert'] = ['SmallStoveController','insert'];
+    $routes['/smallStove/submit'] = ['SmallStoveController','submit'];
     $routes['/news'] = ['NewsController',$defaltAction];
 
     /* 后台 首页 */
