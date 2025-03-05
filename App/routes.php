@@ -52,6 +52,7 @@ if($routerCacheEnabled and $cashe->get('routes')){
     $routes['/contentParent/detail'] = ['ContentParentController','detail'];
     $routes['/content/detailChild'] = ['ContentController','detailChild'];
     $routes['/singlePage/detail'] = ['SinglePageController','detailChild'];
+    $routes['/smallStove/insert'] = ['SmallStoveController','insert'];
     $routes['/news'] = ['NewsController',$defaltAction];
 
     /* 后台 首页 */
@@ -140,6 +141,11 @@ if($routerCacheEnabled and $cashe->get('routes')){
     $routes = defineRoutes($routes, 'article', [
         'list', 'listApi', 'tableHeadDataApi', 'show', 'showApi', 'insert', 'edit', 'updateApi', 'fileUploadApi', 'deleteSoft', 'deleteSoftBatch', 'recycle', 'recycleApi', 'restore', 'restoreBatch', 'delete', 'deleteBatch', 'detail', 'detailApi', 'userFileUploadApi'
     ]);
+
+    
+    $routes = defineRoutes($routes, 'SmallStove', [
+        'list', 'listApi', 'tableHeadDataApi', 'show', 'showApi', 'insert', 'edit', 'updateApi', 'fileUploadApi', 'deleteSoft', 'deleteSoftBatch', 'recycle', 'recycleApi', 'restore', 'restoreBatch', 'delete', 'deleteBatch'
+    ]); 
 
     if($routerCacheEnabled){
         $cashe->set('routes', $routes, $defaultCacheTime);
