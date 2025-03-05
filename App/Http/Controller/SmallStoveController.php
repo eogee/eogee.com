@@ -21,7 +21,7 @@ class SmallStoveController extends Controller
                 $this->response->json(['code' => 1,'msg' => '新增失败']);
             }
         }else{
-            Window::alert('请先登录或注册！');
+            Window::alert('请先登录或注册！','back');
         }
     }   
 
